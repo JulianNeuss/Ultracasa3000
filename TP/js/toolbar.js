@@ -1,6 +1,7 @@
 Vue.component('toolbar', {
     template:
-        `<v-toolbar color="deep-purple darken-1" dark  flat>
+        `<div>
+            <v-toolbar color="deep-purple darken-1" dark  flat>
                         <v-btn color="deep-purple darken-1" depressed  href="index.html">
                             <v-toolbar-title class="ml-0 pl-3">
                                         <span class="title ml-3 mr-5">UC<span class="font-italic font-weight-light">3000</span>
@@ -13,12 +14,41 @@ Vue.component('toolbar', {
 
                         <v-spacer></v-spacer> <!-- deja espacio entre el search y boton de  notificaciones y settings -->
 
-                        <v-btn icon>
+                        <v-btn icon  @click="drawer = !drawer">
                             <v-icon>settings</v-icon>
                         </v-btn>
                        
-            </v-toolbar>`
-
+            </v-toolbar>
+            
+            <v-navigation-drawer v-model="drawer" app left clipped  class="white">
+                <v-list-item>
+                     <v-list-item-content>
+                        <v-list-item-title class="title">Settings </v-list-item-title> 
+                    </v-list-item-content>
+                </v-list-item>
+                <v-divider></v-divider>
+                <v-list dense >
+                    <v-list-item v-for="item in items" :key="item.title" link>
+                         <v-list-item-icon>
+                             <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+            </v-navigation-drawer>
+        </div>`,
+        data(){
+            return {
+                drawer:false,
+                items: [
+                    { title: 'Dashboard', icon: 'mdi-view-dashboard' },
+                    { title: 'Photos', icon: 'mdi-image' },
+                    { title: 'About', icon: 'mdi-help-box' },
+                  ],
+            }
+        }
 })
 
 
