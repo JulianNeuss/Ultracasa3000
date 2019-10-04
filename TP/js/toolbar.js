@@ -20,10 +20,12 @@ Vue.component('toolbar', {
                        
             </v-toolbar>
             
-            <v-navigation-drawer v-model="drawer" app left clipped  class="white">
+            <v-navigation-drawer v-model="drawer" app right clipped  class="white">
                 <v-list-item>
                      <v-list-item-content>
-                        <v-list-item-title class="title">Settings </v-list-item-title> 
+                          <v-btn class="mx-2" depressed @click="drawer = !drawer">
+                                <v-icon>settings</v-icon> Settings
+                          </v-btn>
                     </v-list-item-content>
                 </v-list-item>
                 <v-divider></v-divider>
