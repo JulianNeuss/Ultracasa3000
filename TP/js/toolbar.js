@@ -54,19 +54,6 @@ Vue.component('toolbar', {
 })
 
 
-new Vue({
-    el: '#app',
-    vuetify: new Vuetify(),
-    data: () => ({
-        tabs: [
-            { index: 0, name: 'HOME', href:'index.html' },
-            { index: 1, name: 'ROUTINES', href:'routines.html' },
-            { index: 2, name: 'FAVOURITES', href:'favourites.html'},
-            { index: 3, name: 'SAFETY', href: 'safety.html'},
-        ]
-    }),
-})
-
 
 
 
