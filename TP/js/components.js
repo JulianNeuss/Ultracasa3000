@@ -82,34 +82,38 @@ Vue.component('rooms',{
                     </v-btn>
                     
                     <v-dialog v-model="addroom" width="400px">  <!-- no me anda el css de este width-->
-                                                 
-                          <v-card>
-                                <v-card-title light> Add Room  </v-card-title>
-                                <v-container grid-list-sm>
-                                    <v-layout row wrap>
-                                        <v-flex  xs12  align-center  justify-space-between >
-                                            <v-layout align-center>
-                                                <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
+                         
+                              <v-card>
+                                    <v-card-title light> Add Room </v-card-title>
+                                    <v-container grid-list-sm>
+                                        <v-form>
+                                            <v-layout row wrap>
+                                                <v-flex  xs12  align-center  justify-space-between >
+                                                    <v-layout align-center>
+                                                        <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
+                                                    </v-layout>
+                                                
+                                        
+                                            </v-flex>
+                                            <v-container grid-list-sm>
+                                                    <v-layout row wrap>
+                                                           <v-col class="d-flex" cols="12" sm="12">
+                                                                      <v-select label="Select image" ></v-select>
+                                                           </v-col>
+                                                    </v-layout>
+                                            </v-container> 
+                                         
                                             </v-layout>
-                                        </v-flex>
-                                        <v-container grid-list-sm>
-                                                <v-layout row wrap>
-                                                       <v-col class="d-flex" cols="12" sm="12">
-                                                                  <v-select label="Select image" ></v-select>
-                                                       </v-col>
-                                                </v-layout>
-                                        </v-container>
-                                     
-                                    </v-layout>
-                                </v-container>
-                                
-                                
-                                <v-card-actions>
-                                     <v-spacer></v-spacer>
-                                     <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
-                                     <v-btn text @click="addroom = false">Save</v-btn>
-                                </v-card-actions>
-                          </v-card>
+                                        
+                                    </v-container>
+                                    
+                                    
+                                    <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
+                                         <v-btn text @click="addroom = false">Save</v-btn>
+                                    </v-card-actions>
+                              </v-card>
                                               
                                               
                     </v-dialog>
@@ -189,7 +193,7 @@ Vue.component('rooms',{
             addroom: false,
             dialog: false,
             addbutton: false,
-            items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
+            items: [ ],
             rooms: [
                 { title: 'Living', src: "../src/living.jpg"},
                 { title: 'Garage', src: "../src/garage.jpg"},
@@ -200,8 +204,17 @@ Vue.component('rooms',{
                 { title: 'Dorm Betty', src: "../src/dormitorio.jpg"},
             ]
         }
-    }
+    },
+    mounted() {
+        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+            for (let i of r.result){
+                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.items.push(i.name);
+            }
+        }
 
+        )
+    }
 })
 
 
