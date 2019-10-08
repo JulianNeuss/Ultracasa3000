@@ -71,14 +71,6 @@ Vue.component('devices',{
 })
 
 
-Vue.component('AC',{
-    data(){
-        return {
-            title: 'AC', room: 'Kitchen'
-        }
-    }
-})
-
 Vue.component('rooms',{
     template:
     `<div> 
@@ -87,9 +79,42 @@ Vue.component('rooms',{
                     <v-list-item-content class="align-self-start">
                         <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
                     </v-list-item-content>
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1">
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="addroom = !addroom">
                         <v-icon dark> add </v-icon>
                     </v-btn>
+                    
+                    <v-dialog v-model="addroom" width="400px">  <!-- no me anda el css de este width-->
+                                                 
+                          <v-card>
+                                <v-card-title light> Add Room  </v-card-title>
+                                <v-container grid-list-sm>
+                                    <v-layout row wrap>
+                                        <v-flex  xs12  align-center  justify-space-between >
+                                            <v-layout align-center>
+                                                <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
+                                            </v-layout>
+                                        </v-flex>
+                                        <v-container grid-list-sm>
+                                                <v-layout row wrap>
+                                                       <v-col class="d-flex" cols="12" sm="12">
+                                                                  <v-select label="Select image" ></v-select>
+                                                       </v-col>
+                                                </v-layout>
+                                        </v-container>
+                                     
+                                    </v-layout>
+                                </v-container>
+                                
+                                
+                                <v-card-actions>
+                                     <v-spacer></v-spacer>
+                                     <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
+                                     <v-btn text @click="addroom = false">Save</v-btn>
+                                </v-card-actions>
+                          </v-card>
+                                              
+                                              
+                    </v-dialog>
             </v-list-item>                           
            
             <v-divider></v-divider>
@@ -98,7 +123,7 @@ Vue.component('rooms',{
                   <v-col v-for="room in rooms" :key="room.title" cols="12" md="6" >
                          <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
-                                     <v-card-title class="white--text" v-text="room.title" > </v-card-title>
+                                     <v-card-title class="white--text" v-text="room.title" ></v-card-title>
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
@@ -163,6 +188,7 @@ Vue.component('rooms',{
      </div>`,
     data() {
         return {
+            addroom: false,
             dialog: false,
             addbutton: false,
             items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
@@ -186,6 +212,7 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
+        active_tab: 0,
         tabs: [
             { index: 0, name: 'HOME', href:'index.html' },
             { index: 1, name: 'ROUTINES', href:'routines.html' },

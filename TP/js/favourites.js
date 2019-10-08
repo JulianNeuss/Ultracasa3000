@@ -97,6 +97,7 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
+        active_tab: 2,
         tabs: [
             { index: 0, name: 'HOME', href:'index.html' },
             { index: 1, name: 'ROUTINES', href:'routines.html' },
