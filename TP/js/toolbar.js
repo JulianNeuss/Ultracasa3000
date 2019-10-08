@@ -19,11 +19,8 @@ Vue.component('toolbar', {
                        
             </v-toolbar>
             
-<<<<<<< HEAD
             <v-navigation-drawer v-model="drawer" app left   class="white">
-=======
             <v-navigation-drawer v-model="drawer" app right clipped  class="white">
->>>>>>> 23abbc12b62215831f5936253250cbae5ca5441a
                 <v-list-item>
                      <v-list-item-content>
                           <v-btn class="mx-2" depressed @click="drawer = !drawer">
