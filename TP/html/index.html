@@ -19,7 +19,7 @@
                 <v-card>
                     <toolbar></toolbar>
 
-                    <v-tabs centered background-color = 'grey lighten-3'>
+                    <v-tabs centered background-color = 'grey lighten-3' v-model="active_tab">
                         <v-tab v-for="tab of tabs" :key="tab.index" :href="tab.href">
                             {{tab.name}}
                         </v-tab>
@@ -48,8 +48,10 @@
 
         <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-        <script src="../js/toolbar.js"></script>
-        <script src="../js/main.js"></script>
+
+        <script src="../js/components.js"></script>
+       <!-- <script src="../js/toolbar.js"></script>
+        <script src="../js/main.js"></script> -->
 </body>
 
 
