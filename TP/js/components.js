@@ -238,7 +238,7 @@ Vue.component('addroom',{
                           </v-card>
                                               
                                               
-                    </v-dialog>`
+                    </v-dialog>` 
 })
 
 Vue.component('favourites',{
