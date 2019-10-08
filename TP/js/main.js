@@ -141,7 +141,7 @@ Vue.component('rooms',{
                                               </v-row>
                                               
                                               <!--  -->
-                                              <v-dialog v-model="addbutton" width="400px">  <!-- no me anda el css de este width-->
+                                              <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
                                                  
                                                     <v-card>
                                                         <v-card-title class="grey darken-2" light>
