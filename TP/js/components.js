@@ -81,37 +81,40 @@ Vue.component('rooms',{
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-                    <v-dialog v-model="addroom" width="400px">  <!-- no me anda el css de este width-->
-                         
-                              <v-card>
-                                    <v-card-title light> Add Room </v-card-title>
-                                    <v-container grid-list-sm>
-                                            <v-layout row wrap>
-                                                <v-flex  xs12  align-center  justify-space-between >
-                                                    <v-layout align-center>
-                                                        <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
-                                                    </v-layout>
+                    <v-dialog v-model="addroom" width="300px">  <!-- no me anda el css de este width-->
                                                 
-                                        
-                                                </v-flex>
-                                                <v-container grid-list-sm>
-                                                        <v-layout row wrap>
-                                                               <v-col class="d-flex" cols="12" sm="12">
-                                                                          <v-select label="Select image" ></v-select>
-                                                               </v-col>
+                              <v-card>
+                                    <v-form @submit="roomadd"> 
+                                                    <v-card-title light> Add Room  </v-card-title>
+                                                    
+                                                    <v-container grid-list-sm>
+                                                        <v-layout row wrap>  
+                                                          
+                                                            <v-col cols="12" sm="6" md="12">
+                                                                        <v-text-field 
+                                                                        label="Regular" 
+                                                                        clearable 
+                                                                        v-model="roomname"
+                                                                        maxlength="60"
+                                                                        required
+                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                                            </v-col>
+                                                            
+                                                            <v-col class="d-flex" cols="12" sm="12">
+                                                                        <v-select label="Select image" ></v-select>
+                                                            </v-col>
+                                                    
+                                                         
                                                         </v-layout>
-                                                </v-container> 
-                                         
-                                            </v-layout>
-                                        
-                                    </v-container>
-                                    
-                                    
-                                    <v-card-actions>
-                                         <v-spacer></v-spacer>
-                                         <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
-                                         <v-btn text @click="addroom = false">Save</v-btn>
-                                    </v-card-actions>
+                                                    </v-container>
+                                                    
+                                                    
+                                                    <v-card-actions>
+                                                         <v-spacer></v-spacer>
+                                                         <v-btn  text  color="primary" @click="cancel">Cancel</v-btn>
+                                                         <v-btn text @click="addroom = false" type="submit">Save</v-btn>
+                                                    </v-card-actions>
+                                    </v-form>
                               </v-card>
                                               
                                               
@@ -121,15 +124,15 @@ Vue.component('rooms',{
             <v-divider></v-divider>
             
             <v-row>
-                  <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
+                  <v-col v-for="room in rooms" :key="room.title" cols="12" md="6" >
                          <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
-                                     <v-card-title class="white--text" v-text="room.name" ></v-card-title>
+                                     <v-card-title class="white--text" v-text="room.title" ></v-card-title>
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
                                               <v-list-item-content class="text-center">
-                                                    <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
+                                                    <v-list-item-title  class="title"  v-text="room.title"></v-list-item-title>
                                               </v-list-item-content>
                                                  
                                               <v-row justify="space-around">
@@ -145,38 +148,27 @@ Vue.component('rooms',{
                                               <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
                                                  
                                                     <v-card>
-                                                        <v-form @submit="addDevice" ref="addDeviceForm">
-                                                            <v-card-title class="grey darken-2" light>
-                                                                Add Device
-                                                            </v-card-title>
-                                                            <v-container grid-list-sm>
+                                                        <v-card-title class="grey darken-2" light>
+                                                            Add Device
+                                                        </v-card-title>
+                                                        <v-container grid-list-sm>
+                                                        
+                                                            <v-layout row wrap>
+                                                                <v-col class="d-flex" cols="12" sm="12">
+                                                                  <v-select
+                                                                    :items="items"
+                                                                    label="Select Device"
+                                                                  ></v-select>
+                                                                </v-col>
+                                                            </v-layout>
                                                             
-                                                                <v-layout row wrap>
-                                                                    <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select :items="items" label="Select Device" item-text="name" item-value="id" required></v-select>
-                                                                    </v-col>
-                                                                </v-layout>
-                                                                <v-flex  xs12  align-center  justify-space-between >
-                                                                    <v-layout align-center>
-                                                                        <v-text-field :rules="deviceRules" 
-                                                                                      required
-                                                                                      placeholder="Name" 
-                                                                                      counter="60">
-                                                                        </v-text-field>
-                                                                    </v-layout>
-                                                                </v-flex>
-                                                                
-                                                                
-                                                            </v-container>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
-                                                                <v-btn type="submit" text>Save</v-btn>
-                                                            </v-card-actions>
-                                                            
-                                                        </v-form>
-                
-                                                    </v-card>
+                                                        </v-container>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
+                                                            <v-btn text @click="addbutton = false">Save</v-btn>
+                                                        </v-card-actions>
+                                                     </v-card>
                                               
                                               
                                               </v-dialog>
@@ -200,79 +192,44 @@ Vue.component('rooms',{
      </div>`,
     data() {
         return {
-            deviceRules: [
-                v => {
-                    return !!v || 'Name is required'
-                },
-                v => {
-                    return v.length <= 60 || 'Name must be less than 60 characters'
-                },
-                v => {
-                    return v.length >= 3 || 'Name must be more than 3 characters'
-                }
-            ],
             addroom: false,
             dialog: false,
             addbutton: false,
-            devices: [ ],
-            items: [ ],              //aca se guardan todos los devices de la API
-            rooms: [ ],
+            items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
+            rooms: [
+                { title: 'Living', src: "../src/living.jpg"},
+                { title: 'Garage', src: "../src/garage.jpg"},
+                { title: 'Kitchen', src: "../src/kitchen.jpg"},
+                { title: 'Playroom', src: "../src/playroom.jpg"},
+                { title: 'Dorm Jorge', src: "../src/dormitorio.jpg"},
+                { title: 'Dorm Susana', src: "../src/dormitorio.jpg"},
+                { title: 'Dorm Betty', src: "../src/dormitorio.jpg"},
+            ],
+            roomname: '',
+            roomimage:''
         }
     },
-    
-    mounted() {
-        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-            for (let i of r.result){
-                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.items.push({id: i.id, name: i.name});
-            }
-        }
-
-        )
-
-        api.room.getAll().then( (r) => {
-            for(let i of r.result){
-                this.rooms.push({name: i.name});
-            }
-        })
-    },
-
-    methods: {
-        addDevice(e){
-            e.preventDefault();
-            if(this.$refs.addDeviceForm.validate()){
-                api.device.add({
-                    name: this.newDevice,
-                    meta: {
-                        fav: false
+    methods:{
+        roomadd(event) {
+            event.preventDefault();
+            api.room
+            .add({
+                    name: this.roomname,
+                    meta:{
+                        img: this.roomimage
                     }
-                })
-                .then( r => {
-                    let newDevice = {
-                        name: r.result.name,
-                        fav: r.result.meta.fav,
+                }
+            );
 
-                    }
-                });
-                this.$refs.addDeviceForm.reset();
-                this.newDevice = "";
-                this.devices.push(newDevice);
-                this.addbutton = false;
-            }
-            else{
-                this.$refs.addDeviceForm.reset();
-                this.addbutton = false;
-            }
         },
-        cancelAdd(){
-            this.newDevice = "";
-            this.$refs.addDeviceForm.reset();
-            this.addbutton = false;
+        cancel(){
+            addroom = false;
+            roomname = ''
+
         }
     }
+
 })
-
-
 
 Vue.component('favourites',{
     template:
@@ -560,10 +517,7 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
-        active_tab: 'index.html',
-        active_tab2: 'routines.html',
-        active_tab3: 'favourites.html',
-        active_tab4: 'safety.html',
+        active_tab: 0,
         tabs: [
             { index: 0, name: 'HOME', href:'index.html' },
             { index: 1, name: 'ROUTINES', href:'routines.html' },

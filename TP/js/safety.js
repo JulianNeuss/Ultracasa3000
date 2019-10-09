@@ -16,16 +16,28 @@ Vue.component('alarm',{
                           <v-btn class="mx-2"  dark color="deep-purple darken-1">
                                   <v-icon dark> edit </v-icon> EDIT
                           </v-btn>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addAlarm">
                                   <v-icon dark> add </v-icon> ADD
                           </v-btn>
                 </v-row>
             
             </v-card>
                
-        </v-container> 
-    
-    `
+        </v-container>`,
+    methods: {
+
+    },
+    data() {
+        return{
+
+        }
+    },
+    computed: {
+
+    },
+    props: {
+
+    }
 
 })
 
@@ -42,4 +54,14 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
+    component:{
+      toolbar,
+
+    },
+
+    methods: {
+        addAlarm: function () {
+
+        }
+    }
 })

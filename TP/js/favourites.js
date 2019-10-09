@@ -27,7 +27,7 @@ Vue.component('favourites',{
                                         <v-list-item-title class="medium mb-2"  >{{ device.title }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
-                                <v-dialog v-model="dialog"  width="400px">  <!-- no me anda el css del width -->
+                                <v-dialog v-model="dialog"  >  <!-- no me anda el css del width -->
                                             <v-card>
                                                 <v-card-title class="grey darken-1"> {{ device.title }}</v-card-title>
                                                 <v-container grid-list-sm>
