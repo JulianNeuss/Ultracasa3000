@@ -679,7 +679,10 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
-        active_tab: 0,
+        active_tab: 'index.html',
+        active_tab2: 'routines.html',
+        active_tab3: 'favourites.html',
+        active_tab4: 'safety.html',
         tabs: [
             { index: 0, name: 'HOME', href:'index.html' },
             { index: 1, name: 'ROUTINES', href:'routines.html' },
