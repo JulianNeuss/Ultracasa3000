@@ -94,13 +94,13 @@ Vue.component('rooms',{
                                                 
                                         
                                                 </v-flex>
-                                            <v-container grid-list-sm>
-                                                    <v-layout row wrap>
-                                                           <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select label="Select image" ></v-select>
-                                                           </v-col>
-                                                    </v-layout>
-                                            </v-container> 
+                                                <v-container grid-list-sm>
+                                                        <v-layout row wrap>
+                                                               <v-col class="d-flex" cols="12" sm="12">
+                                                                          <v-select label="Select image" ></v-select>
+                                                               </v-col>
+                                                        </v-layout>
+                                                </v-container> 
                                          
                                             </v-layout>
                                         
@@ -153,21 +153,19 @@ Vue.component('rooms',{
                                                             
                                                                 <v-layout row wrap>
                                                                     <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select :items="items" label="Select Device"></v-select>
+                                                                      <v-select :items="items" label="Select Device" item-text="name" item-value="id" required></v-select>
                                                                     </v-col>
                                                                 </v-layout>
-                                                                
-                                                                <v-layout align-center>
-                                                                    <v-text-field 
-                                                                           :rules="deviceRules" 
-                                                                           required
-                                                                           placeholder="Name" 
-                                                                           counter="60"
-                                                                    </v-text-field>  
-                                                                </v-layout>
-                                                                
-                                                        
+                                                                <v-flex  xs12  align-center  justify-space-between >
+                                                                    <v-layout align-center>
+                                                                        <v-text-field :rules="deviceRules" 
+                                                                                      required
+                                                                                      placeholder="Name" 
+                                                                                      counter="60">
+                                                                        </v-text-field>
+                                                                    </v-layout>
                                                                 </v-flex>
+                                                                
                                                                 
                                                             </v-container>
                                                             <v-card-actions>
@@ -207,8 +205,11 @@ Vue.component('rooms',{
                     return !!v || 'Name is required'
                 },
                 v => {
-                 return v.length <= 60 || 'Name must be less than 60 characters'
+                    return v.length <= 60 || 'Name must be less than 60 characters'
                 },
+                v => {
+                    return v.length >= 3 || 'Name must be more than 3 characters'
+                }
             ],
             addroom: false,
             dialog: false,
@@ -231,7 +232,7 @@ Vue.component('rooms',{
         api.devicetypes.getAllDeviceTypes().then( ( r ) => {
             for (let i of r.result){
                 if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.items.push(i.name);
+                    this.items.push({id: i.id, name: i.name});
             }
         }
 
