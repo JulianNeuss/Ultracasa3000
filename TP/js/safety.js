@@ -23,9 +23,21 @@ Vue.component('alarm',{
             
             </v-card>
                
-        </v-container> 
-    
-    `
+        </v-container>`,
+    methods: {
+
+    },
+    data() {
+        return{
+
+        }
+    },
+    computed: {
+
+    },
+    props: {
+
+    }
 
 })
 
@@ -42,6 +54,10 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
+    component:{
+      toolbar,
+
+    },
 
     methods: {
         addAlarm: function () {

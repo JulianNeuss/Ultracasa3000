@@ -81,35 +81,41 @@ Vue.component('rooms',{
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-                    <v-dialog v-model="addroom" width="400px">  <!-- no me anda el css de este width-->
-                                                 
-                          <v-card>
-                                <v-card-title light> Add Room  </v-card-title>
-                                <v-container grid-list-sm>
-                                    <v-layout row wrap>
-                                        <v-flex  xs12  align-center  justify-space-between >
-                                            <v-layout align-center>
-                                                <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
-                                            </v-layout>
-                                        </v-flex>
-                                        <v-container grid-list-sm>
-                                                <v-layout row wrap>
-                                                       <v-col class="d-flex" cols="12" sm="12">
-                                                                  <v-select label="Select image" ></v-select>
-                                                       </v-col>
-                                                </v-layout>
-                                        </v-container>
-                                     
-                                    </v-layout>
-                                </v-container>
-                                
-                                
-                                <v-card-actions>
-                                     <v-spacer></v-spacer>
-                                     <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
-                                     <v-btn text @click="addroom = false">Save</v-btn>
-                                </v-card-actions>
-                          </v-card>
+                    <v-dialog v-model="addroom" width="300px">  <!-- no me anda el css de este width-->
+                                                
+                              <v-card>
+                                    <v-form @submit="roomadd"> 
+                                                    <v-card-title light> Add Room  </v-card-title>
+                                                    
+                                                    <v-container grid-list-sm>
+                                                        <v-layout row wrap>  
+                                                          
+                                                            <v-col cols="12" sm="6" md="12">
+                                                                        <v-text-field 
+                                                                        label="Regular" 
+                                                                        clearable 
+                                                                        v-model="roomname"
+                                                                        maxlength="60"
+                                                                        required
+                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                                            </v-col>
+                                                            
+                                                            <v-col class="d-flex" cols="12" sm="12">
+                                                                        <v-select label="Select image" ></v-select>
+                                                            </v-col>
+                                                    
+                                                         
+                                                        </v-layout>
+                                                    </v-container>
+                                                    
+                                                    
+                                                    <v-card-actions>
+                                                         <v-spacer></v-spacer>
+                                                         <v-btn  text  color="primary" @click="cancel">Cancel</v-btn>
+                                                         <v-btn text @click="addroom = false" type="submit">Save</v-btn>
+                                                    </v-card-actions>
+                                    </v-form>
+                              </v-card>
                                               
                                               
                     </v-dialog>
@@ -198,47 +204,31 @@ Vue.component('rooms',{
                 { title: 'Dorm Jorge', src: "../src/dormitorio.jpg"},
                 { title: 'Dorm Susana', src: "../src/dormitorio.jpg"},
                 { title: 'Dorm Betty', src: "../src/dormitorio.jpg"},
-            ]
+            ],
+            roomname: '',
+            roomimage:''
+        }
+    },
+    methods:{
+        roomadd(event) {
+            event.preventDefault();
+            api.room
+            .add({
+                    name: this.roomname,
+                    meta:{
+                        img: this.roomimage
+                    }
+                }
+            );
+
+        },
+        cancel(){
+            addroom = false;
+            roomname = ''
+
         }
     }
 
-})
-
-
-Vue.component('addroom',{
-    template: `
-                    <v-dialog v-model="addroom" width="400px">  <!-- no me anda el css de este width-->
-                                                 
-                          <v-card>
-                                <v-card-title light> Add Room  </v-card-title>
-                                <v-container grid-list-sm>
-                                    <v-layout row wrap>
-                                        <v-flex  xs12  align-center  justify-space-between >
-                                            <v-layout align-center>
-                                                <v-text-field placeholder="Name"></v-text-field>  <!-- chequear que lo que ingresan aca no este repetido-->
-                                            </v-layout>
-                                        </v-flex>
-                                        <v-container grid-list-sm>
-                                                <v-layout row wrap>
-                                                       <v-col class="d-flex" cols="12" sm="12">
-                                                                  <v-select label="Select image" ></v-select>
-                                                       </v-col>
-                                                </v-layout>
-                                        </v-container>
-                                     
-                                    </v-layout>
-                                </v-container>
-                                
-                                
-                                <v-card-actions>
-                                     <v-spacer></v-spacer>
-                                     <v-btn  text  color="primary" @click="addroom = false" >Cancel</v-btn>
-                                     <v-btn text @click="addroom = false">Save</v-btn>
-                                </v-card-actions>
-                          </v-card>
-                                              
-                                              
-                    </v-dialog>` 
 })
 
 Vue.component('favourites',{
