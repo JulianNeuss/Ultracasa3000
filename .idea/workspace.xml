@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="" />
+    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +31,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -56,7 +60,20 @@
       <workItem from="1570558852195" duration="840000" />
       <workItem from="1570560171304" duration="26000" />
       <workItem from="1570565236453" duration="2956000" />
+      <workItem from="1570572428633" duration="426000" />
+      <workItem from="1570573065313" duration="54000" />
+      <workItem from="1570573217007" duration="64000" />
+      <workItem from="1570573335392" duration="123000" />
+      <workItem from="1570620875463" duration="7216000" />
     </task>
+    <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
+      <created>1570627021586</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1570627021586</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -74,5 +91,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API" />
+    <option name="LAST_COMMIT_MESSAGE" value="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API" />
   </component>
 </project>

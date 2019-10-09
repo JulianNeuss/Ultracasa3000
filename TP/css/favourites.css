@@ -1,3 +1,7 @@
 .favs-card-style{
     height: 150px;
 }
+
+.favs-dialog-style{
+    width: 400px !important;
+}
