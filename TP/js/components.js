@@ -121,15 +121,15 @@ Vue.component('rooms',{
             <v-divider></v-divider>
             
             <v-row>
-                  <v-col v-for="room in rooms" :key="room.title" cols="12" md="6" >
+                  <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
                          <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
-                                     <v-card-title class="white--text" v-text="room.title" ></v-card-title>
+                                     <v-card-title class="white--text" v-text="room.name" ></v-card-title>
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
                                               <v-list-item-content class="text-center">
-                                                    <v-list-item-title  class="title"  v-text="room.title"></v-list-item-title>
+                                                    <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                               </v-list-item-content>
                                                  
                                               <v-row justify="space-around">
@@ -216,15 +216,7 @@ Vue.component('rooms',{
             addbutton: false,
             devices: [ ],
             items: [ ],              //aca se guardan todos los devices de la API
-            rooms: [
-                { title: 'Living', src: "../src/living.jpg"},
-                { title: 'Garage', src: "../src/garage.jpg"},
-                { title: 'Kitchen', src: "../src/kitchen.jpg"},
-                { title: 'Playroom', src: "../src/playroom.jpg"},
-                { title: 'Dorm Jorge', src: "../src/dormitorio.jpg"},
-                { title: 'Dorm Susana', src: "../src/dormitorio.jpg"},
-                { title: 'Dorm Betty', src: "../src/dormitorio.jpg"},
-            ]
+            rooms: [ ],
         }
     },
     
@@ -237,6 +229,12 @@ Vue.component('rooms',{
         }
 
         )
+
+        api.room.getAll().then( (r) => {
+            for(let i of r.result){
+                this.rooms.push({name: i.name});
+            }
+        })
     },
 
     methods: {
