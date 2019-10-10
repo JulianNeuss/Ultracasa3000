@@ -398,8 +398,10 @@ Vue.component('lastused', {
                     }).catch((err) => {
                         console.error(err);
                     });
-                console.log(this.$refs.deviceroomselector.internalValue)
+                //api.room.addRoomDevices(roomID, r.result.id);
                 this.$refs.deviceform.reset();
+                // console.log(roomID);
+                // console.log(tempID);
             },
             cancelform(){
                 this.$refs.deviceform.reset();
