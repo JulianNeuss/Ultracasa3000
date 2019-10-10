@@ -279,7 +279,7 @@ Vue.component('lastused', {
                                         
 
                                         <v-col class="d-flex" cols="12" sm="12">
-                                        <v-select :items="rooms" item-text="name" label="Select Room"  ref="deviceroomselector" required></v-select>
+                                            <v-select :items="rooms" item-text="name" label="Select Room"  ref="deviceroomselector" required></v-select>
                                         </v-col>
 
                                      </v-layout>
@@ -309,7 +309,7 @@ Vue.component('lastused', {
 
 
                <v-row>
-                    <v-col v-for="device in devices" :key="device.id" cols="12" md="4" >
+                    <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
                          <v-card class="devices-style" :elevation="21" type="button" >
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
                             <v-dialog v-model="dialog"  width="400px">
@@ -334,10 +334,12 @@ Vue.component('lastused', {
                                 </v-card>
                             </v-dialog>
                          </v-card>
-                    </c0
+                    </v-col>
+               </v-row>
     </div>`,
         data(){
             return {
+                dialog: false,
                 deviceadd_s: false,
                 rooms: [],
                 devices: [],
@@ -348,15 +350,22 @@ Vue.component('lastused', {
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    if(i.name !== "vacuum" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
                         this.devicelist.push({id: i.id, name: i.name});
                 }
             });
 
             api.room.getAll().then( r => {
                 for(let i of r.result){
-                    this.rooms.push({name: i.name});
+                    this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
                 }
+            })
+
+            api.device.getAll().then( r => {
+                for(let i of r.devices){
+                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav});
+                }
+                console.log(this.devices);
             })
         },
         methods:{
@@ -372,11 +381,12 @@ Vue.component('lastused', {
                         type: {id:tempID},
                         name: this.$refs.nameselector.internalValue,
                         meta:{
+                            fav: false,
                             device: this.$refs.deviceselector.internalValue,
                             deviceroom: this.$refs.deviceroomselector.internalValue
                         }
                     }).then(r => {
-                        this.devices.push({name:r.result.name, droom: this.$refs.deviceroomselector.internalValue, id: r.result.id});
+                        this.devices.push({name: r.result.name, room: this.$refs.deviceroomselector.internalValue, id: r.result.id});
                     }).catch((err) => {
                         console.error(err);
                     });
