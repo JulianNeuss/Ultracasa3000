@@ -424,12 +424,14 @@ Vue.component('favourites',{
                     <v-divider></v-divider>  
                     <v-row>
                         <v-col v-show="fav.name == 'Favourite Rooms'" v-for="room in rooms" :key="room.title"  cols="6" md="6" >
-                            <v-card class="favs-card-style" :elevation="21" type="button"> 
+                            <v-card class="favs-card-style" :elevation="21" type="button">
+                            <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
                                 <v-list-item three-line>
                                     <v-list-item-content class="align-self-start">
                                         <v-list-item-title class="medium mb-2"  >{{ room.name }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
+                                </v-img>
                             </v-card>
                         </v-col>
                         <v-col v-show="fav.name == 'Favourite Devices'" v-for="device in devices" :key="device.name"  cols="6" md="6" >
@@ -474,6 +476,7 @@ Vue.component('favourites',{
                                                 </v-card-actions>
                                             </v-card>
                                 </v-dialog>
+                                
                             </v-card>
                         </v-col>
                     </v-row>
@@ -496,7 +499,7 @@ Vue.component('favourites',{
         api.room.getAll().then( r => {
             for(let i of r.result){
                 if(i.meta.fav === true)
-                     this.rooms.push({name: i.name});
+                     this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg"});
             }
         })
 
