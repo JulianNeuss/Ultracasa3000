@@ -197,8 +197,8 @@ Vue.component('rooms',{
             addroom: false,
             dialog: false,
             addbutton: false,
-            items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
-            rooms: [],
+            items: [ ],
+            rooms: [ ],
             /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
             roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
 
@@ -214,8 +214,9 @@ Vue.component('rooms',{
 
         api.room.getAll().then( (r) => {
             for(let i of r.result){
-                this.rooms.push({name: i.name});
+                this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
             }
+            console.log(this.rooms);
         })
     },
     methods:{
@@ -225,6 +226,7 @@ Vue.component('rooms',{
                 api.room.add({
                     name: this.$refs.nameselector.internalValue,
                     meta:{
+                        fav: false,
                         img: this.$refs.imageselector.internalValue
                     }
                 }).then(r => {
@@ -265,7 +267,7 @@ Vue.component('favourites',{
                             <v-card class="favs-card-style" :elevation="21" type="button"> 
                                 <v-list-item three-line>
                                     <v-list-item-content class="align-self-start">
-                                        <v-list-item-title class="medium mb-2"  >{{ room.title }}</v-list-item-title>
+                                        <v-list-item-title class="medium mb-2"  >{{ room.name }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-card>
@@ -326,20 +328,23 @@ Vue.component('favourites',{
                 { name: 'Favourite Rooms' },
                 { name: 'Favourite Devices'},
             ],
-            rooms: [
-                { title:'Living'},
-                { title:'Kitchen'},
-                { title:'Playroom'},
-                { title:'Add other'}
-
-            ],
+            rooms: [ ],
             devices: [
                 { title: 'AC'},
                 { title: 'Apple Homepods'},
                 { title:'Add other'}
             ]
         }
-    }
+    },
+    mounted() {
+        api.room.getAll().then( (r) => {
+            for(let i of r.result){
+                if(i.meta.fav === true)
+                     this.rooms.push({name: i.name});
+            }
+        })
+    },
+
 
 }),
 
