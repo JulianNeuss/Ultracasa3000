@@ -77,7 +77,6 @@ Vue.component('rooms',{
                     <v-list-item-content class="align-self-start">
                         <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
                     </v-list-item-content>
-                    <button @click="review">Review</button>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="addroom = !addroom">
                         <v-icon dark> add </v-icon>
                     </v-btn>
@@ -137,6 +136,8 @@ Vue.component('rooms',{
                                               <v-list-item-content class="text-center">
                                                     <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                               </v-list-item-content>
+                                              
+                                              <v-spacer></v-spacer>
                                                  
                                               <v-row justify="space-around">
                                                     <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
@@ -198,7 +199,7 @@ Vue.component('rooms',{
             addbutton: false,
             items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
             rooms: [],
-            /*{ title: 'Living', src: "../src/living.jpg", id:lk12j4lk134}*/
+            /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
             roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
 
         }
@@ -227,10 +228,11 @@ Vue.component('rooms',{
                         img: this.$refs.imageselector.internalValue
                     }
                 }).then(r => {
-                    this.rooms.push({title: r.result.name, src: "../src/" + this.$refs.imageselector.internalValue + ".jpg", id: r.result.id});
+                    this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
                 }).catch((err) => {
                     console.error(err);
                 });
+                console.log(this.rooms);
             }else{
                 console.error("Error en el formulario");
             }
@@ -241,9 +243,6 @@ Vue.component('rooms',{
             this.roomname = '';
             this.addroom = false
         },
-        review(){
-            console.log(api.room.getAll());
-        }
 
     }
 
@@ -343,77 +342,6 @@ Vue.component('favourites',{
     }
 
 }),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -536,62 +464,7 @@ Vue.component('rutines',{
     }
 
     <!--@submit="currentDev"{text: "lampara", value:100}-->
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}),
 
 
 
@@ -616,16 +489,28 @@ Vue.component('alarm',{
                           <v-btn class="mx-2"  dark color="deep-purple darken-1">
                                   <v-icon dark> edit </v-icon> EDIT
                           </v-btn>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addAlarm">
                                   <v-icon dark> add </v-icon> ADD
                           </v-btn>
                 </v-row>
             
             </v-card>
                
-        </v-container> 
-    
-    `
+        </v-container>`,
+    methods: {
+
+    },
+    data() {
+        return{
+
+        }
+    },
+    computed: {
+
+    },
+    props: {
+
+    }
 
 }),
 
@@ -676,6 +561,7 @@ Vue.component('toolbar', {
     data(){
         return {
             drawer:false,
+
             items: [
                 { title: 'Dashboard', icon: 'mdi-view-dashboard' },
                 { title: 'Photos', icon: 'mdi-image' },
@@ -702,4 +588,14 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
+    /*component:{
+      toolbar,
+
+    },
+
+    methods: {
+        addAlarm: function () {
+
+        }
+    }*/
 });
