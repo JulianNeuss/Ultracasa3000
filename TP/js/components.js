@@ -1,6 +1,6 @@
 
-  
-  
+
+
 
 
 Vue.component('lastused', {
@@ -41,30 +41,229 @@ Vue.component('lastused', {
 
 
 
-/////////////DEVICES/////////////
+    Vue.component('rooms',{
+        template:
+            `<div>
 
-Vue.component('devices',{
-    template:
-        `<div>
-               <v-list-item one-line>
+            <v-list-item one-line>
                     <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
+                        <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
                     </v-list-item-content>
-                    <button @click="review">Review</button>
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="deviceadd_s = !deviceadd_s">
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="addroom = !addroom">
                         <v-icon dark> add </v-icon>
                     </v-btn>
 
+                    <v-dialog v-model="addroom" width="300px">
+
+                              <v-card>
+                                    <v-form @submit="roomadd" ref="roomform">
+                                                    <v-card-title light> Add Room  </v-card-title>
+
+                                                    <v-container grid-list-sm>
+                                                        <v-layout row wrap>
+
+                                                            <v-col cols="12" sm="6" md="12">
+                                                                        <v-text-field
+                                                                        ref="nameselector"
+                                                                        label="Name"
+                                                                        clearable
+                                                                        maxlength="60"
+                                                                        required
+                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                                            </v-col>
+
+                                                            <v-col class="d-flex" cols="12" sm="12">
+                                                                        <v-select :items="roomtypes" label="Select Type"  ref="imageselector" required></v-select>
+                                                            </v-col>
+
+
+                                                        </v-layout>
+                                                    </v-container>
+
+                                                    <v-card-actions>
+                                                         <v-spacer></v-spacer>
+                                                         <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
+                                                         <v-btn text @click="addroom = false" type="submit">Save</v-btn>
+                                                    </v-card-actions>
+                                    </v-form>
+                              </v-card>
+
+
+                    </v-dialog>
+
+
+
+            </v-list-item>
+
+            <v-divider></v-divider>
+
+            <v-row>
+                  <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
+                         <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog">
+                               <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
+                                     <v-card-title class="white--text" v-text="room.name" ></v-card-title>
+                                     <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
+                                          <v-card>
+
+
+                                              <v-list-item three-line>
+                                                      <v-list-item-content class="text-center">
+                                                            <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
+                                                      </v-list-item-content>
+                                                      <v-btn icon @click="room.fav = !room.fav">
+                                                            <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
+                                                      </v-btn>
+                                               </v-list-item>
+
+                                              <v-spacer></v-spacer>
+
+                                              <v-row justify="space-around">
+                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
+                                                          <v-icon dark> edit </v-icon> EDIT
+                                                    </v-btn>
+                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >
+                                                          <v-icon dark> add </v-icon> ADD
+                                                    </v-btn>
+                                              </v-row>
+
+                                              <!--  -->
+                                              <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
+
+                                                    <v-card>
+                                                        <v-form>
+
+                                                                <v-card-title class="grey darken-2" light>
+                                                                    Add Device
+                                                                </v-card-title>
+                                                                <v-container grid-list-sm>
+
+                                                                    <v-layout row wrap>
+                                                                        <v-col class="d-flex" cols="12" sm="12">
+                                                                          <v-select
+                                                                            :items="items" item-text="name"
+                                                                            label="Select Device"
+                                                                            required
+                                                                          ></v-select>
+                                                                        </v-col>
+                                                                    </v-layout>
+
+                                                                </v-container>
+                                                                <v-card-actions>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
+                                                                    <v-btn text @click="addbutton = false">Save</v-btn>
+                                                                </v-card-actions>
+
+                                                        </v-form>
+
+                                                     </v-card>
+
+
+                                              </v-dialog>
+
+                                               <!-- -->
+
+                                              <v-card-actions>
+                                                    <v-spacer></v-spacer>
+                                                    <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
+                                                    <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                              </v-card-actions>
+                                          </v-card>
+                                     </v-dialog>
+                               </v-img>
+                         </v-card>
+                  </v-col>
+            </v-row>
+
+     </div>`,
+        data: function() {
+            return {
+                addroom: false,
+                dialog: false,
+                addbutton: false,
+                items: [ ],
+                rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
+                /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
+                roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
+
+            }
+        },
+        mounted() {
+            api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+                for (let i of r.result){
+                    if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                        this.items.push({id: i.id, name: i.name});
+                }
+            });
+
+            api.room.getAll().then( (r) => {
+                for(let i of r.result){
+                    this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
+                }
+                console.log(this.rooms);
+            })
+        },
+        methods:{
+            roomadd(event) {
+                if(this.$refs.roomform.validate()){
+                    api.room.add({
+                        name: this.$refs.nameselector.internalValue,
+                        meta:{
+                            fav: false,
+                            img: this.$refs.imageselector.internalValue
+                        }
+                    }).then(r => {
+                        this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                    console.log(this.rooms);
+                }else{
+                    console.error("Error en el formulario");
+                }
+                this.$refs.roomform.reset();
+            },
+            cancelform(){
+                this.$refs.roomform.reset();
+                this.roomname = '';
+                this.addroom = false
+            },
+
+        }
+
+    }),
+
+    Vue.component('devices',{
+        template:
+            `<div>
+               <v-list-item one-line>
+               
+               
+                    <v-list-item-content class="align-self-start">
+                        <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
+                    </v-list-item-content>
+                    
+           
+                    
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="deviceadd_s = !deviceadd_s">
+                        <v-icon dark> add </v-icon>
+                    </v-btn>
+                    
+                    
+
                     <v-dialog v-model="deviceadd_s" width="300px">
                          <v-card>
-                            <v-form @submit="deviceadd" ref="deviceform"> 
-                                 <v-card-title light> Add Device  </v-card-title>
-                         
+                            <v-form @submit="deviceadd" ref="deviceform">
+                                
+                                <v-card-title light> Add Device  </v-card-title>
+
+
+
                                  <v-container grid-list-sm>
-                                     <v-layout row wrap>  
-                               
+                                     <v-layout row wrap>
+
                                         <v-col cols="12" sm="6" md="12">
-                                             <v-text-field 
+                                             <v-text-field
                                              ref="nameselector"
                                              label="Name"
                                              clearable
@@ -72,31 +271,42 @@ Vue.component('devices',{
                                              required
                                              ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
-                                 
-                                        <v-col class="d-flex" cols="12" sm="12"> 
-                                             <v-select :items="devicelist" label="Select Device"  ref="deviceselector" required></v-select>
+                                        
+
+                                        <v-col class="d-flex" cols="12" sm="12">
+                                             <v-select :items="devicelist" item-text="name" label="Select Device"  ref="deviceselector" required></v-select>
                                         </v-col>
                                         
-                                        <v-col class="d-flex" cols="12" sm="12"> 
+
+                                        <v-col class="d-flex" cols="12" sm="12">
                                         <v-select :items="rooms" item-text="name" label="Select Room"  ref="deviceroomselector" required></v-select>
                                         </v-col>
 
                                      </v-layout>
                                  </v-container>
-                         
+
+
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
                                     <v-btn text @click="deviceadd_s = false" type="submit">Save</v-btn>
                                 </v-card-actions>
+                                
+                                
+                                
                             </v-form>
                          </v-card>
                     </v-dialog>
                     
-                    
-               </v-list-item>      
+               </v-list-item>
 
-               <v-divider></v-divider>]
+
+
+
+               <v-divider></v-divider>
+
+
+
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.id" cols="12" md="4" >
@@ -107,7 +317,7 @@ Vue.component('devices',{
                                     <v-list-item-content class="text-center">
                                           <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
                                     </v-list-item-content>
-                                                 
+
                                     <v-row justify="space-around">
                                         <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
                                             <v-icon dark> edit </v-icon> EDIT
@@ -126,280 +336,60 @@ Vue.component('devices',{
                          </v-card>
                     </c0
     </div>`,
-    data(){
-        return {
-            deviceadd_s: false,
-            rooms: [],
-            devices: [],
-            devicelist: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
-        }
-    },
-    mounted() {
-        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-            for (let i of r.result){
-                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.items.push({id: i.id, name: i.name});
+        data(){
+            return {
+                deviceadd_s: false,
+                rooms: [],
+                devices: [],
+                devicelist: [],
+                deviceID: ''
             }
-        })
+        },
+        mounted() {
+            api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+                for (let i of r.result){
+                    if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                        this.devicelist.push({id: i.id, name: i.name});
+                }
+            });
 
-        api.room.getAll().then( (r) => {
-            for(let i of r.result){
-                this.rooms.push({name: i.name});
-            }
-        })
-    },
-    methods:{
-        deviceadd(event) {
-            event.preventDefault();
-            //if(this.$refs.addform.validate()){
-                api.device.add({
-                    name: this.$refs.nameselector.internalValue,
-                    meta:{
-                        type: this.de$refs.devicelector.internalValue,
-                        deviceroom: this.de$refs.deviceroomlector.internalValue
+            api.room.getAll().then( r => {
+                for(let i of r.result){
+                    this.rooms.push({name: i.name});
+                }
+            })
+        },
+        methods:{
+            deviceadd(event) {
+                event.preventDefault();
+                    var tempID;
+                    for(let i of this.devicelist){
+                        if (i.name === this.$refs.deviceselector.internalValue){
+                            tempID = i.id;
+                        }
                     }
-                }).then(r => {
-                    this.devices.push({name:r.result.name, droom: r.result.room, id: r.result.id});
-                }).catch((err) => {
-                    console.error(err);
-                });
-            //}else{
-            //    console.error("Error en el formulario");
-            //}
-            this.$refs.deviceform.reset();
-        },
-        cancelform(){
-            this.$refs.deviceform.reset();
-            this.devicename = '';
-            this.deviceadd_s = false
-        },
-        review(){
-            console.log(api.device.getAll());
-        }
-
-    }
-
-}),
-
-
-
-
-
-
-
-
-///////////////////ROOOMMSS//////////////////
-
-Vue.component('rooms',{
-    template:
-        `<div> 
-
-            <v-list-item one-line>
-                    <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
-                    </v-list-item-content>
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="addroom = !addroom">
-                        <v-icon dark> add </v-icon>
-                    </v-btn>
-                    
-                    <v-dialog v-model="addroom" width="300px">  
-                                                
-                              <v-card>
-                                    <v-form @submit="roomadd" ref="roomform"> 
-                                                    <v-card-title light> Add Room  </v-card-title>
-                                                    
-                                                    <v-container grid-list-sm>
-                                                        <v-layout row wrap>  
-                                                          
-                                                            <v-col cols="12" sm="6" md="12">
-                                                                        <v-text-field 
-                                                                        ref="nameselector"
-                                                                        label="Name"
-                                                                        clearable
-                                                                        maxlength="60"
-                                                                        required
-                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
-                                                            </v-col>
-                                                            
-                                                            <v-col class="d-flex" cols="12" sm="12"> 
-                                                                        <v-select :items="roomtypes" label="Select Type"  ref="imageselector" required></v-select>
-                                                            </v-col>
-                                                    
-                                                         
-                                                        </v-layout>
-                                                    </v-container>
-                                                    
-                                                    <v-card-actions>
-                                                         <v-spacer></v-spacer>
-                                                         <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
-                                                         <v-btn text @click="addroom = false" type="submit">Save</v-btn>
-                                                    </v-card-actions>
-                                    </v-form>
-                              </v-card>
-                                              
-                                              
-                    </v-dialog>
-                    
-                    
-                    
-            </v-list-item>                           
-           
-            <v-divider></v-divider>
-            
-            <v-row>
-                  <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
-                         <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog"> 
-                               <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
-                                     <v-card-title class="white--text" v-text="room.name" ></v-card-title>
-                                     <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
-                                          <v-card>
-                                            
-                                              
-                                              <v-list-item three-line>
-                                                      <v-list-item-content class="text-center">
-                                                            <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
-                                                      </v-list-item-content>
-                                                      <v-btn icon @click="room.fav = !room.fav">
-                                                            <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
-                                                      </v-btn>
-                                               </v-list-item> 
-                                              
-                                              <v-spacer></v-spacer>
-                                                 
-                                              <v-row justify="space-around">
-                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
-                                                          <v-icon dark> edit </v-icon> EDIT
-                                                    </v-btn>
-                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >
-                                                          <v-icon dark> add </v-icon> ADD
-                                                    </v-btn>
-                                              </v-row>
-                                              
-                                              <!--  -->
-                                              <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
-                                                 
-                                                    <v-card>
-                                                        <v-form> 
-
-                                                                <v-card-title class="grey darken-2" light>
-                                                                    Add Device
-                                                                </v-card-title>
-                                                                <v-container grid-list-sm>
-                                                                
-                                                                    <v-layout row wrap>
-                                                                        <v-col class="d-flex" cols="12" sm="12">
-                                                                          <v-select
-                                                                            :items="items" item-text="name"
-                                                                            label="Select Device"
-                                                                            required
-                                                                          ></v-select>
-                                                                        </v-col>
-                                                                    </v-layout>
-                                                                    
-                                                                </v-container>
-                                                                <v-card-actions>
-                                                                    <v-spacer></v-spacer>
-                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
-                                                                    <v-btn text @click="addbutton = false">Save</v-btn>
-                                                                </v-card-actions>
-                                                                
-                                                        </v-form>
-
-                                                     </v-card>
-                                              
-                                              
-                                              </v-dialog>
-                                              
-                                               <!-- -->
-                                              
-                                              <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                                    <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
-                                              </v-card-actions>
-                                          </v-card>
-                                     </v-dialog>
-                               </v-img>
-                         </v-card>
-                  </v-col>
-            </v-row>
-            
-     </div>`,
-    data: function() {
-        return {
-            addroom: false,
-            dialog: false,
-            addbutton: false,
-            items: [ ],
-            rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
-            /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
-            roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
+                    api.device.add({
+                        type: {id:tempID},
+                        name: this.$refs.nameselector.internalValue,
+                        meta:{
+                            device: this.$refs.deviceselector.internalValue,
+                            deviceroom: this.$refs.deviceroomselector.internalValue
+                        }
+                    }).then(r => {
+                        this.devices.push({name:r.result.name, droom: this.$refs.deviceroomselector.internalValue, id: r.result.id});
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                this.$refs.deviceform.reset();
+            },
+            cancelform(){
+                this.$refs.deviceform.reset();
+                this.deviceadd_s = false
+            },
 
         }
-    },
-    mounted() {
-        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-            for (let i of r.result){
-                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.items.push({id: i.id, name: i.name});
-            }
-        })
 
-        api.room.getAll().then( (r) => {
-            for(let i of r.result){
-                this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
-            }
-            console.log(this.rooms);
-        })
-    },
-    methods:{
-        roomadd(event) {
-            event.preventDefault();
-            if(this.$refs.roomform.validate()){
-                api.room.add({
-                    name: this.$refs.nameselector.internalValue,
-                    meta:{
-                        fav: false,
-                        img: this.$refs.imageselector.internalValue
-                    }
-                }).then(r => {
-                    this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
-                }).catch((err) => {
-                    console.error(err);
-                });
-                console.log(this.rooms);
-            }else{
-                console.error("Error en el formulario");
-            }
-            this.$refs.roomform.reset();
-        },
-        cancelform(){
-            this.$refs.roomform.reset();
-            this.roomname = '';
-            this.addroom = false
-        },
-      /*  deviceadd(event){
-            event.preventDefault();
-            if(this.$refs.deviceform.validate()){
-                api.room.addRoomDevices().then(r => {
-                    this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
-                }).catch((err) => {
-                    console.error(err);
-                });
-                console.log(this.rooms);
-            }else{
-                console.error("Error en el formulario");
-            }
-            this.$refs.deviceform.reset();
-        },
-        canceldeviceform(){
-            this.$refs.deviceform.reset();
-            this.addbutton = false
-        } */
-
-    }
-
-}),
+    }),
 
 Vue.component('favourites',{
     template:
@@ -597,7 +587,7 @@ Vue.component('rutines',{
         api.devicetypes.getAllDeviceTypes().then( ( r ) => {
             for (let i of r.result){
                 if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.allDev.push({id: i.id, name: i.name}); // mentira que andan estos comments 
+                    this.allDev.push({id: i.id, name: i.name}); // mentira que andan estos comments
             }
 
         })
@@ -622,7 +612,7 @@ Vue.component('rutines',{
                 event.preventDefault();
               //if(this.$refs.roomform.validate()){
                     api.routine.add({
-                        
+
                             name: this.$refs.nameselector.internalValue ,
                             "actions": [
                               {
@@ -670,66 +660,58 @@ Vue.component('rutines',{
             }
     }
 
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
-
-    <!--@submit="currentDev"{text: "lampara", value:100}-->
 }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
