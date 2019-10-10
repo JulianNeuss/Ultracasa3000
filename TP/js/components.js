@@ -156,8 +156,8 @@ Vue.component('rooms',{
                                                             <v-layout row wrap>
                                                                 <v-col class="d-flex" cols="12" sm="12">
                                                                   <v-select
-                                                                    :items="items"
-                                                                    label="Select Device"
+                                                                    :items="items" item-text="name"
+                                                                    required label="Select Device"
                                                                   ></v-select>
                                                                 </v-col>
                                                             </v-layout>
@@ -233,6 +233,7 @@ Vue.component('rooms',{
             roomname = ''
 
         }
+
     }
 
 })
@@ -440,7 +441,7 @@ Vue.component('rutines',{
                                                                 </v-flex>
                                                                 <v-layout row wrap>
                                                                     <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select :items="allDev" item-text="title" label="Select Device"  name="category"  ></v-select>
+                                                                      <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
                                                                     </v-col>
                                                                 </v-layout>
                                                                 
@@ -505,9 +506,7 @@ Vue.component('rutines',{
     data(){
         return{
             dialog: false,
-            allDev: [
-                { title: "AIRPOD"},
-            ],
+            allDev: [ ],
             currentDevice: [],
             rutines: [
                 { title: "HOME TEMPERATURE"},
