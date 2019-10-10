@@ -198,7 +198,6 @@ Vue.component('rooms',{
                     <v-list-item-content class="align-self-start">
                         <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
                     </v-list-item-content>
-                    <button @click="review">Review</button>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="addroom = !addroom">
                         <v-icon dark> add </v-icon>
                     </v-btn>
@@ -255,9 +254,17 @@ Vue.component('rooms',{
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
-                                              <v-list-item-content class="text-center">
-                                                    <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
-                                              </v-list-item-content>
+                                              
+                                              <v-list-item three-line>
+                                                      <v-list-item-content class="text-center">
+                                                            <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
+                                                      </v-list-item-content>
+                                                      <v-btn icon @click="room.fav = !room.fav">
+                                                            <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
+                                                      </v-btn>
+                                               </v-list-item> 
+                                              
+                                              <v-spacer></v-spacer>
                                                  
                                               <v-row justify="space-around">
                                                     <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
@@ -272,26 +279,32 @@ Vue.component('rooms',{
                                               <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
                                                  
                                                     <v-card>
-                                                        <v-card-title class="grey darken-2" light>
-                                                            Add Device
-                                                        </v-card-title>
-                                                        <v-container grid-list-sm>
-                                                        
-                                                            <v-layout row wrap>
-                                                                <v-col class="d-flex" cols="12" sm="12">
-                                                                  <v-select
-                                                                    :items="items" item-text="name"
-                                                                    required label="Select Device"
-                                                                  ></v-select>
-                                                                </v-col>
-                                                            </v-layout>
-                                                            
-                                                        </v-container>
-                                                        <v-card-actions>
-                                                            <v-spacer></v-spacer>
-                                                            <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
-                                                            <v-btn text @click="addbutton = false">Save</v-btn>
-                                                        </v-card-actions>
+                                                        <v-form> 
+
+                                                                <v-card-title class="grey darken-2" light>
+                                                                    Add Device
+                                                                </v-card-title>
+                                                                <v-container grid-list-sm>
+                                                                
+                                                                    <v-layout row wrap>
+                                                                        <v-col class="d-flex" cols="12" sm="12">
+                                                                          <v-select
+                                                                            :items="items" item-text="name"
+                                                                            label="Select Device"
+                                                                            required
+                                                                          ></v-select>
+                                                                        </v-col>
+                                                                    </v-layout>
+                                                                    
+                                                                </v-container>
+                                                                <v-card-actions>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
+                                                                    <v-btn text @click="addbutton = false">Save</v-btn>
+                                                                </v-card-actions>
+                                                                
+                                                        </v-form>
+
                                                      </v-card>
                                               
                                               
@@ -317,9 +330,9 @@ Vue.component('rooms',{
             addroom: false,
             dialog: false,
             addbutton: false,
-            items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
-            rooms: [],
-            /*{ title: 'Living', src: "../src/living.jpg", id:lk12j4lk134}*/
+            items: [ ],
+            rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
+            /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
             roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
 
         }
@@ -334,8 +347,9 @@ Vue.component('rooms',{
 
         api.room.getAll().then( (r) => {
             for(let i of r.result){
-                this.rooms.push({name: i.name});
+                this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
             }
+            console.log(this.rooms);
         })
     },
     methods:{
@@ -345,13 +359,15 @@ Vue.component('rooms',{
                 api.room.add({
                     name: this.$refs.nameselector.internalValue,
                     meta:{
+                        fav: false,
                         img: this.$refs.imageselector.internalValue
                     }
                 }).then(r => {
-                    this.rooms.push({title: r.result.name, src: "../src/" + this.$refs.imageselector.internalValue + ".jpg", id: r.result.id});
+                    this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
                 }).catch((err) => {
                     console.error(err);
                 });
+                console.log(this.rooms);
             }else{
                 console.error("Error en el formulario");
             }
@@ -362,9 +378,24 @@ Vue.component('rooms',{
             this.roomname = '';
             this.addroom = false
         },
-        review(){
-            console.log(api.room.getAll());
-        }
+      /*  deviceadd(event){
+            event.preventDefault();
+            if(this.$refs.deviceform.validate()){
+                api.room.addRoomDevices().then(r => {
+                    this.rooms.push({name: r.result.name, src: "../src/" + r.result.meta.img + ".jpg", id: r.result.id});
+                }).catch((err) => {
+                    console.error(err);
+                });
+                console.log(this.rooms);
+            }else{
+                console.error("Error en el formulario");
+            }
+            this.$refs.deviceform.reset();
+        },
+        canceldeviceform(){
+            this.$refs.deviceform.reset();
+            this.addbutton = false
+        } */
 
     }
 
@@ -387,21 +418,21 @@ Vue.component('favourites',{
                             <v-card class="favs-card-style" :elevation="21" type="button"> 
                                 <v-list-item three-line>
                                     <v-list-item-content class="align-self-start">
-                                        <v-list-item-title class="medium mb-2"  >{{ room.title }}</v-list-item-title>
+                                        <v-list-item-title class="medium mb-2"  >{{ room.name }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                             </v-card>
                         </v-col>
-                        <v-col v-show="fav.name == 'Favourite Devices'" v-for="device in devices" :key="device.title"  cols="6" md="6" >
+                        <v-col v-show="fav.name == 'Favourite Devices'" v-for="device in devices" :key="device.name"  cols="6" md="6" >
                             <v-card class="favs-card-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                 <v-list-item three-line>
                                     <v-list-item-content class="align-self-start">
-                                        <v-list-item-title class="medium mb-2"  >{{ device.title }}</v-list-item-title>
+                                        <v-list-item-title class="medium mb-2"  >{{ device.name }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-dialog v-model="dialog"  width="400px">  <!-- no me anda el css del width -->
                                             <v-card>
-                                                <v-card-title class="grey darken-1"> {{ device.title }}</v-card-title>
+                                                <v-card-title class="grey darken-1"> {{ device.name }}</v-card-title>
                                                 <v-container grid-list-sm>
                                                     <v-layout row wrap>
                                                         <v-flex  xs12  align-center  justify-space-between >
@@ -448,93 +479,29 @@ Vue.component('favourites',{
                 { name: 'Favourite Rooms' },
                 { name: 'Favourite Devices'},
             ],
-            rooms: [
-                { title:'Living'},
-                { title:'Kitchen'},
-                { title:'Playroom'},
-                { title:'Add other'}
-
-            ],
-            devices: [
-                { title: 'AC'},
-                { title: 'Apple Homepods'},
-                { title:'Add other'}
-            ]
+            rooms: [ ],
+            devices: [ ]
         }
-    }
+    },
+    mounted() {
+        api.room.getAll().then( r => {
+            for(let i of r.result){
+                if(i.meta.fav === true)
+                     this.rooms.push({name: i.name});
+            }
+        })
+
+        api.device.getAll().then( r  => {
+            for(let i of r.devices){
+                if(i.meta.fav === true){
+                    this.devices.push({name: i.name}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                }
+            }
+        })
+    },
+
 
 }),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -702,6 +669,7 @@ Vue.component('rutines',{
                 this.currentDevice.push(e);
             }
     }
+
 })
 
 
@@ -758,6 +726,11 @@ Vue.component('rutines',{
 
 
 
+=======
+
+    <!--@submit="currentDev"{text: "lampara", value:100}-->
+}),
+
 
 
 
@@ -782,16 +755,28 @@ Vue.component('alarm',{
                           <v-btn class="mx-2"  dark color="deep-purple darken-1">
                                   <v-icon dark> edit </v-icon> EDIT
                           </v-btn>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addAlarm">
                                   <v-icon dark> add </v-icon> ADD
                           </v-btn>
                 </v-row>
             
             </v-card>
                
-        </v-container> 
-    
-    `
+        </v-container>`,
+    methods: {
+
+    },
+    data() {
+        return{
+
+        }
+    },
+    computed: {
+
+    },
+    props: {
+
+    }
 
 }),
 
@@ -842,6 +827,7 @@ Vue.component('toolbar', {
     data(){
         return {
             drawer:false,
+
             items: [
                 { title: 'Dashboard', icon: 'mdi-view-dashboard' },
                 { title: 'Photos', icon: 'mdi-image' },
@@ -868,4 +854,14 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
+    /*component:{
+      toolbar,
+
+    },
+
+    methods: {
+        addAlarm: function () {
+
+        }
+    }*/
 });

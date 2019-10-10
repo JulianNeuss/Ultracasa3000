@@ -94,6 +94,15 @@ api.room = class {
             }
         })
     }
+
+    static addRoomDevices(roomId, deviceId){
+        return api.fetch( api.room.url + roomId + '/devices' + deviceId , {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json; charset=utf-8"
+            }
+        })
+    }
 }
 
 api.devicetypes = class {
