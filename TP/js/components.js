@@ -95,8 +95,9 @@ Vue.component('rooms',{
                                                                         ref="nameselector"
                                                                         label="Name"
                                                                         clearable
-                                                                        maxlength="60"
                                                                         required
+                                                                        counter="60"
+                                                                        :rules="rules"
                                                                         ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                                             </v-col>
                                                             
@@ -211,8 +212,13 @@ Vue.component('rooms',{
             addbutton: false,
             items: [ ],
             rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
-            /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
-            roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
+            /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}, fav: false */
+            roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom'],
+            rules: [
+                value => !!value || 'Name is required',
+                value => !!value && value.length >= 3 || 'Name must be more than 3 characters',
+                value => !!value && value.length <= 60 || 'Name must be less than 60 characters',
+            ],
 
         }
     },
