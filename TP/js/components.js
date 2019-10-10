@@ -133,9 +133,15 @@ Vue.component('rooms',{
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
-                                              <v-list-item-content class="text-center">
-                                                    <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
-                                              </v-list-item-content>
+                                              
+                                              <v-list-item three-line>
+                                                      <v-list-item-content class="text-center">
+                                                            <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
+                                                      </v-list-item-content>
+                                                      <v-btn icon>
+                                                            <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
+                                                      </v-btn>
+                                               </v-list-item> 
                                               
                                               <v-spacer></v-spacer>
                                                  
@@ -198,7 +204,7 @@ Vue.component('rooms',{
             dialog: false,
             addbutton: false,
             items: [ ],
-            rooms: [ ],
+            rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
             /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
             roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
 
