@@ -302,16 +302,16 @@ Vue.component('favourites',{
                                 </v-list-item>
                             </v-card>
                         </v-col>
-                        <v-col v-show="fav.name == 'Favourite Devices'" v-for="device in devices" :key="device.title"  cols="6" md="6" >
+                        <v-col v-show="fav.name == 'Favourite Devices'" v-for="device in devices" :key="device.name"  cols="6" md="6" >
                             <v-card class="favs-card-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                 <v-list-item three-line>
                                     <v-list-item-content class="align-self-start">
-                                        <v-list-item-title class="medium mb-2"  >{{ device.title }}</v-list-item-title>
+                                        <v-list-item-title class="medium mb-2"  >{{ device.name }}</v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
                                 <v-dialog v-model="dialog"  width="400px">  <!-- no me anda el css del width -->
                                             <v-card>
-                                                <v-card-title class="grey darken-1"> {{ device.title }}</v-card-title>
+                                                <v-card-title class="grey darken-1"> {{ device.name }}</v-card-title>
                                                 <v-container grid-list-sm>
                                                     <v-layout row wrap>
                                                         <v-flex  xs12  align-center  justify-space-between >
@@ -359,18 +359,22 @@ Vue.component('favourites',{
                 { name: 'Favourite Devices'},
             ],
             rooms: [ ],
-            devices: [
-                { title: 'AC'},
-                { title: 'Apple Homepods'},
-                { title:'Add other'}
-            ]
+            devices: [ ]
         }
     },
     mounted() {
-        api.room.getAll().then( (r) => {
+        api.room.getAll().then( r => {
             for(let i of r.result){
                 if(i.meta.fav === true)
                      this.rooms.push({name: i.name});
+            }
+        })
+
+        api.device.getAll().then( r  => {
+            for(let i of r.devices){
+                if(i.meta.fav === true){
+                    this.devices.push({name: i.name}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                }
             }
         })
     },
