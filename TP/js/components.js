@@ -372,24 +372,33 @@ Vue.component('lastused', {
             deviceadd(event) {
                 event.preventDefault();
                     var tempID;
+                    var roomID;
+                    var roomSelector;
                     for(let i of this.devicelist){
                         if (i.name === this.$refs.deviceselector.internalValue){
                             tempID = i.id;
                         }
                     }
-                    api.device.add({
+                    for(let i of this.rooms){
+                        if (i.name === this.$refs.deviceroomselector.internalValue){
+                            roomID = i.id;
+                        }
+                    }
+                    roomSelector = this.$refs.deviceroomselector.internalValue;
+                api.device.add({
                         type: {id:tempID},
                         name: this.$refs.nameselector.internalValue,
                         meta:{
                             fav: false,
-                            device: this.$refs.deviceselector.internalValue,
-                            deviceroom: this.$refs.deviceroomselector.internalValue
+                            roomID: roomID,
+                            deviceroom: this.$refs.deviceroomselector.internalValue,
                         }
                     }).then(r => {
-                        this.devices.push({name: r.result.name, room: this.$refs.deviceroomselector.internalValue, id: r.result.id});
+                        this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
                     }).catch((err) => {
                         console.error(err);
                     });
+                console.log(this.$refs.deviceroomselector.internalValue)
                 this.$refs.deviceform.reset();
             },
             cancelform(){
