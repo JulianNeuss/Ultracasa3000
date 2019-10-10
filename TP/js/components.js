@@ -32,7 +32,7 @@ Vue.component('lastused', {
             ]
         }
     }
-})
+}),
 
 Vue.component('devices',{
     template:
@@ -66,7 +66,7 @@ Vue.component('devices',{
         }
     }
 
-})
+}),
 
 
 Vue.component('rooms',{
@@ -77,14 +77,15 @@ Vue.component('rooms',{
                     <v-list-item-content class="align-self-start">
                         <v-list-item-title  class="headline font-weight-bold">Room's</v-list-item-title>
                     </v-list-item-content>
+                    <button @click="review">Review</button>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="addroom = !addroom">
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-                    <v-dialog v-model="addroom" width="300px">  <!-- no me anda el css de este width-->
+                    <v-dialog v-model="addroom" width="300px">  
                                                 
                               <v-card>
-                                    <v-form @submit="roomadd"> 
+                                    <v-form @submit="roomadd" ref="roomform"> 
                                                     <v-card-title light> Add Room  </v-card-title>
                                                     
                                                     <v-container grid-list-sm>
@@ -92,26 +93,25 @@ Vue.component('rooms',{
                                                           
                                                             <v-col cols="12" sm="6" md="12">
                                                                         <v-text-field 
-                                                                        label="Regular" 
-                                                                        clearable 
-                                                                        v-model="roomname"
+                                                                        ref="nameselector"
+                                                                        label="Name"
+                                                                        clearable
                                                                         maxlength="60"
                                                                         required
                                                                         ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                                             </v-col>
                                                             
-                                                            <v-col class="d-flex" cols="12" sm="12">
-                                                                        <v-select label="Select image" ></v-select>
+                                                            <v-col class="d-flex" cols="12" sm="12"> 
+                                                                        <v-select :items="roomtypes" label="Select Type"  ref="imageselector" required></v-select>
                                                             </v-col>
                                                     
                                                          
                                                         </v-layout>
                                                     </v-container>
                                                     
-                                                    
                                                     <v-card-actions>
                                                          <v-spacer></v-spacer>
-                                                         <v-btn  text  color="primary" @click="cancel">Cancel</v-btn>
+                                                         <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
                                                          <v-btn text @click="addroom = false" type="submit">Save</v-btn>
                                                     </v-card-actions>
                                     </v-form>
@@ -119,6 +119,9 @@ Vue.component('rooms',{
                                               
                                               
                     </v-dialog>
+                    
+                    
+                    
             </v-list-item>                           
            
             <v-divider></v-divider>
@@ -175,8 +178,6 @@ Vue.component('rooms',{
                                               
                                                <!-- -->
                                               
-                                                 
-                                                
                                               <v-card-actions>
                                                     <v-spacer></v-spacer>
                                                     <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
@@ -190,15 +191,16 @@ Vue.component('rooms',{
             </v-row>
             
      </div>`,
-    data() {
+    data: function() {
         return {
             addroom: false,
             dialog: false,
             addbutton: false,
-            items: [ ],
-            rooms: [ ],
-            roomname: '',
-            roomimage:''
+            items: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
+            rooms: [],
+            /*{ title: 'Living', src: "../src/living.jpg", id:lk12j4lk134}*/
+            roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
+
         }
     },
     mounted() {
@@ -218,25 +220,34 @@ Vue.component('rooms',{
     methods:{
         roomadd(event) {
             event.preventDefault();
-            api.room
-            .add({
-                    name: this.roomname,
+            if(this.$refs.roomform.validate()){
+                api.room.add({
+                    name: this.$refs.nameselector.internalValue,
                     meta:{
-                        img: this.roomimage
+                        img: this.$refs.imageselector.internalValue
                     }
-                }
-            );
-
+                }).then(r => {
+                    this.rooms.push({title: r.result.name, src: "../src/" + this.$refs.imageselector.internalValue + ".jpg", id: r.result.id});
+                }).catch((err) => {
+                    console.error(err);
+                });
+            }else{
+                console.error("Error en el formulario");
+            }
+            this.$refs.roomform.reset();
         },
-        cancel(){
-            addroom = false;
-            roomname = ''
-
+        cancelform(){
+            this.$refs.roomform.reset();
+            this.roomname = '';
+            this.addroom = false
+        },
+        review(){
+            console.log(api.room.getAll());
         }
 
     }
 
-})
+}),
 
 Vue.component('favourites',{
     template:
@@ -331,7 +342,7 @@ Vue.component('favourites',{
         }
     }
 
-})
+}),
 
 
 
@@ -523,8 +534,10 @@ Vue.component('rutines',{
                 this.currentDevice.push(e);
             }
     }
+
     <!--@submit="currentDev"{text: "lampara", value:100}-->
 })
+
 
 
 
@@ -614,7 +627,7 @@ Vue.component('alarm',{
     
     `
 
-})
+}),
 
 
 Vue.component('toolbar', {
@@ -670,7 +683,7 @@ Vue.component('toolbar', {
             ],
         }
     }
-})
+});
 
 
 
@@ -689,4 +702,4 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
-})
+});

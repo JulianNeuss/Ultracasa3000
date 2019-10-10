@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP/js/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,6 +20,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1RvXx3shzb0qsQHQyja2Dw4Qp2V" />
@@ -75,6 +81,7 @@
       <workItem from="1570573217007" duration="64000" />
       <workItem from="1570573335392" duration="123000" />
       <workItem from="1570620875463" duration="7216000" />
+      <workItem from="1570656760770" duration="4702000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
