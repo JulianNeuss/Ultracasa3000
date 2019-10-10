@@ -1,3 +1,8 @@
+
+  
+  
+
+
 Vue.component('lastused', {
     template:
         `<div>
@@ -34,6 +39,10 @@ Vue.component('lastused', {
     }
 }),
 
+
+
+/////////////DEVICES/////////////
+
 Vue.component('devices',{
     template:
         `<div>
@@ -41,33 +50,145 @@ Vue.component('devices',{
                     <v-list-item-content class="align-self-start">
                         <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
                     </v-list-item-content>
-               </v-list-item>      
-               <v-divider></v-divider>
-               <v-row>
-                    <v-col v-for="device in devices" :key="device.title" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" > 
-                              <v-list-item three-line>
-                                  <v-list-item-content class="align-self-start">
-                                        <v-list-item-title  class="medium mb-2"  v-text="device.title"></v-list-item-title>
-                                        <v-list-item-subtitle v-text="device.room"></v-list-item-subtitle>
-                                  </v-list-item-content>
-                              </v-list-item>
+                    <button @click="review">Review</button>
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="deviceadd_s = !deviceadd_s">
+                        <v-icon dark> add </v-icon>
+                    </v-btn>
+
+                    <v-dialog v-model="deviceadd_s" width="300px">
+                         <v-card>
+                            <v-form @submit="deviceadd" ref="deviceform"> 
+                                 <v-card-title light> Add Device  </v-card-title>
+                         
+                                 <v-container grid-list-sm>
+                                     <v-layout row wrap>  
+                               
+                                        <v-col cols="12" sm="6" md="12">
+                                             <v-text-field 
+                                             ref="nameselector"
+                                             label="Name"
+                                             clearable
+                                             maxlength="60"
+                                             required
+                                             ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                        </v-col>
+                                 
+                                        <v-col class="d-flex" cols="12" sm="12"> 
+                                             <v-select :items="devicelist" label="Select Device"  ref="deviceselector" required></v-select>
+                                        </v-col>
+                                        
+                                        <v-col class="d-flex" cols="12" sm="12"> 
+                                        <v-select :items="rooms" item-text="name" label="Select Room"  ref="deviceroomselector" required></v-select>
+                                        </v-col>
+
+                                     </v-layout>
+                                 </v-container>
+                         
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
+                                    <v-btn text @click="deviceadd_s = false" type="submit">Save</v-btn>
+                                </v-card-actions>
+                            </v-form>
                          </v-card>
-                    </v-col>
-               </v-row> 
+                    </v-dialog>
+                    
+                    
+               </v-list-item>      
+
+               <v-divider></v-divider>]
+
+               <v-row>
+                    <v-col v-for="device in devices" :key="device.id" cols="12" md="4" >
+                         <v-card class="devices-style" :elevation="21" type="button" >
+                            <v-card-title class="white--text" v-text="device.name" ></v-card-title>
+                            <v-dialog v-model="dialog"  width="400px">
+                                <v-card>
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                    </v-list-item-content>
+                                                 
+                                    <v-row justify="space-around">
+                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
+                                            <v-icon dark> edit </v-icon> EDIT
+                                        </v-btn>
+                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >
+                                            <v-icon dark> add </v-icon> ADD
+                                        </v-btn>
+                                    </v-row>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                         </v-card>
+                    </c0
     </div>`,
     data(){
         return {
-            devices: [
-                { title: 'Lights'},
-                { title: 'AC', room: 'Kitchen', icon: 'ac_unit'},
-                { title: 'Smart Tv', room: 'Living', icon: 'tv'},
-            ]
+            deviceadd_s: false,
+            rooms: [],
+            devices: [],
+            devicelist: [ 'AC', 'BLIND' ,'DOOR','LIGHT', 'OVEN', 'SPEAKER', 'VACUUM' ],
         }
+    },
+    mounted() {
+        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+            for (let i of r.result){
+                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.items.push({id: i.id, name: i.name});
+            }
+        })
+
+        api.room.getAll().then( (r) => {
+            for(let i of r.result){
+                this.rooms.push({name: i.name});
+            }
+        })
+    },
+    methods:{
+        deviceadd(event) {
+            event.preventDefault();
+            //if(this.$refs.addform.validate()){
+                api.device.add({
+                    name: this.$refs.nameselector.internalValue,
+                    meta:{
+                        type: this.de$refs.devicelector.internalValue,
+                        deviceroom: this.de$refs.deviceroomlector.internalValue
+                    }
+                }).then(r => {
+                    this.devices.push({name:r.result.name, droom: r.result.room, id: r.result.id});
+                }).catch((err) => {
+                    console.error(err);
+                });
+            //}else{
+            //    console.error("Error en el formulario");
+            //}
+            this.$refs.deviceform.reset();
+        },
+        cancelform(){
+            this.$refs.deviceform.reset();
+            this.devicename = '';
+            this.deviceadd_s = false
+        },
+        review(){
+            console.log(api.device.getAll());
+        }
+
     }
 
 }),
 
+
+
+
+
+
+
+
+///////////////////ROOOMMSS//////////////////
 
 Vue.component('rooms',{
     template:
@@ -194,7 +315,7 @@ Vue.component('rooms',{
                                               <v-card-actions>
                                                     <v-spacer></v-spacer>
                                                     <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                                    <v-btn text @click="dialog = false">Save</v-btn>
+                                                    <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
                                               </v-card-actions>
                                           </v-card>
                                      </v-dialog>
@@ -412,7 +533,7 @@ Vue.component('rutines',{
                                                             <v-container grid-list-sm>
                                                             <v-flex  xs12  align-center  justify-space-between >
                                                                     <v-layout align-center>
-                                                                        <v-text-field :rules="deviceRules" required placeholder="Name" counter="60"></v-text-field>
+                                                                        <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>
                                                                                                                       
                                                                 
                                                                            </v-layout>
@@ -476,7 +597,7 @@ Vue.component('rutines',{
         api.devicetypes.getAllDeviceTypes().then( ( r ) => {
             for (let i of r.result){
                 if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.allDev.push({id: i.id, name: i.name});
+                    this.allDev.push({id: i.id, name: i.name}); // mentira que andan estos comments 
             }
 
         })
@@ -484,9 +605,10 @@ Vue.component('rutines',{
     data(){
         return{
             dialog: false,
-            allDev: [ ],
-            currentDevice: [],
-            rutines: [
+            allDev: [],
+            currentDevice:null ,
+            routineDevices,
+            routines: [
                 { title: "HOME TEMPERATURE"},
                 { title: "OUT OF HOME"},
                 { title: "BACKYARD LIGHT ON"},
@@ -496,14 +618,119 @@ Vue.component('rutines',{
         }
     },
         methods: {
+            routineadd(event) {
+                event.preventDefault();
+              //if(this.$refs.roomform.validate()){
+                    api.routine.add({
+                        
+                            name: this.$refs.nameselector.internalValue ,
+                            "actions": [
+                              {
+                                "device": {
+                                  "id": "c39181d52abe5555"
+                                },
+                                "actionName": "turnOff",
+                                "params": [],
+                                "meta": {}
+                              },
+                              {
+                                "device": {
+                                  "id": "f597c13717008fb1"
+                                },
+                                "actionName": "armStay",
+                                "params": [
+                                  "1234"
+                                ],
+                                "meta": {}
+                              }
+                            ],
+                            "meta": {}
+                        }
+                    ).then(r => {
+                        this.routines.push({title: r.result.name, id: r.result.id});
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+              //  }else{
+                //    console.error("Error en el formulario");
+                //}
+                this.$refs.roomform.reset();
+            },
+            cancelform(){
+                this.$refs.roomform.reset();
+                this.roomname = '';
+                this.addroom = false
+            },
+            review(){
+                console.log(api.room.getAll());
+            },
             currentDev(e){
                 this.currentDevice.pop();
                 this.currentDevice.push(e);
             }
     }
 
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+
     <!--@submit="currentDev"{text: "lampara", value:100}-->
 }),
+
 
 
 
