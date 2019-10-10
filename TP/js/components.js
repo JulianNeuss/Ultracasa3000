@@ -127,15 +127,15 @@ Vue.component('rooms',{
             <v-divider></v-divider>
             
             <v-row>
-                  <v-col v-for="room in rooms" :key="room.title" cols="12" md="6" >
+                  <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
                          <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog"> 
                                <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
-                                     <v-card-title class="white--text" v-text="room.title" ></v-card-title>
+                                     <v-card-title class="white--text" v-text="room.name" ></v-card-title>
                                      <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
                                           <v-card>
                                             
                                               <v-list-item-content class="text-center">
-                                                    <v-list-item-title  class="title"  v-text="room.title"></v-list-item-title>
+                                                    <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                               </v-list-item-content>
                                                  
                                               <v-row justify="space-around">
@@ -159,8 +159,8 @@ Vue.component('rooms',{
                                                             <v-layout row wrap>
                                                                 <v-col class="d-flex" cols="12" sm="12">
                                                                   <v-select
-                                                                    :items="items"
-                                                                    label="Select Device"
+                                                                    :items="items" item-text="name"
+                                                                    required label="Select Device"
                                                                   ></v-select>
                                                                 </v-col>
                                                             </v-layout>
@@ -200,7 +200,22 @@ Vue.component('rooms',{
             rooms: [],
             /*{ title: 'Living', src: "../src/living.jpg", id:lk12j4lk134}*/
             roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
+
         }
+    },
+    mounted() {
+        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+            for (let i of r.result){
+                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.items.push({id: i.id, name: i.name});
+            }
+        })
+
+        api.room.getAll().then( (r) => {
+            for(let i of r.result){
+                this.rooms.push({name: i.name});
+            }
+        })
     },
     methods:{
         roomadd(event) {
@@ -229,6 +244,7 @@ Vue.component('rooms',{
         review(){
             console.log(api.room.getAll());
         }
+
     }
 
 }),
@@ -329,6 +345,81 @@ Vue.component('favourites',{
 }),
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Vue.component('rutines',{
 
     template: ` 
@@ -347,40 +438,41 @@ Vue.component('rutines',{
 
                     <v-dialog v-model="dialog"  width="800px">  <!-- cambiar width tiene que estar en un CSS -->
                         <v-card>
-                            <v-card-title class="grey darken-2">
-                                CREATE RUTINE
-                            </v-card-title>
-                            <v-container grid-list-sm>
-                                <v-layout row wrap>
-                                    <v-flex  xs12  align-center  justify-space-between >
-                                        <v-layout align-center>
-                                            <v-text-field placeholder="Name"></v-text-field>
-                                        </v-layout>
-                                    </v-flex>
-                                    <v-flex xs6>
-                                        <v-text-field prepend-icon="business" placeholder="Company"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs6>
-                                        <v-text-field  placeholder="Job title" ></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12>
-                                        <v-text-field  prepend-icon="mail"  placeholder="Email"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12>
-                                        <v-text-field type="tel" prepend-icon="phone" placeholder="(000) 000 - 0000"></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12>
-                                        <v-text-field prepend-icon="notes" placeholder="Notes"></v-text-field>
-                                    </v-flex>
-                                </v-layout>
-                            </v-container>
-                            <v-card-actions>
-                                <v-btn text color="primary">More</v-btn>
-                                <v-spacer></v-spacer>
-                                <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                <v-btn text @click="dialog = false">Save</v-btn>
-                            </v-card-actions>
-                        </v-card>
+                                                        <v-form @submit="addRoutine" ref="addRoutineForm">
+                                                            <v-card-title class="grey darken-2" light>
+                                                                Add routine
+                                                            </v-card-title>
+                                                            <v-container grid-list-sm>
+                                                            <v-flex  xs12  align-center  justify-space-between >
+                                                                    <v-layout align-center>
+                                                                        <v-text-field :rules="deviceRules" required placeholder="Name" counter="60"></v-text-field>
+                                                                                                                      
+                                                                
+                                                                           </v-layout>
+                                                                </v-flex>
+                                                                <v-layout row wrap>
+                                                                    <v-col class="d-flex" cols="12" sm="12">
+                                                                      <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
+                                                                    </v-col>
+                                                                </v-layout>
+                                                                
+                                                                  <v-layout row wrap>
+                                                                    <v-col class="d-flex" cols="12" sm="12">
+                                                                      <v-select :items="allDev"  label="Device options"  name="category"  ></v-select>
+                                                                    </v-col>
+                                                                </v-layout>
+                                                                
+                                                            </v-container>
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+                                                                <v-btn type="submit" left text>Add device</v-btn>
+                                                                <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
+                                                                <v-btn type="submit" text>Save</v-btn>
+                                                            </v-card-actions>
+                                                            
+                                                        </v-form>
+                
+                                                    </v-card>
                     </v-dialog>
 
 
@@ -412,9 +504,21 @@ Vue.component('rutines',{
 
             </v-container>
         </v-item-group>`,
+
+    mounted() {
+        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+            for (let i of r.result){
+                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.allDev.push({id: i.id, name: i.name});
+            }
+
+        })
+    },
     data(){
         return{
             dialog: false,
+            allDev: [ ],
+            currentDevice: [],
             rutines: [
                 { title: "HOME TEMPERATURE"},
                 { title: "OUT OF HOME"},
@@ -423,8 +527,76 @@ Vue.component('rutines',{
                 { title: "ARRIVED HOME"},
             ]
         }
+    },
+        methods: {
+            currentDev(e){
+                this.currentDevice.pop();
+                this.currentDevice.push(e);
+            }
     }
-}),
+
+    <!--@submit="currentDev"{text: "lampara", value:100}-->
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Vue.component('alarm',{
     template:`
@@ -519,7 +691,10 @@ new Vue({
     el: '#app',
     vuetify: new Vuetify(),
     data: () => ({
-        active_tab: 0,
+        active_tab: 'index.html',
+        active_tab2: 'routines.html',
+        active_tab3: 'favourites.html',
+        active_tab4: 'safety.html',
         tabs: [
             { index: 0, name: 'HOME', href:'index.html' },
             { index: 1, name: 'ROUTINES', href:'routines.html' },
