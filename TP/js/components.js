@@ -986,7 +986,7 @@ Vue.component('alarm',{
                 </v-list-item>
                 
                 
-                <v-col v-show="havealarm == false" cols="6" md="6" >
+                <v-col v-show="havealarm == true" cols="6" md="6" >
                             <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addalarm = true">
                                   <v-icon dark> add </v-icon> ADD ALARM
                             </v-btn>
@@ -1023,7 +1023,7 @@ Vue.component('alarm',{
                 
                 
                 
-                <v-col v-show="havealarm == true" cols="12" sm="10">
+                <v-col v-show="havealarm == false" cols="12" sm="10">
                           <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="changeSecurityCodeDialog = true">
                                   <v-icon dark> edit </v-icon> CHANGE SECURITY CODE
                           </v-btn>
@@ -1054,30 +1054,37 @@ Vue.component('alarm',{
                 <v-dialog v-model="changeSecurityCodeDialog" max-width="300">
 
                           <v-card>
+                              <v-form @submit="changeCode" ref="changeCode">
+
                                  <v-container >
                                      <v-card-title class="headline">Change Security Code</v-card-title>
-                                     <v-text-field
+                                     <v-text-field 
                                             type="password"
-                                            v-model="armNumbers"
                                             ref="oldCode"
+                                            label="Enter Old Code"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
                                             :rules="armRules"
-                                            label="Old Code"
                                             required
                                      ></v-text-field>
                                      <v-text-field
                                             type="password"
-                                            v-model="newCode"
                                             ref="newCode"
+                                            label="Enter New Code"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
                                             :rules="armRules"
-                                            label="New Code"
                                             required
                                      ></v-text-field>
                                      <v-card-actions>
                                          <v-spacer></v-spacer>
                                          <v-btn class="mx-2" color="deep-purple darken-1" dark @click="armDialog = false">Cancel</v-btn>
-                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="changeSecurityCodeDialog = false; changeSecurityCode()">Done</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
                                      </v-card-actions>
                                  </v-container>
+                              </v-form>
                           </v-card>
                 </v-dialog>
                 
@@ -1086,15 +1093,36 @@ Vue.component('alarm',{
                
         </v-container>`,
      mounted(){
-         console.log(this.havealarm);
+        console.log(this.devices);
          api.device.getAll().then( r  => {
             for(let i of r.devices){
-                this.devices.push({id: i.type.id}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                this.devices.push({id: i.type.id, name: i.name, code: i.meta.code}); //por ahora solo le guardo name, hay que ver que mas necesitamos
             }
         })
+         console.log(this.devices);
      },
 
     methods: {
+        changeCode(event){
+            event.preventDefault();
+            var old;
+            for(let i of this.devices){
+                console.log(i.name);
+                console.log(this.devices);
+                if (i.name === "alarm"){
+                    console.log(i.name);
+                    old = i.meta.code;
+                    console.log(i.meta.code);
+                }
+            }
+            console.log(this.$refs.oldCode.internalvalue);
+            if(this.$refs.oldCode.internalvalue !== old){
+                alert(JSON.stringify({error : 'invalid password'}));
+                return;
+            }
+        },
+
+
         addNewAlarm(event) {
             console.log(this.havealarm);
             event.preventDefault();
@@ -1143,13 +1171,15 @@ Vue.component('alarm',{
             })
         },
         changeSecurityCode() {
+            console.log(this.$refs.oldCode.internalvalue);
             if(this.$refs.oldCode.internalvalue !== this.myAlarmID){
                 alert(JSON.stringify({error : 'invalid password'}));
+                return;
             }
             let params = JSON.parse(JSON.stringify([this.armNumbers, this.newCode]));
             this.armNumbers = this.newCode = '';
             alert(JSON.stringify({id : this.myAlarmID, name : 'changeSecurityCode', body : params}));
-            this.device.sendAction(this.myAlarmID, 'changeSecurityCode', params);
+            api.device.sendAction(this.myAlarmID, 'changeSecurityCode', params);
         }
 
     },
