@@ -1173,7 +1173,7 @@ Vue.component('alarm',{
                 <v-dialog v-model="changeSecurityCodeDialog" max-width="300">
 
                           <v-card>
-                              <v-form @submit="changeCode" ref="changeCode">
+                              <v-form @submit="changeCode" ref="changeCodeForm">
 
                                  <v-container >
                                      <v-card-title class="headline">Change Security Code</v-card-title>
@@ -1199,7 +1199,7 @@ Vue.component('alarm',{
                                      ></v-text-field>
                                      <v-card-actions>
                                          <v-spacer></v-spacer>
-                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="armDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="changeSecurityCodeDialog = false">Cancel</v-btn>
                                          <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
                                      </v-card-actions>
                                  </v-container>
@@ -1215,7 +1215,7 @@ Vue.component('alarm',{
         console.log(this.devices);
          api.device.getAll().then( r  => {
             for(let i of r.devices){
-                this.devices.push({id: i.type.id, name: i.name, code: i.meta.code}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                this.devices.push({id: i.id, name: i.name, code: i.meta.code}); //por ahora solo le guardo name, hay que ver que mas necesitamos
             }
         })
          console.log(this.devices);
@@ -1225,20 +1225,29 @@ Vue.component('alarm',{
         changeCode(event){
             event.preventDefault();
             var old;
+            var idCode;
             for(let i of this.devices){
-                console.log(i.name);
-                console.log(this.devices);
                 if (i.name === "alarm"){
-                    console.log(i.name);
-                    old = i.meta.code;
-                    console.log(i.meta.code);
+                    old = i.code;
+                    idCode = i.id;
                 }
             }
-            console.log(this.$refs.oldCode.internalvalue);
-            if(this.$refs.oldCode.internalvalue !== old){
+            //console.log(this.$refs.oldCode.internalValue);
+            if(this.$refs.oldCode.internalValue !== old){
                 alert(JSON.stringify({error : 'invalid password'}));
+                this.$refs.changeCodeForm.reset();
                 return;
             }
+            //console.log(idCode);
+            //console.log(this.$refs.oldCode.internalValue);
+            //console.log(this.$refs.newCode.internalValue);
+            api.device.sendAction(idCode, 'changeSecurityCode', [this.$refs.oldCode.internalValue,this.$refs.newCode.internalValue]);
+            alert(JSON.stringify({error : 'password changed'}));
+
+
+            this.changeSecurityCodeDialog = false;
+            this.$refs.changeCodeForm.reset();
+
         },
 
 
