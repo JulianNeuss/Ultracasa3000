@@ -117,56 +117,56 @@ Vue.component('lastused', {
 
                                               <v-spacer></v-spacer>
 
-                                              <v-row justify="space-around">
-                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
-                                                          <v-icon dark> edit </v-icon> EDIT
-                                                    </v-btn>
-                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >
-                                                          <v-icon dark> add </v-icon> ADD
-                                                    </v-btn>
-                                              </v-row>
+<!--                                              <v-row justify="space-around">-->
+<!--                                                    <v-btn class="mx-2"  outlined dark color="deep-purple darken-1" @click="dialog = !dialog">-->
+<!--                                                          <v-icon dark> edit </v-icon> EDIT-->
+<!--                                                    </v-btn>-->
+<!--                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >-->
+<!--                                                          <v-icon dark> add </v-icon> ADD-->
+<!--                                                    </v-btn>-->
+<!--                                              </v-row>-->
                                               
 
-                                              <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12">
-                                                     <v-row v-if="dev.room == room.name">
+                                              <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12"  >
+                                                     <v-row v-if="dev.room == room.name" justify="center" align="center">
                                                            <v-btn text> {{ dev.name}}</v-btn>
                                                      </v-row>
                                               </v-col>
 
                                               <!--  -->
-                                              <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
+<!--                                              <v-dialog v-model="addbutton" width="400px" >  &lt;!&ndash; no me anda el css de este width&ndash;&gt;-->
 
-                                                    <v-card>
-                                                        <v-form>
+<!--                                                    <v-card>-->
+<!--                                                        <v-form>-->
 
-                                                                <v-card-title class="grey darken-2" light>
-                                                                    Add Device
-                                                                </v-card-title>
-                                                                <v-container grid-list-sm>
+<!--                                                                <v-card-title class="grey darken-2" light>-->
+<!--                                                                    Add Device-->
+<!--                                                                </v-card-title>-->
+<!--                                                                <v-container grid-list-sm>-->
 
-                                                                    <v-layout row wrap>
-                                                                        <v-col class="d-flex" cols="12" sm="12">
-                                                                          <v-select
-                                                                            :items="items" item-text="name"
-                                                                            label="Select Device"
-                                                                            required
-                                                                          ></v-select>
-                                                                        </v-col>
-                                                                    </v-layout>
+<!--                                                                    <v-layout row wrap>-->
+<!--                                                                        <v-col class="d-flex" cols="12" sm="12">-->
+<!--                                                                          <v-select-->
+<!--                                                                            :items="items" item-text="name"-->
+<!--                                                                            label="Select Device"-->
+<!--                                                                            required-->
+<!--                                                                          ></v-select>-->
+<!--                                                                        </v-col>-->
+<!--                                                                    </v-layout>-->
 
-                                                                </v-container>
-                                                                <v-card-actions>
-                                                                    <v-spacer></v-spacer>
-                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>
-                                                                    <v-btn text @click="addbutton = false">Save</v-btn>
-                                                                </v-card-actions>
+<!--                                                                </v-container>-->
+<!--                                                                <v-card-actions>-->
+<!--                                                                    <v-spacer></v-spacer>-->
+<!--                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>-->
+<!--                                                                    <v-btn text @click="addbutton = false">Save</v-btn>-->
+<!--                                                                </v-card-actions>-->
 
-                                                        </v-form>
+<!--                                                        </v-form>-->
 
-                                                     </v-card>
+<!--                                                     </v-card>-->
 
 
-                                              </v-dialog>
+<!--                                              </v-dialog>-->
 
                                                <!-- -->
 
@@ -326,6 +326,7 @@ Vue.component('lastused', {
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
                          <v-card class="devices-style" :elevation="21" type="button" >
+                            <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
                             <v-dialog v-model="dialog"  width="400px">
                                 <v-card>
@@ -348,6 +349,7 @@ Vue.component('lastused', {
                                     </v-card-actions>
                                 </v-card>
                             </v-dialog>
+                            </v-img>
                          </v-card>
                     </v-col>
                </v-row>
@@ -357,7 +359,7 @@ Vue.component('lastused', {
                 dialog: false,
                 deviceadd_s: false,
                 rooms: [],
-                devices: [],
+                devices: [], //id,name,fav,src
                 devicelist: [],
                 deviceID: ''
             }
@@ -378,7 +380,7 @@ Vue.component('lastused', {
 
             api.device.getAll().then( r => {
                 for(let i of r.devices){
-                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav});
+                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav, src: i.meta.img});
                 }
                 console.log(this.devices);
             })
@@ -388,7 +390,6 @@ Vue.component('lastused', {
                 event.preventDefault();
                     var tempID;
                     var roomID;
-                    var devID;
                     var roomSelector;
                     for(let i of this.devicelist){
                         if (i.name === this.$refs.deviceselector.internalValue){
@@ -408,9 +409,10 @@ Vue.component('lastused', {
                             fav: false,
                             roomID: roomID,
                             deviceroom: this.$refs.deviceroomselector.internalValue,
+                            img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg"
                         }
                     }).then(r => {
-                        this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
+                        this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id, src: "../src/" + this.$refs.deviceselector.internalValue + ".jpg"});
                         api.room.addRoomDevices(roomID, r.result.id);
                     }).catch((err) => {
                         console.error(err);
