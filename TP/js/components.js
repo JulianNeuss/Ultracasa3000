@@ -262,6 +262,10 @@
                         <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
                     </v-list-item-content>
                     
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="registereddevices = !registereddevices">
+                        <v-icon dark> info </v-icon>
+                    </v-btn>
+                    
            
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="devicedelete = !devicedelete">
                         <v-icon dark> delete </v-icon>
@@ -270,10 +274,32 @@
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
+             <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
+                    <v-dialog v-model="devicedelete" width="300px">
+                         <v-card>
+                            <v-form @submit="deletedevice" ref="deldeviceform">
+                                
+                                <v-card-title light> Device Status </v-card-title>
+
+
+
+                              
+
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn  text  color="primary" @click="canceldelform">Done</v-btn>
+                                </v-card-actions>
+                                
+                                
+                                
+                            </v-form>
+                         </v-card>
+                    </v-dialog>
+            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->       
                     
                     
-                    
-                    
+            <!--DIALOG PARA BORRAR UN DEVICE-->
                     <v-dialog v-model="devicedelete" width="300px">
                          <v-card>
                             <v-form @submit="deletedevice" ref="deldeviceform">
@@ -295,16 +321,6 @@
                                              ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
                                         
-
-<!--                                        <v-col class="d-flex" cols="12" sm="12">-->
-<!--                                             <v-select :items="devicelist" item-text="name" label="Select Device"  ref="deldeviceselector" required></v-select>-->
-<!--                                        </v-col>-->
-<!--                                        -->
-
-<!--                                        <v-col class="d-flex" cols="12" sm="12">-->
-<!--                                            <v-select :items="rooms" item-text="name" label="Select Room"  ref="deldeviceroomselector" required></v-select>-->
-<!--                                        </v-col>-->
-
                                      </v-layout>
                                  </v-container>
 
@@ -320,7 +336,7 @@
                             </v-form>
                          </v-card>
                     </v-dialog>
-                    
+            <!--DIALOG PARA BORRAR UN DEVICE-->
                     
                     
                     
@@ -386,7 +402,7 @@
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.device ; devDialog();"> 
+                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.device; currentDevID = device.id ; devDialog();"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
                       
@@ -394,6 +410,39 @@
                  
                           <!---DIALOG DE BLINDS-->
                           <v-dialog v-model="blindsdialog"  width="400px">
+                          <v-form @submit="blindsaction">
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                          <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                                     <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="blindsOnOff" color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Closed / Open</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                                    
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="blindsdialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="blindsdialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                             </v-form>   
+                             </v-dialog>
+                          <!---DIALOG DE BLINDS-->
+                          
+                          <!---DIALOG DE OVEN-->
+                          <v-dialog v-model="ovendialog"  width="400px">
                           
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
@@ -470,10 +519,6 @@
                                     </v-card-actions>
                                 </v-card>
                              </v-dialog>
-                          <!---DIALOG DE BLINDS-->
-                          
-                          <!---DIALOG DE OVEN-->
-                          
                           <!---DIALOG DE OVEN-->
                           
                           <!---DIALOG DE Refrigerator-->
@@ -509,12 +554,17 @@
                 acdialog: false,
                 speakerdialog: false,
                 doordialog: false,
-                //
+                //////////////////////
+
+                //Blinds Variables
+                blindsOnOff: false,
+                //////////////////////
                 devicedelete: false,
                 deviceadd_s: false,
                 rooms: [],
                 devices: [], //id,name,src,device --> el device tiene el lo que es, Ej: 'blinds'
                 devicelist: [],
+                currentDevID:'',
                 currentDev:'',
                 deviceID: ''
             }
@@ -531,7 +581,7 @@
                 for(let i of r.result){
                     this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
                 }
-            })
+            });
 
             api.device.getAll().then( r => {
                 for(let i of r.devices){
@@ -631,8 +681,21 @@
                         break;
                     }
                 }
-            }
+            },
 
+            //////// METHODS PARA DEVICES ////////////////
+            blindsaction(e){
+                e.preventDefault();
+                //is ON
+                if(this.blindsOnOff){
+                    api.device.sendAction(this.currentDevID,"open","");
+                }
+                //is OFF
+                else{
+                    api.device.sendAction(this.currentDevID,"close","");
+                }
+            },
+            ////////////////////////////////////////////////
         }
 
     }),
