@@ -1182,44 +1182,7 @@ Vue.component('alarm',{
                 </v-list-item>
                 
                 
-                <v-col v-show="havealarm == true" cols="12" md="12" >
-                            <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addalarm = true">
-                                  <v-icon dark> add </v-icon> ADD ALARM
-                            </v-btn>
-                            <v-dialog v-model="addalarm" width="350">
-                                <v-card>
-                                    <v-form @submit="addNewAlarm" ref="alarmform">
-                                        <v-container grid-list-sm>
-                                                        <v-layout row wrap>
-
-                                                            <v-col cols="12" sm="6" md="12">
-                                                                        <v-text-field
-                                                                        type="password"
-                                                                        ref="alarmCode"
-                                                                        label="Enter Alarm Code"
-                                                                        clearable
-                                                                        maxlength="4"
-                                                                        counter="4"
-                                                                        :rules="armRules"
-                                                                        required
-                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
-                                                            </v-col>
-
-                                                        </v-layout>
-                                        </v-container>
-                                        <v-card-actions>
-                                                 <v-spacer></v-spacer>
-                                                 <v-btn class="mx-2" color="deep-purple darken-1" dark @click="addalarm = false">Cancel</v-btn>
-                                                 <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
-                                        </v-card-actions>
-                                    </v-form>
-                                </v-card>
-                            </v-dialog>
-                </v-col>
-                
-                
-                
-                <v-col v-show="havealarm == false" cols="12" sm="10">
+                <v-col cols="12" sm="10">
                           <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="changeSecurityCodeDialog = true">
                                   <v-icon dark> edit </v-icon> CHANGE SECURITY CODE
                           </v-btn>
@@ -1317,7 +1280,7 @@ Vue.component('alarm',{
                               <v-form @submit="awayMode" ref="am">
 
                                  <v-container >
-                                     <v-card-title class="headline">Away Mode</v-card-title>
+                                     <v-card-title class="headline">Regular Mode</v-card-title>
                                      <v-text-field 
                                             type="password"
                                             ref="password"
@@ -1345,7 +1308,7 @@ Vue.component('alarm',{
                               <v-form @submit="disarmMode" ref="dm">
 
                                  <v-container >
-                                     <v-card-title class="headline">DISARM</v-card-title>
+                                     <v-card-title class="headline">Disarm</v-card-title>
                                      <v-text-field 
                                             type="password"
                                             ref="password"
@@ -1367,33 +1330,7 @@ Vue.component('alarm',{
                           </v-card>
                 </v-dialog>
                 
-                <v-dialog v-model="disarmDialog" max-width="300">
-
-                          <v-card>
-                              <v-form @submit="disarmMode" ref="dm">
-
-                                 <v-container >
-                                     <v-card-title class="headline">Home Mode</v-card-title>
-                                     <v-text-field 
-                                            type="password"
-                                            ref="password"
-                                            label="Enter Password"
-                                            clearable
-                                            maxlength="4"
-                                            counter="4"
-                                            :rules="armRules"
-                                            required
-                                     ></v-text-field>
-                                     
-                                     <v-card-actions>
-                                         <v-spacer></v-spacer>
-                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="disarmDialog = false">Cancel</v-btn>
-                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
-                                     </v-card-actions>
-                                 </v-container>
-                              </v-form>
-                          </v-card>
-                </v-dialog>
+                
                 
                 
             
@@ -1402,67 +1339,69 @@ Vue.component('alarm',{
         </v-container>`,
      mounted(){
         console.log(this.devices);
-         api.device.getAll().then( r  => {
-            for(let i of r.devices){
-                this.devices.push({id: i.id, name: i.name, code: i.meta.code}); //por ahora solo le guardo name, hay que ver que mas necesitamos
-            }
-        })
+
+            //
+             var flag = true;
+             api.device.getAll().then( r  => {
+                 for(let i of r.devices){
+                     if(i.name === "alarm"){
+                         flag = false;
+                         console.log(flag);
+                     }
+                 }
+                 if(flag){
+                     api.device.add({
+                         type: { id: "mxztsyjzsrq7iaqc" }, //id de la alarma, siempre igual
+                         name: "alarm",
+                         meta:{
+                             fav: false,
+                         }
+                     }).catch((err) => {
+                         console.error(err);
+                     });
+                 }
+
+                 for(let i of r.devices){
+                     this.devices.push({id: i.id, name: i.name}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                 }
+             })
+
+            //
+
          console.log(this.devices);
      },
 
     methods: {
         homeModeAct(event){
-            var old;
             var idCode;
             for(let i of this.devices){
                 if (i.name === "alarm"){
-                    old = i.code;
                     idCode = i.id;
                 }
             }
-            //console.log(this.$refs.password.internalValue);
-            /*if(this.$refs.password.internalValue !== old){
-                alert(JSON.stringify({error : 'invalid password'}));
-                this.$refs.hm.reset();
-                return;
-            } */
-            //console.log(idCode);
-            //console.log(this.$refs.password.internalValue);
-            //console.log(this.$refs.newCode.internalValue);
+
             api.device.sendAction(idCode, 'armStay', [this.$refs.password.internalValue]);
             this.homeModeDialog = false;
-            this.$refs.am.reset();
+            this.$refs.hm.reset();
         },
 
         disarmMode(event){
-            var old;
             var idCode;
             for(let i of this.devices){
                 if (i.name === "alarm"){
-                    old = i.code;
                     idCode = i.id;
                 }
             }
-            //console.log(this.$refs.password.internalValue);
-            /*if(this.$refs.password.internalValue !== old){
-                alert(JSON.stringify({error : 'invalid password'}));
-                this.$refs.hm.reset();
-                return;
-            } */
-            //console.log(idCode);
-            //console.log(this.$refs.password.internalValue);
-            //console.log(this.$refs.newCode.internalValue);
+
             api.device.sendAction(idCode, 'disarm', [this.$refs.password.internalValue]);
             this.disarmDialog = false;
             this.$refs.dm.reset();
         },
 
         awayMode(event){
-            var old;
             var idCode;
             for(let i of this.devices){
                 if (i.name === "alarm"){
-                    old = i.code;
                     idCode = i.id;
                 }
             }
@@ -1478,11 +1417,9 @@ Vue.component('alarm',{
 
         changeCode(event){
             event.preventDefault();
-            var old;
             var idCode;
             for(let i of this.devices){
                 if (i.name === "alarm"){
-                    old = i.code;
                     idCode = i.id;
                 }
             }
@@ -1498,41 +1435,12 @@ Vue.component('alarm',{
 
         },
 
-
-        addNewAlarm(event) {
-            console.log(this.havealarm);
-            event.preventDefault();
-            if(this.$refs.alarmform.validate()){
-                api.device.add({
-                    type: { id: "mxztsyjzsrq7iaqc" }, //id de la alarma, siempre igual
-                    name: "alarm",
-                    meta:{
-                        code: this.$refs.alarmCode.internalValue,
-                        fav: false,
-                    }
-                }).then(r => {
-                    this.myAlarmID = r.result.id;
-                    console.log(r.result.meta.code);
-                }).catch((err) => {
-                    console.error(err);
-                });
-            }else{
-                console.error("Error en el formulario");
-            }
-            this.$refs.alarmform.reset();
-            this.addalarm = false;
-            this.havealarm = true;
-            console.log(this.havealarm);
-        },
-
-
     },
     data() {
         return{
             devices: [], /* me guardo los id's de los devices ya creados,
                             asi cuando entro a alarmas me fijo,
                             si ya hay creada una alarma muestro una cosa, sino muestro otra*/
-            havealarm: false,
             changeSecurityCodeDialog : false,
             homeModeDialog: false,
             awayModeDialog: false,
@@ -1545,8 +1453,6 @@ Vue.component('alarm',{
             ],
             newCode : '',
             error : false,
-            errorCode : '',
-            myAlarmID: '',
             addalarm: false,
 
         }
