@@ -1182,11 +1182,11 @@ Vue.component('alarm',{
                 </v-list-item>
                 
                 
-                <v-col v-show="havealarm == true" cols="6" md="6" >
+                <v-col v-show="havealarm == true" cols="12" md="12" >
                             <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addalarm = true">
                                   <v-icon dark> add </v-icon> ADD ALARM
                             </v-btn>
-                            <v-dialog v-model="addalarm" width="250">
+                            <v-dialog v-model="addalarm" width="350">
                                 <v-card>
                                     <v-form @submit="addNewAlarm" ref="alarmform">
                                         <v-container grid-list-sm>
@@ -1225,22 +1225,22 @@ Vue.component('alarm',{
                           </v-btn>
                           </br>
                           </br>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="homeModeDialog = true">
                                   <v-icon dark> home </v-icon> HOME MODE
                           </v-btn>
                           </br>
                           </br>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="awayModeDialog = true">
                                   <v-icon dark> lock </v-icon> REGULAR MODE
                           </v-btn>
                           </br>
                           </br>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="disarmDialog = true">
                                   <v-icon dark> lock_open </v-icon> DISARM
                           </v-btn>
                           </br>
                           </br>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="stateDialog = true">
                                   <v-icon dark> assignment </v-icon> GET STATE
                           </v-btn>
                           </br>
@@ -1265,7 +1265,6 @@ Vue.component('alarm',{
                                             required
                                      ></v-text-field>
                                      <v-text-field
-                                            type="password"
                                             ref="newCode"
                                             label="Enter New Code"
                                             clearable
@@ -1284,6 +1283,119 @@ Vue.component('alarm',{
                           </v-card>
                 </v-dialog>
                 
+                <v-dialog v-model="homeModeDialog" max-width="300">
+
+                          <v-card>
+                              <v-form @submit="homeModeAct" ref="hm">
+
+                                 <v-container >
+                                     <v-card-title class="headline">Home Mode</v-card-title>
+                                     <v-text-field 
+                                            type="password"
+                                            ref="password"
+                                            label="Enter Password"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
+                                            :rules="armRules"
+                                            required
+                                     ></v-text-field>
+                                     
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="homeModeDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                              </v-form>
+                          </v-card>
+                </v-dialog>
+                
+                <v-dialog v-model="awayModeDialog" max-width="300">
+
+                          <v-card>
+                              <v-form @submit="awayMode" ref="am">
+
+                                 <v-container >
+                                     <v-card-title class="headline">Away Mode</v-card-title>
+                                     <v-text-field 
+                                            type="password"
+                                            ref="password"
+                                            label="Enter Password"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
+                                            :rules="armRules"
+                                            required
+                                     ></v-text-field>
+                                     
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="awayModeDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                              </v-form>
+                          </v-card>
+                </v-dialog>
+                
+                <v-dialog v-model="disarmDialog" max-width="300">
+
+                          <v-card>
+                              <v-form @submit="disarmMode" ref="dm">
+
+                                 <v-container >
+                                     <v-card-title class="headline">DISARM</v-card-title>
+                                     <v-text-field 
+                                            type="password"
+                                            ref="password"
+                                            label="Enter Password"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
+                                            :rules="armRules"
+                                            required
+                                     ></v-text-field>
+                                     
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="disarmDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                              </v-form>
+                          </v-card>
+                </v-dialog>
+                
+                <v-dialog v-model="disarmDialog" max-width="300">
+
+                          <v-card>
+                              <v-form @submit="disarmMode" ref="dm">
+
+                                 <v-container >
+                                     <v-card-title class="headline">Home Mode</v-card-title>
+                                     <v-text-field 
+                                            type="password"
+                                            ref="password"
+                                            label="Enter Password"
+                                            clearable
+                                            maxlength="4"
+                                            counter="4"
+                                            :rules="armRules"
+                                            required
+                                     ></v-text-field>
+                                     
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="disarmDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark type="submit">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                              </v-form>
+                          </v-card>
+                </v-dialog>
+                
+                
             
             </v-card>
                
@@ -1299,6 +1411,71 @@ Vue.component('alarm',{
      },
 
     methods: {
+        homeModeAct(event){
+            var old;
+            var idCode;
+            for(let i of this.devices){
+                if (i.name === "alarm"){
+                    old = i.code;
+                    idCode = i.id;
+                }
+            }
+            //console.log(this.$refs.password.internalValue);
+            /*if(this.$refs.password.internalValue !== old){
+                alert(JSON.stringify({error : 'invalid password'}));
+                this.$refs.hm.reset();
+                return;
+            } */
+            //console.log(idCode);
+            //console.log(this.$refs.password.internalValue);
+            //console.log(this.$refs.newCode.internalValue);
+            api.device.sendAction(idCode, 'armStay', [this.$refs.password.internalValue]);
+            this.homeModeDialog = false;
+            this.$refs.am.reset();
+        },
+
+        disarmMode(event){
+            var old;
+            var idCode;
+            for(let i of this.devices){
+                if (i.name === "alarm"){
+                    old = i.code;
+                    idCode = i.id;
+                }
+            }
+            //console.log(this.$refs.password.internalValue);
+            /*if(this.$refs.password.internalValue !== old){
+                alert(JSON.stringify({error : 'invalid password'}));
+                this.$refs.hm.reset();
+                return;
+            } */
+            //console.log(idCode);
+            //console.log(this.$refs.password.internalValue);
+            //console.log(this.$refs.newCode.internalValue);
+            api.device.sendAction(idCode, 'disarm', [this.$refs.password.internalValue]);
+            this.disarmDialog = false;
+            this.$refs.dm.reset();
+        },
+
+        awayMode(event){
+            var old;
+            var idCode;
+            for(let i of this.devices){
+                if (i.name === "alarm"){
+                    old = i.code;
+                    idCode = i.id;
+                }
+            }
+            /*if(this.$refs.password.internalValue !== old){
+                alert(JSON.stringify({error : 'invalid password'}));
+                this.$refs.hm.reset();
+                return;
+            } */
+            api.device.sendAction(idCode, 'armAway', [this.$refs.password.internalValue]);
+            this.awayModeDialog = false;
+            this.$refs.am.reset();
+        },
+
         changeCode(event){
             event.preventDefault();
             var old;
@@ -1309,19 +1486,13 @@ Vue.component('alarm',{
                     idCode = i.id;
                 }
             }
-            //console.log(this.$refs.oldCode.internalValue);
-            if(this.$refs.oldCode.internalValue !== old){
+            /*if(this.$refs.oldCode.internalValue !== old){
                 alert(JSON.stringify({error : 'invalid password'}));
                 this.$refs.changeCodeForm.reset();
                 return;
-            }
-            //console.log(idCode);
-            //console.log(this.$refs.oldCode.internalValue);
-            //console.log(this.$refs.newCode.internalValue);
-            api.device.sendAction(idCode, 'changeSecurityCode', [this.$refs.oldCode.internalValue,this.$refs.newCode.internalValue]);
-            alert(JSON.stringify({error : 'password changed'}));
-
-
+            }*/
+            let params = JSON.parse(JSON.stringify([this.$refs.oldCode.internalValue, this.$refs.newCode.internalValue]));
+            api.device.sendAction(idCode, 'changeSecurityCode', params);
             this.changeSecurityCodeDialog = false;
             this.$refs.changeCodeForm.reset();
 
@@ -1354,38 +1525,6 @@ Vue.component('alarm',{
             console.log(this.havealarm);
         },
 
-        activateAlarm(){
-            api.device.sendAction(this.myAlarmID, 'arm' + this.armMode, [this.armNumbers]).then((response)=>{
-                if(response){
-                    this.armDialog = false;
-                }
-                else{
-                    this.armDialog = true;
-                    this.armNumbers = '';
-                }
-            })
-        },
-        deactivateAlarm(){
-            api.device.sendAction(this.myAlarmID, 'disarm', [this.armNumbers]).then((response)=>{
-                if(response){
-                    this.disarmDialog = false;
-                }
-                else{
-                    this.armNumber='Wrong Code'
-                }
-            })
-        },
-        changeSecurityCode() {
-            console.log(this.$refs.oldCode.internalvalue);
-            if(this.$refs.oldCode.internalvalue !== this.myAlarmID){
-                alert(JSON.stringify({error : 'invalid password'}));
-                return;
-            }
-            let params = JSON.parse(JSON.stringify([this.armNumbers, this.newCode]));
-            this.armNumbers = this.newCode = '';
-            alert(JSON.stringify({id : this.myAlarmID, name : 'changeSecurityCode', body : params}));
-            api.device.sendAction(this.myAlarmID, 'changeSecurityCode', params);
-        }
 
     },
     data() {
@@ -1395,6 +1534,10 @@ Vue.component('alarm',{
                             si ya hay creada una alarma muestro una cosa, sino muestro otra*/
             havealarm: false,
             changeSecurityCodeDialog : false,
+            homeModeDialog: false,
+            awayModeDialog: false,
+            disarmDialog: false,
+            stateDialog: false,
             armNumbers : '',
             armMode : '',
             armRules : [
