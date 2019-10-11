@@ -110,21 +110,25 @@ Vue.component('lastused', {
                                                       <v-list-item-content class="text-center">
                                                             <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                                       </v-list-item-content>
+                                                    
                                                       <v-btn icon @click="room.fav = !room.fav">
                                                             <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
                                                       </v-btn>
                                                </v-list-item>
-
                                               <v-spacer></v-spacer>
 
-<!--                                              <v-row justify="space-around">-->
+                                              <v-row>
+                                                      <v-list-item-content class="text-center">
+                                                            <v-list-item-title class="medium mb-2"  >Room Devices:</v-list-item-title>
+                                                      </v-list-item-content>
+
 <!--                                                    <v-btn class="mx-2"  outlined dark color="deep-purple darken-1" @click="dialog = !dialog">-->
 <!--                                                          <v-icon dark> edit </v-icon> EDIT-->
 <!--                                                    </v-btn>-->
 <!--                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >-->
 <!--                                                          <v-icon dark> add </v-icon> ADD-->
 <!--                                                    </v-btn>-->
-<!--                                              </v-row>-->
+                                              </v-row>
                                               
 
                                               <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12"  >
@@ -259,10 +263,67 @@ Vue.component('lastused', {
                     </v-list-item-content>
                     
            
-                    
+                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="devicedelete = !devicedelete">
+                        <v-icon dark> delete </v-icon>
+                    </v-btn>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="deviceadd_s = !deviceadd_s">
                         <v-icon dark> add </v-icon>
                     </v-btn>
+                    
+                    
+                    
+                    
+                    
+                    <v-dialog v-model="devicedelete" width="300px">
+                         <v-card>
+                            <v-form @submit="deletedevice" ref="deldeviceform">
+                                
+                                <v-card-title light> Delete Device  </v-card-title>
+
+
+
+                                 <v-container grid-list-sm>
+                                     <v-layout row wrap>
+
+                                        <v-col cols="12" sm="6" md="12">
+                                             <v-text-field
+                                             ref="delnameselector"
+                                             label="Name"
+                                             clearable
+                                             maxlength="60"
+                                             required
+                                             ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                        </v-col>
+                                        
+
+<!--                                        <v-col class="d-flex" cols="12" sm="12">-->
+<!--                                             <v-select :items="devicelist" item-text="name" label="Select Device"  ref="deldeviceselector" required></v-select>-->
+<!--                                        </v-col>-->
+<!--                                        -->
+
+<!--                                        <v-col class="d-flex" cols="12" sm="12">-->
+<!--                                            <v-select :items="rooms" item-text="name" label="Select Room"  ref="deldeviceroomselector" required></v-select>-->
+<!--                                        </v-col>-->
+
+                                     </v-layout>
+                                 </v-container>
+
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn  text  color="primary" @click="canceldelform">Cancel</v-btn>
+                                    <v-btn text @click="devicedelete = false" type="submit">Save</v-btn>
+                                </v-card-actions>
+                                
+                                
+                                
+                            </v-form>
+                         </v-card>
+                    </v-dialog>
+                    
+                    
+                    
+                    
                     
                     
 
@@ -325,30 +386,27 @@ Vue.component('lastused', {
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" >
+                         <v-card class="devices-style" :elevation="21" type="button" > <!--@click="dialog = !dialog"-->
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
-                            <v-dialog v-model="dialog"  width="400px">
-                                <v-card>
-                                    <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                    </v-list-item-content>
+<!--                            <v-dialog v-model="dialog"  width="400px">-->
+<!--                                <v-card>-->
+<!--                                    <v-list-item-content class="text-center">-->
+<!--                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>-->
+<!--                                    </v-list-item-content>-->
 
-                                    <v-row justify="space-around">
-                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="dialog = !dialog">
-                                            <v-icon dark> edit </v-icon> EDIT
-                                        </v-btn>
-                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >
-                                            <v-icon dark> add </v-icon> ADD
-                                        </v-btn>
-                                    </v-row>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
+<!--                                    <v-row justify="space-around">-->
+<!--                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">-->
+<!--                                            <v-icon dark> delete </v-icon> DELETE-->
+<!--                                        </v-btn>-->
+<!--                                    </v-row>-->
+<!--                                    <v-card-actions>-->
+<!--                                        <v-spacer></v-spacer>-->
+<!--                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>-->
+<!--                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>-->
+<!--                                    </v-card-actions>-->
+<!--                                </v-card>-->
+<!--                            </v-dialog>-->
                             </v-img>
                          </v-card>
                     </v-col>
@@ -356,6 +414,7 @@ Vue.component('lastused', {
     </div>`,
         data(){
             return {
+                devicedelete: false,
                 dialog: false,
                 deviceadd_s: false,
                 rooms: [],
@@ -387,7 +446,7 @@ Vue.component('lastused', {
         },
         methods:{
             deviceadd(event) {
-                event.preventDefault();
+                // event.preventDefault();
                     var tempID;
                     var roomID;
                     var roomSelector;
@@ -424,6 +483,21 @@ Vue.component('lastused', {
                 this.$refs.deviceform.reset();
                 this.deviceadd_s = false
             },
+            canceldelform(){
+                this.$refs.deldeviceform.reset();
+                this.devicedelete = false
+            },
+            deletedevice(event){
+                // event.preventDefault();
+                console.log('hola1')
+                for(let i of this.devices){
+                    console.log(i.name);
+                    if (i.name === this.$refs.delnameselector.internalValue){
+                        api.device.delete(i.id);
+                        break;
+                    }
+                }
+            }
 
         }
 
