@@ -399,7 +399,7 @@
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
                                           <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
                                                                        <!---CONTENIDO DIALOG DE DEVICE-->
@@ -528,7 +528,9 @@
 
             api.device.getAll().then( r => {
                 for(let i of r.devices){
-                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav, src: i.meta.img});
+                    if(i.name !== "alarm") {
+                        this.devices.push({id: i.id, name: i.name, fav: i.meta.fav, src: i.meta.img});
+                    }
                 }
                 console.log(this.devices);
             })
@@ -1063,26 +1065,28 @@ Vue.component('alarm',{
          console.log(this.havealarm);
          api.device.getAll().then( r  => {
             for(let i of r.devices){
-                this.devices.push({id: i.type.id}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                if(i.name === "alarm")
+                    this.devices.push({flag: i.meta.havealarm}); //por ahora solo le guardo name, hay que ver que mas necesitamos
             }
-        })
+         })
+         console.log(this.devices);
      },
 
     methods: {
         addNewAlarm(event) {
-            console.log(this.havealarm);
             event.preventDefault();
             if(this.$refs.alarmform.validate()){
                 api.device.add({
                     type: { id: "mxztsyjzsrq7iaqc" }, //id de la alarma, siempre igual
                     name: "alarm",
                     meta:{
+                        havealarm: true,
                         code: this.$refs.alarmCode.internalValue,
                         fav: false,
                     }
                 }).then(r => {
                     this.myAlarmID = r.result.id;
-                    console.log(r.result.meta.code);
+                    console.log(this.havealarm);
                 }).catch((err) => {
                     console.error(err);
                 });
@@ -1091,7 +1095,8 @@ Vue.component('alarm',{
             }
             this.$refs.alarmform.reset();
             this.addalarm = false;
-            this.havealarm = true;
+
+            sessionStorage.setItem("havealarm", "true");
             console.log(this.havealarm);
         },
 
