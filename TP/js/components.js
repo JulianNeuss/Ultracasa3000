@@ -771,30 +771,89 @@ Vue.component('alarm',{
                 <v-list-item one-line>
                         <v-icon large> notification_important </v-icon>
                         <v-list-item-content class="align-self-start">
-                            <v-list-item-title  class="headline font-weight-bold">Alarms</v-list-item-title> <!-- ver si se puede centrar esto-->
+                            <v-list-item-title  class="headline font-weight-bold">Alarms</v-list-item-title> 
                         </v-list-item-content>
                 </v-list-item>
                 
                 
-                <v-row justify="space-around">
+                
+                
+                <v-col  cols="12" sm="10">
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="changeSecurityCodeDialog = true">
+                                  <v-icon dark> edit </v-icon> CHANGE SECURITY CODE
+                          </v-btn>
+                          </br>
+                          </br>
                           <v-btn class="mx-2"  dark color="deep-purple darken-1">
-                                  <v-icon dark> edit </v-icon> EDIT
+                                  <v-icon dark> home </v-icon> HOME MODE
                           </v-btn>
-                          <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addAlarm">
-                                  <v-icon dark> add </v-icon> ADD
+                          </br>
+                          </br>
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                                  <v-icon dark> lock </v-icon> REGULAR MODE
                           </v-btn>
-                </v-row>
+                          </br>
+                          </br>
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                                  <v-icon dark> lock_open </v-icon> DISARM
+                          </v-btn>
+                          </br>
+                          </br>
+                          <v-btn class="mx-2"  dark color="deep-purple darken-1">
+                                  <v-icon dark> assignment </v-icon> GET STATE
+                          </v-btn>
+                          </br>
+                          </br>
+                </v-col>
+                
+                <v-dialog v-model="changeSecurityCodeDialog" max-width="300">
+
+                          <v-card>
+                                 <v-container >
+                                     <v-card-title class="headline">Change Security Code</v-card-title>
+                                     <v-text-field
+                                            type="password"
+                                            v-model="armNumbers"
+                                            :rules="armRules"
+                                            label="Old Code"
+                                            required
+                                     ></v-text-field>
+                                     <v-text-field
+                                            type="password"
+                                            v-model="newCode"
+                                            :rules="armRules"
+                                            label="New Code"
+                                            required
+                                     ></v-text-field>
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="armDialog = false">Cancel</v-btn>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="changeSecurityCodeDialog = false; changeSecurityCode()">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                          </v-card>
+                </v-dialog>
+                
             
             </v-card>
                
         </v-container>`,
-    methods: {
 
+    methods: {
+        
     },
     data() {
         return{
-
-        }
+            alarmID: 'mxztsyjzsrq7iaqc',
+            changeSecurityCodeDialog : false,
+            armNumbers : '',
+            armMode : '',
+            armRules : [
+                v=> v>="0000" && v<="9999" || 'Invalid Code'
+            ],
+            newCode : '',
+            error : false,
+            errorCode : '',        }
     },
     computed: {
 
