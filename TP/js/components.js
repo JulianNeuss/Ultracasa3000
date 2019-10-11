@@ -202,7 +202,7 @@
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    if(i.name !== "alarm" && i.name !== "vacuum" ) //hay que ver cuales dispositivos usamos
                         this.items.push({id: i.id, name: i.name});
                 }
             });
@@ -751,21 +751,53 @@
                     });
                 this.$refs.deviceform.reset();
 
-            // .then(r => {
-            //         this.devices.push({
-            //             name: r.result.name,
-            //             room: roomSelector,
-            //             id: r.result.id,
-            //             src: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
-            //         });
-            //         api.room.addRoomDevices(roomID, r.result.id);
-            //     })
-
             },
             cancelform(){
                 this.$refs.deviceform.reset();
                 this.deviceadd_s = false
             },
+
+            deviceadd(event) {
+                event.preventDefault();
+                var tempID;
+                var roomID;
+                var roomSelector;
+                for(let i of this.devicelist){
+                    if (i.name === this.$refs.deviceselector.internalValue){
+                        tempID = i.id;
+                    }
+                }
+                for(let i of this.rooms){
+                    if (i.name === this.$refs.deviceroomselector.internalValue){
+                        roomID = i.id;
+                    }
+                }
+                roomSelector = this.$refs.deviceroomselector.internalValue;
+                api.device.add({
+                    type: {id:tempID},
+                    name: this.$refs.nameselector.internalValue,
+                    meta:{
+                        fav: false,
+                        roomID: roomID,
+                        deviceroom: this.$refs.deviceroomselector.internalValue,
+                        img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
+                        device: this.$refs.deviceselector.internalValue
+                    }
+                }).then(r => {
+                    this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
+                    console.log(roomID);
+                    console.log(r.result.id);
+                    api.room.addRoomDevices(roomID, r.result.id);
+                }).catch((err) => {
+                    console.error(err);
+                });
+                this.$refs.deviceform.reset();
+            },
+            cancelform(){
+                this.$refs.deviceform.reset();
+                this.deviceadd_s = false
+            },
+
             // namer(id,name,room,device){
             //
             //     // console.log('hi im namer');
@@ -948,7 +980,7 @@ Vue.component('favourites',{
 
 
 
-Vue.component('rutines',{
+Vue.component('routines',{
 
     template: ` 
     <v-item-group>
@@ -956,7 +988,7 @@ Vue.component('rutines',{
             <v-container>
                 <v-list-item one-line>
                     <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Rutines</v-list-item-title>
+                        <v-list-item-title  class="headline font-weight-bold">Routines</v-list-item-title>
                     </v-list-item-content>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="dialog = !dialog">
                         <v-icon dark>add </v-icon>
@@ -1019,13 +1051,13 @@ Vue.component('rutines',{
                 <v-divider></v-divider>
 
                 <v-row>
-                    <v-col v-for="rutine in rutines" :key="rutine.title"  cols="12" md="4" >
+                    <v-col v-for="routine in routines" :key="routine.title"  cols="12" md="4" >
                         <v-card class="routine-card-style" :elevation="21" type="button"> 
                             <v-list-item three-line>
                                 <v-list-item-content class="align-self-start">
-                                    <v-list-item-title  class="medium mb-2"  v-text="rutine.title"></v-list-item-title>
+                                    <v-list-item-title  class="medium mb-2"  v-text="routine.title"></v-list-item-title>
                                 </v-list-item-content>
-                                <v-icon centered> {{ rutine.icon }}</v-icon>
+                                <v-icon centered> {{ routine.icon }}</v-icon>
                             </v-list-item>
                         </v-card>
                     </v-col>
@@ -1040,7 +1072,7 @@ Vue.component('rutines',{
     mounted() {
         api.devicetypes.getAllDeviceTypes().then( ( r ) => {
             for (let i of r.result){
-                if(i.name !== "refrigerator" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                if(i.name !== "vacuum"  && i.name !== "alarm") //hay que ver cuales dispositivos usamos
                     this.allDev.push({id: i.id, name: i.name}); // mentira que andan estos comments
             }
 
@@ -1048,20 +1080,27 @@ Vue.component('rutines',{
     },
     data(){
         return{
+            deviceRules: [
+                v => !!v || 'Required',
+                v => !!v && v.length >= 3 || 'Name must have 3',
+                v => !!v && v.length <= 60 || 'Name ',
+            ],
             dialog: false,
             allDev: [],
             currentDevice:null ,
-            routineDevices,
-            routines: [
-                { title: "HOME TEMPERATURE"},
-                { title: "OUT OF HOME"},
-                { title: "BACKYARD LIGHT ON"},
-                { title: "BACKYARD LIGHT OFF"},
-                { title: "ARRIVED HOME"},
-            ]
+            routines: [ ]
         }
     },
         methods: {
+
+            addRoutine(event){
+
+            },
+
+            cancelAdd(event){
+
+            },
+
             routineadd(event) {
                 event.preventDefault();
               //if(this.$refs.roomform.validate()){
