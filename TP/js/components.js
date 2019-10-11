@@ -3,42 +3,42 @@
 
 
 
-Vue.component('lastused', {
-    template:
-        `<div>
-               <v-list-item one-line>
-                     <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Last Used</v-list-item-title>
-                    </v-list-item-content>
-               </v-list-item>            
-               <v-divider></v-divider>
-    
-               <v-row>
-                    <v-col v-for="last in lastusedvec" :key="last.title"  cols="12" md="4" >
-                            <v-card class="last-used-style" :elevation="21" type="button">  
-                               <v-list-item three-line>
-                                      <v-list-item-content class="align-self-start">
-                                            <v-list-item-title  class="medium mb-2"  v-text="last.title"></v-list-item-title>
-                                            <v-list-item-subtitle v-text="last.room"></v-list-item-subtitle>
-                                      </v-list-item-content>
-                                    <v-icon> {{ last.icon }}</v-icon>
-                               </v-list-item>
-                 
-                            </v-card>
-                    </v-col>
-               </v-row>
-        </div>`,
-    data(){
-        return {
-            lastusedvec: [
-                { title: 'Living', icon: 'tv' },
-                { title: 'Smart Tv', room: 'Living' , icon: 'tv'},
-                { title: 'Apple Homepods', room:'Dorm Jorge' , icon: 'speaker'},
-            ]
-        }
-    }
-}),
-
+// Vue.component('lastused', {
+//     template:
+//         `<div>
+//                <v-list-item one-line>
+//                      <v-list-item-content class="align-self-start">
+//                         <v-list-item-title  class="headline font-weight-bold">Last Used</v-list-item-title>
+//                     </v-list-item-content>
+//                </v-list-item>
+//                <v-divider></v-divider>
+//
+//                <v-row>
+//                     <v-col v-for="last in lastusedvec" :key="last.title"  cols="12" md="4" >
+//                             <v-card class="last-used-style" :elevation="21" type="button">
+//                                <v-list-item three-line>
+//                                       <v-list-item-content class="align-self-start">
+//                                             <v-list-item-title  class="medium mb-2"  v-text="last.title"></v-list-item-title>
+//                                             <v-list-item-subtitle v-text="last.room"></v-list-item-subtitle>
+//                                       </v-list-item-content>
+//                                     <v-icon> {{ last.icon }}</v-icon>
+//                                </v-list-item>
+//
+//                             </v-card>
+//                     </v-col>
+//                </v-row>
+//         </div>`,
+//     data(){
+//         return {
+//             lastusedvec: [
+//                 { title: 'Living', icon: 'tv' },
+//                 { title: 'Smart Tv', room: 'Living' , icon: 'tv'},
+//                 { title: 'Apple Homepods', room:'Dorm Jorge' , icon: 'speaker'},
+//             ]
+//         }
+//     }
+// }),
+//
 
 
     Vue.component('rooms',{
@@ -389,13 +389,12 @@ Vue.component('lastused', {
                          <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.name ; devDialog()"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
+                      
+                 <!---DIALOG DE DEVICES-->
+                 
+                          <!---DIALOG DE BLINDS-->
                           <v-dialog v-model="vacuumdialog"  width="400px">
                           
-                          
-                          
-                          
-                          
-                          <!---DIALOG DE DEVICE-->
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
@@ -470,10 +469,32 @@ Vue.component('lastused', {
                                         <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
+                             </v-dialog>
+                          <!---DIALOG DE BLINDS-->
+                          
+                          <!---DIALOG DE OVEN-->
+                          
+                          <!---DIALOG DE OVEN-->
+                          
+                          <!---DIALOG DE Refrigerator-->
+                          
+                          <!---DIALOG DE Refrigerator-->
+                          
+                          <!---DIALOG DE AC-->
+                          
+                          <!---DIALOG DE AC-->
+                          
+                          <!---DIALOG DE Speaker-->
+                          
+                          <!---DIALOG DE Speaker-->
+                          
+                          <!---DIALOG DE Door-->
+                          
+                          <!---DIALOG DE Door-->
+                          
+                 <!---DIALOG DE DEVICES-->
                                 
-                                <!---DIALOG DE DEVICE-->
-                                
-                            </v-dialog>
+                            
                             </v-img>
                          </v-card> 
                     </v-col>
@@ -553,20 +574,20 @@ Vue.component('lastused', {
             },
 
             devDialog(){
-            switch (currentDev){
-            case 'lamp':
-                vacuumdialog=true;
-                break;
-            case 'speaker':
-                //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
-                break;
-            case 'blind':
-                //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
-                break;
-            default:
-                //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
-                break;
-            }
+                switch (currentDev){
+                case 'lamp':
+                    vacuumdialog=true;
+                    break;
+                case 'speaker':
+                    //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
+                    break;
+                case 'blind':
+                    //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
+                    break;
+                default:
+                    //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
+                    break;
+                }
 
 
             },
@@ -1104,7 +1125,7 @@ Vue.component('alarm',{
             alert(JSON.stringify({id : this.myAlarmID, name : 'changeSecurityCode', body : params}));
             this.device.sendAction(this.myAlarmID, 'changeSecurityCode', params);
         }
-        
+
     },
     data() {
         return{
