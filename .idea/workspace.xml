@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,7 +90,7 @@
       <workItem from="1570738163859" duration="5130000" />
       <workItem from="1570760490605" duration="5756000" />
       <workItem from="1570800798067" duration="4046000" />
-      <workItem from="1570805964440" duration="691000" />
+      <workItem from="1570805964440" duration="4731000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
@@ -112,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570764724675</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Dialog devices">
+      <created>1570806709929</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1570806709929</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -135,6 +143,7 @@
     <MESSAGE value="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API" />
     <MESSAGE value="ADD DEVICES 100% WORKING WITH API" />
     <MESSAGE value="Images working with devices. Not working when added, just working after refresh.&#10;&#10;Cleared the Room's Card DIALOGUE." />
-    <option name="LAST_COMMIT_MESSAGE" value="Images working with devices. Not working when added, just working after refresh.&#10;&#10;Cleared the Room's Card DIALOGUE." />
+    <MESSAGE value="Dialog devices" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dialog devices" />
   </component>
 </project>
