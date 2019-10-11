@@ -441,10 +441,10 @@
                              </v-form>   
                              </v-dialog>
                           <!---DIALOG DE BLINDS-->
-                         
+
                           <!---DIALOG DE OVEN-->
                            <v-dialog v-model="ovendialog"  width="400px">
-                          
+                            <v-form @submit="ovenaction">
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
@@ -456,7 +456,7 @@
                                                                        
                                      <v-list-item>
                                            <v-card-text>
-      <v-row>
+        <v-row>
         <v-col class="pr-4">
           <v-slider
           :label="ex3.label"
@@ -490,10 +490,11 @@
                                         <template >
                                             <v-card flat ml-10>
                                                 <v-card-subtitle>Heat</v-card-subtitle>
-                                                <v-radio-group v-model="heatselect" row >
-                                                    <v-radio label="Up" value="radio-1"></v-radio>
-                                                    <v-radio label="Conventional" value="radio-2"></v-radio>
-                                                    <v-radio label="Down" value="radio-3"></v-radio>
+
+                                                <v-radio-group v-model="row" row >
+                                                    <v-radio label="top" value="radio-2"></v-radio>
+                                                    <v-radio label="bottom" value="radio-1"></v-radio>
+                                                    <v-radio label="conventional" value="radio-3"></v-radio>
                                                 </v-radio-group>
                                             </v-card>
                                         </template>
@@ -506,8 +507,8 @@
                                                 <v-card-subtitle>Grill</v-card-subtitle>
                                                 <v-radio-group v-model="row" row >
                                                       <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="economic" value="radio-2"></v-radio>
-                                                      <v-radio label="full" value="radio-3"></v-radio>
+                                                      <v-radio label="eco" value="radio-2"></v-radio>
+                                                      <v-radio label="large" value="radio-3"></v-radio>
                                                 </v-radio-group>
                                             </v-card>
                                     </template>
@@ -519,8 +520,8 @@
                                                 <v-card-subtitle>Convection</v-card-subtitle>
                                                 <v-radio-group v-model="row" row >
                                                       <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="economic" value="radio-2"></v-radio>
-                                                      <v-radio label="convection" value="radio-3"></v-radio>
+                                                      <v-radio label="eco" value="radio-2"></v-radio>
+                                                      <v-radio label="normal" value="radio-3"></v-radio>
                                                 </v-radio-group>
                                             </v-card>
                                     </template>
@@ -549,14 +550,16 @@
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
+                               </v-form>   
                              </v-dialog>
                           <!---DIALOG DE OVEN-->
                           
                           <!---DIALOG DE Refrigerator-->
+
                           <v-dialog v-model="refridialog"  width="400px">
                           
                                 <v-card>
@@ -634,6 +637,7 @@
                                     </v-card-actions>
                                 </v-card>
                              </v-dialog>
+
                           <!---DIALOG DE Refrigerator-->
                           
                           <!---DIALOG DE AC-->
@@ -664,6 +668,7 @@
                 max: 230,
                 slider: 100,
                 range: [90, 230],
+                ovenOnOff:false,
                 //
                 //DIALOG DEVICES
                 blindsdialog: false,
@@ -811,6 +816,18 @@
                     api.device.sendAction(this.currentDevID,"close","");
                 }
             },
+            ovenaction(e){
+                //is ON
+                if(this.ovenOnOff){
+                    api.device.sendAction(this.currentDevID,"open","");
+                }
+                //is OFF
+                else{
+                    api.device.sendAction(this.currentDevID,"close","");
+                }
+
+
+            }
             ////////////////////////////////////////////////
         }
 
