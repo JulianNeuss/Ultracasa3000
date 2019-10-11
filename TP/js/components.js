@@ -555,41 +555,45 @@ Vue.component('rutines',{
 
                     <v-dialog v-model="dialog"  width="800px">  <!-- cambiar width tiene que estar en un CSS -->
                         <v-card>
-                                                        <v-form @submit="addRoutine" ref="addRoutineForm">
-                                                            <v-card-title class="grey darken-2" light>
-                                                                Add routine
-                                                            </v-card-title>
-                                                            <v-container grid-list-sm>
-                                                            <v-flex  xs12  align-center  justify-space-between >
-                                                                    <v-layout align-center>
-                                                                        <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>
-                                                                                                                      
-                                                                
-                                                                           </v-layout>
-                                                                </v-flex>
-                                                                <v-layout row wrap>
-                                                                    <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
-                                                                    </v-col>
-                                                                </v-layout>
-                                                                
-                                                                  <v-layout row wrap>
-                                                                    <v-col class="d-flex" cols="12" sm="12">
-                                                                      <v-select :items="allDev"  label="Device options"  name="category"  ></v-select>
-                                                                    </v-col>
-                                                                </v-layout>
-                                                                
-                                                            </v-container>
-                                                            <v-card-actions>
-                                                                <v-spacer></v-spacer>
-                                                                <v-btn type="submit" left text>Add device</v-btn>
-                                                                <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
-                                                                <v-btn type="submit" text>Save</v-btn>
-                                                            </v-card-actions>
+                             
+                             <v-form @submit="addRoutine" ref="addRoutineForm">
                                                             
-                                                        </v-form>
+                                     <v-card-title class="grey darken-2" light>
+                                             Add routine
+                                     </v-card-title>
+                                     
+                                     <v-container grid-list-sm>
+                                            <v-flex  xs12  align-center  justify-space-between >
+                                                
+                                                    <v-layout align-center>
+                                                                        
+                                                             <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>
+                                                                                                                      
+                                                    </v-layout>
+                                            </v-flex>
+                                            <v-layout row wrap>
+                                                     <v-col class="d-flex" cols="12" sm="12">
+                                                            <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
+                                                     </v-col>
+                                            </v-layout>
+                                                                
+                                            <v-layout row wrap>
+                                                     <v-col class="d-flex" cols="12" sm="12">
+                                                             <v-select :items="allDev"  label="Device options"  name="category"  ></v-select>
+                                                     </v-col>
+                                            </v-layout>
+                                                                
+                                     </v-container>
+                                     <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                            <v-btn type="submit" left text>Add device</v-btn>
+                                            <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
+                                            <v-btn type="submit" text>Save</v-btn>
+                                     </v-card-actions>
+                                                            
+                             </v-form>
                 
-                                                    </v-card>
+                        </v-card>
                     </v-dialog>
 
 
