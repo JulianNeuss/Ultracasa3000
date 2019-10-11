@@ -535,7 +535,8 @@
 
             api.device.getAll().then( r => {
                 for(let i of r.devices){
-                    this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
+                    if(i.name !== "alarm")
+                        this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
                 }
                 console.log(this.devices);
             })
