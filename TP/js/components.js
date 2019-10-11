@@ -386,14 +386,14 @@
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.name ; devDialog()"> 
+                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.device ; devDialog();"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
                       
                  <!---DIALOG DE DEVICES-->
                  
                           <!---DIALOG DE BLINDS-->
-                          <v-dialog v-model="vacuumdialog"  width="400px">
+                          <v-dialog v-model="blindsdialog"  width="400px">
                           
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
@@ -502,20 +502,27 @@
     </div>`,
         data(){
             return {
+                //DIALOG DEVICES
+                blindsdialog: false,
+                ovendialog: false,
+                refrigeratordialog: false,
+                acdialog: false,
+                speakerdialog: false,
+                doordialog: false,
+                //
                 devicedelete: false,
-                vacuumdialog: false,
                 deviceadd_s: false,
                 rooms: [],
-                devices: [], //id,name,fav,src
+                devices: [], //id,name,src,device --> el device tiene el lo que es, Ej: 'blinds'
                 devicelist: [],
-                currentDev:'lamp',
+                currentDev:'',
                 deviceID: ''
             }
         },
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "vacuum" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    if(i.name !== "vacuum" && i.name !== "lamp") //hay que ver cuales dispositivos usamos
                         this.devicelist.push({id: i.id, name: i.name});
                 }
             });
@@ -528,7 +535,7 @@
 
             api.device.getAll().then( r => {
                 for(let i of r.devices){
-                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav, src: i.meta.img});
+                    this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
                 }
                 console.log(this.devices);
             })
@@ -557,31 +564,49 @@
                             fav: false,
                             roomID: roomID,
                             deviceroom: this.$refs.deviceroomselector.internalValue,
-                            img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg"
+                            img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
+                            device: this.$refs.deviceselector.internalValue
                         }
-                    }).then(r => {
-                        this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id, src: "../src/" + this.$refs.deviceselector.internalValue + ".jpg"});
-                        api.room.addRoomDevices(roomID, r.result.id);
                     }).catch((err) => {
                         console.error(err);
                     });
                 this.$refs.deviceform.reset();
+
+            // .then(r => {
+            //         this.devices.push({
+            //             name: r.result.name,
+            //             room: roomSelector,
+            //             id: r.result.id,
+            //             src: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
+            //         });
+            //         api.room.addRoomDevices(roomID, r.result.id);
+            //     })
 
             },
             cancelform(){
                 this.$refs.deviceform.reset();
                 this.deviceadd_s = false
             },
+            // namer(id,name,room,device){
+            //
+            //     // console.log('hi im namer');
+            //     // console.log(id);
+            //     // console.log(name);
+            //     // console.log(room);
+            //     // console.log(device);
+            //    //this.currentDev = device;
+            // },
 
             devDialog(){
-                switch (currentDev){
-                case 'lamp':
-                    vacuumdialog=true;
+                switch (this.currentDev){
+                case 'blinds':
+                    console.log('hi im the case of BLINDS');
+                    this.blindsdialog=true;
                     break;
                 case 'speaker':
                     //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
                     break;
-                case 'blind':
+                case 'oven':
                     //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
                     break;
                 default:
