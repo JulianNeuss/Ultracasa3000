@@ -126,17 +126,13 @@ Vue.component('lastused', {
                                                     </v-btn>
                                               </v-row>
                                               
-                                              <v-row >
 
-                                                            <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12">
-                                                                <v-col v-if="dev.room == room.name">
-                                                                      <v-btn text> {{ dev.name}}</v-btn>
-                                                                </v-col>
-                                                                
-                                                            </v-col>
-                                              </v-row>
+                                              <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12">
+                                                     <v-row v-if="dev.room == room.name">
+                                                           <v-btn text> {{ dev.name}}</v-btn>
+                                                     </v-row>
+                                              </v-col>
 
-                                              
                                               <!--  -->
                                               <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
 
