@@ -386,40 +386,108 @@ Vue.component('lastused', {
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" > <!--@click="dialog = !dialog"-->
+                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.name ; devDialog()"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
-<!--                            <v-dialog v-model="dialog"  width="400px">-->
-<!--                                <v-card>-->
-<!--                                    <v-list-item-content class="text-center">-->
-<!--                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>-->
-<!--                                    </v-list-item-content>-->
-
-<!--                                    <v-row justify="space-around">-->
-<!--                                        <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">-->
-<!--                                            <v-icon dark> delete </v-icon> DELETE-->
-<!--                                        </v-btn>-->
-<!--                                    </v-row>-->
-<!--                                    <v-card-actions>-->
-<!--                                        <v-spacer></v-spacer>-->
-<!--                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>-->
-<!--                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>-->
-<!--                                    </v-card-actions>-->
-<!--                                </v-card>-->
-<!--                            </v-dialog>-->
+                          <v-dialog v-model="vacuumdialog"  width="400px">
+                          
+                          
+                          
+                          
+                          
+                          <!---DIALOG DE DEVICE-->
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                                     <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Stop / Play</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Aspirar / Trapear</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                                    
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Back to charger</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                          
+                                                                                 
+                                             <v-divider></v-divider>
+                                    <v-row justify="space-around">
+                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
+                                            <v-icon small dark> delete </v-icon> 
+                                        </v-btn>                                   
+                                    </v-row>
+                                    
+                                    
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                                
+                                <!---DIALOG DE DEVICE-->
+                                
+                            </v-dialog>
                             </v-img>
-                         </v-card>
+                         </v-card> 
                     </v-col>
                </v-row>
     </div>`,
         data(){
             return {
                 devicedelete: false,
-                dialog: false,
+                vacuumdialog: false,
                 deviceadd_s: false,
                 rooms: [],
                 devices: [], //id,name,fav,src
                 devicelist: [],
+                currentDev:'lamp',
                 deviceID: ''
             }
         },
@@ -482,6 +550,25 @@ Vue.component('lastused', {
             cancelform(){
                 this.$refs.deviceform.reset();
                 this.deviceadd_s = false
+            },
+
+            devDialog(){
+            switch (currentDev){
+            case 'lamp':
+                vacuumdialog=true;
+                break;
+            case 'speaker':
+                //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
+                break;
+            case 'blind':
+                //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
+                break;
+            default:
+                //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
+                break;
+            }
+
+
             },
             canceldelform(){
                 this.$refs.deldeviceform.reset();
