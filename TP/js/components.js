@@ -557,10 +557,14 @@
                              </v-dialog>
                           <!---DIALOG DE OVEN-->
                           
-                          <!---DIALOG DE Refrigerator-->
-
-                          <v-dialog v-model="refridialog"  width="400px">
                           
+                          
+                          
+                          
+                          
+                          <!---DIALOG DE Refrigerator-->
+                          <v-dialog v-model="refrigeratordialog"  width="400px">
+                            <v-form @submit="refrigeratoraction">
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
@@ -571,45 +575,52 @@
                                                                        <!---CONTENIDO DIALOG DE DEVICE-->
                                                                        
                                      <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
-                                            </v-list-item-content>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex4.label" v-model="slider" class="align-center" :max="8" :min="2" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text><!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                    
+                                                                         <v-list-item>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex5.label" v-model="slider" class="align-center" :max="1" :min="-15" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text><!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <v-list-item>
+                                        <template >
+                                            <v-card flat ml-10>
+                                                <v-card-subtitle>Mode</v-card-subtitle>
+
+                                                <v-radio-group v-model="row" row >
+                                                    <v-radio label="Normal" value="radio-2"></v-radio>
+                                                    <v-radio label="Party" value="radio-1"></v-radio>
+                                                    <v-radio label="Vacations" value="radio-3"></v-radio>
+                                                </v-radio-group>
+                                            </v-card>
                                         </template>
                                     </v-list-item>
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Stop / Play</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Aspirar / Trapear</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                                    
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Back to charger</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                
+                                    
+                                   
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
@@ -620,6 +631,8 @@
                                             </v-list-item-content>
                                         </template>
                                     </v-list-item>                          
+                                    
+                                    
                                                                                  
                                              <v-divider></v-divider>
                                     <v-row justify="space-around">
@@ -631,16 +644,18 @@
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
+                               </v-form>   
                              </v-dialog>
-
                           <!---DIALOG DE Refrigerator-->
                           
-                          <!---DIALOG DE AC-->
                           
+                          
+                          <!---DIALOG DE AC-->
+                     
                           <!---DIALOG DE AC-->
                           
                           <!---DIALOG DE Speaker-->
@@ -661,6 +676,13 @@
     </div>`,
         data(){
             return {
+                //REFRI
+                ex5: { label: 'Refrigerator', val: 100, color: 'red' },
+                ex4: { label: 'Freezer', val: 100, color: 'red' },
+                slider: 100,
+                range: [2, 8],
+                ovenOnOff:false,
+                //
                 //OVENSHITT
                 ex3: { label: 'Temperature', val: 100, color: 'red' },
                 min: 90,
@@ -813,6 +835,10 @@
                     case 'blinds':
                         console.log('hi im the case of BLINDS');
                         this.blindsdialog=true;
+                        break;
+                    case 'refrigerator':
+                        console.log('hi im the case of BLINDS');
+                        this.refrigeratordialog=true;
                         break;
                     case 'speaker':
                         this.speakerdialog=true;
