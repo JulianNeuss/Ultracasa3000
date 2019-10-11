@@ -441,12 +441,7 @@
                              </v-form>   
                              </v-dialog>
                           <!---DIALOG DE BLINDS-->
-                          
-                          <!---DIALOG DE OVEN-->
-                          
-
-                          <!---DIALOG DE BLINDS-->
-                          
+                         
                           <!---DIALOG DE OVEN-->
                            <v-dialog v-model="ovendialog"  width="400px">
                           
@@ -495,9 +490,9 @@
                                         <template >
                                             <v-card flat ml-10>
                                                 <v-card-subtitle>Heat</v-card-subtitle>
-                                                <v-radio-group v-model="row" row >
-                                                    <v-radio label="Up" value="radio-2"></v-radio>
-                                                    <v-radio label="Conventional" value="radio-1"></v-radio>
+                                                <v-radio-group v-model="heatselect" row >
+                                                    <v-radio label="Up" value="radio-1"></v-radio>
+                                                    <v-radio label="Conventional" value="radio-2"></v-radio>
                                                     <v-radio label="Down" value="radio-3"></v-radio>
                                                 </v-radio-group>
                                             </v-card>
@@ -562,7 +557,7 @@
                           <!---DIALOG DE OVEN-->
                           
                           <!---DIALOG DE Refrigerator-->
-                          <v-dialog v-model="ovendialog"  width="400px">
+                          <v-dialog v-model="refridialog"  width="400px">
                           
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
