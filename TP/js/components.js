@@ -275,7 +275,7 @@
                     </v-btn>
                     
              <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
-                    <v-dialog v-model="devicedelete" width="300px">
+                    <v-dialog v-model="registereddevices" width="300px">
                          <v-card>
                             <v-form @submit="deletedevice" ref="deldeviceform">
                                 
@@ -312,13 +312,12 @@
                                      <v-layout row wrap>
 
                                         <v-col cols="12" sm="6" md="12">
-                                             <v-text-field
+                                             <v-select
+                                             :items="devices" item-text="name"
+                                             label="Select device"
                                              ref="delnameselector"
-                                             label="Name"
-                                             clearable
-                                             maxlength="60"
                                              required
-                                             ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                             ></v-select> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
                                         
                                      </v-layout>
@@ -416,7 +415,7 @@
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
                                           <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
                                                           <!---CONTENIDO DIALOG DE DEVICE-->
@@ -449,7 +448,7 @@
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
                                           <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
                                                                        <!---CONTENIDO DIALOG DE DEVICE-->
@@ -566,7 +565,7 @@
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
                                           <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
                                                                        <!---CONTENIDO DIALOG DE DEVICE-->
@@ -671,6 +670,8 @@
                 ovenOnOff:false,
                 //
                 //DIALOG DEVICES
+                registereddevices:false,
+
                 blindsdialog: false,
                 ovendialog: false,
                 refrigeratordialog: false,
@@ -689,7 +690,11 @@
                 devicelist: [],
                 currentDevID:'',
                 currentDev:'',
-                deviceID: ''
+                deviceID: '',
+
+
+                //refrigerator
+                refridialog:false,
             }
         },
         mounted() {
@@ -1490,7 +1495,7 @@ Vue.component('toolbar', {
                        
             </v-toolbar>
             
-            <v-navigation-drawer v-model="drawer" app right clipped  class="white">
+            <!--<v-navigation-drawer v-model="drawer" app right clipped  class="white">
                 <v-list-item>
                      <v-list-item-content>
                           <v-btn class="mx-2" depressed @click="drawer = !drawer">
@@ -1509,7 +1514,7 @@ Vue.component('toolbar', {
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
-            </v-navigation-drawer>
+            </v-navigation-drawer> -->
         </div>`,
     data(){
         return {
