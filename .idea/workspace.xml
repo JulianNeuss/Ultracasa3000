@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
-    </list>
+    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +93,7 @@
       <workItem from="1570818772708" duration="1194000" />
       <workItem from="1570818893461" duration="1259000" />
       <workItem from="1570820525248" duration="74000" />
+      <workItem from="1570820625923" duration="4380000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
@@ -139,7 +137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570817314381</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="OVEN 100% working.">
+      <created>1570836086931</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1570836086931</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -164,6 +169,7 @@
     <MESSAGE value="Images working with devices. Not working when added, just working after refresh.&#10;&#10;Cleared the Room's Card DIALOGUE." />
     <MESSAGE value="Dialog devices" />
     <MESSAGE value="Dialog devices with FIRST DEVICE DIALOG WORKING!!!!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dialog devices with FIRST DEVICE DIALOG WORKING!!!!" />
+    <MESSAGE value="OVEN 100% working." />
+    <option name="LAST_COMMIT_MESSAGE" value="OVEN 100% working." />
   </component>
 </project>

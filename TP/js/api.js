@@ -169,6 +169,10 @@ api.device = class {
         return api.fetch(api.device.url);
     }
 
+    static getState(id) {
+        return api.fetch(api.device.url + id + '/state');
+    }
+
     static setRoom(deviceId, roomId){
         return api.fetch(api.device.url + deviceId + '/rooms/' + roomId, {
             method: 'POST'

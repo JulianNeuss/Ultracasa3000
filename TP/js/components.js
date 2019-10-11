@@ -451,87 +451,60 @@
                                           <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
-                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                           
+                                                           <!---CONTENIDO DIALOG DE DEVICE-->
                                                                        
                                      <v-list-item>
                                            <v-card-text>
-        <v-row>
-        <v-col class="pr-4">
-          <v-slider
-          :label="ex3.label"
-            v-model="slider"
-            class="align-center"
-            :max="max"
-            :min="min"
-            hide-details
-          >
-            <template v-slot:append>
-              <v-text-field
-                v-model="slider"
-                class="mt-0 pt-0"
-                hide-details
-                single-line
-                type="number"
-                style="width: 60px"
-              ></v-text-field>
-            </template>
-          </v-slider>
-        </v-col>
-      </v-row>
-    </v-card-text> <!--OVEN TEMPERATURE-->
+                                                    <v-row>
+                                                    <v-col class="pr-4">
+                                                      <v-slider
+                                                      :label="ex3.label"
+                                                        v-model="slider"
+                                                        class="align-center"
+                                                        :max="max"
+                                                        :min="min"
+                                                        hide-details
+                                                      >
+                                                        <template v-slot:append>
+                                                          <v-text-field
+                                                            v-model="slider"
+                                                            class="mt-0 pt-0"
+                                                            hide-details
+                                                            single-line
+                                                            type="number"
+                                                            style="width: 60px"
+                                                          ></v-text-field>
+                                                        </template>
+                                                      </v-slider>
+                                                    </v-col>
+                                                  </v-row>
+                                            </v-card-text> <!--OVEN TEMPERATURE-->
                                     </v-list-item>
                                     
                                     
-                                    
-                                    
-                                    
-                                    <v-list-item>
-                                        <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Heat</v-card-subtitle>
-
-                                                <v-radio-group v-model="row" row >
-                                                    <v-radio label="top" value="radio-2"></v-radio>
-                                                    <v-radio label="bottom" value="radio-1"></v-radio>
-                                                    <v-radio label="conventional" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="heatOptions"   label="Heat"  ref="heatOptionsSelector"  ></v-select>
                                             </v-card>
-                                        </template>
-                                    </v-list-item>
-                                   
-                                    
-                                    <v-list-item>
-                                     <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Grill</v-card-subtitle>
-                                                <v-radio-group v-model="row" row >
-                                                      <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="eco" value="radio-2"></v-radio>
-                                                      <v-radio label="large" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="grillOptions"   label="Grill"  ref="grillOptionsSelector"  ></v-select>
                                             </v-card>
-                                    </template>
-                                    </v-list-item>   
-
-                                    <v-list-item>
-                                     <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Convection</v-card-subtitle>
-                                                <v-radio-group v-model="row" row >
-                                                      <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="eco" value="radio-2"></v-radio>
-                                                      <v-radio label="normal" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="convectionOptions"   label="Convection" ref="convectionOptionsSelector"   ></v-select>
                                             </v-card>
-                                    </template>
-                                    </v-list-item>                                      
+                                         </v-list-item>                     
                                     
                                     
                                    
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                                  <v-switch v-model="ovenOnOff"  color="success" value="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                   <v-list-item-subtitle>Off / On</v-list-item-subtitle>
@@ -539,13 +512,7 @@
                                         </template>
                                     </v-list-item>                          
                                                                                  
-                                             <v-divider></v-divider>
-                                    <v-row justify="space-around">
-                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
-                                            <v-icon small dark> delete </v-icon> 
-                                        </v-btn>                                   
-                                    </v-row>
-                                    
+                                    <v-divider></v-divider>
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -668,6 +635,9 @@
                 slider: 100,
                 range: [90, 230],
                 ovenOnOff:false,
+                heatOptions: ["top","bottom","conventional"],
+                grillOptions: ["off","eco","large"],
+                convectionOptions: ["off","eco","normal"],
                 //
                 //DIALOG DEVICES
                 registereddevices:false,
@@ -716,8 +686,9 @@
                     if(i.name !== "alarm")
                         this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
                 }
-                console.log(this.devices);
-            })
+            });
+            //Cargar variables de estado de los devices. Cada vez que haces REFRESH SE ROMPE EL ESTADO ACTUAL
+
         },
         methods:{
             deviceadd(event) {
@@ -854,15 +825,20 @@
                 }
             },
             ovenaction(e){
+                e.preventDefault();
+
                 //is ON
                 if(this.ovenOnOff){
-                    api.device.sendAction(this.currentDevID,"open","");
+                    api.device.sendAction(this.currentDevID,"turnOn","");
                 }
                 //is OFF
                 else{
-                    api.device.sendAction(this.currentDevID,"close","");
+                    api.device.sendAction(this.currentDevID,"turnOff","");
                 }
-
+                api.device.sendAction(this.currentDevID,"setTemperature",[this.slider]);
+                api.device.sendAction(this.currentDevID,"setHeat",[this.$refs.heatOptionsSelector[0].internalValue]);
+                api.device.sendAction(this.currentDevID,"setGrill",[this.$refs.grillOptionsSelector[0].internalValue]);
+                api.device.sendAction(this.currentDevID,"setConvection",[this.$refs.convectionOptionsSelector[0].internalValue]);
 
             }
             ////////////////////////////////////////////////
