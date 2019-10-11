@@ -373,6 +373,7 @@ Vue.component('lastused', {
                 event.preventDefault();
                     var tempID;
                     var roomID;
+                    var devID;
                     var roomSelector;
                     for(let i of this.devicelist){
                         if (i.name === this.$refs.deviceselector.internalValue){
@@ -395,10 +396,13 @@ Vue.component('lastused', {
                         }
                     }).then(r => {
                         this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
+                        console.log(roomID);
+                        console.log(r.result.id);
+                        api.room.addRoomDevices(roomID, r.result.id);
                     }).catch((err) => {
                         console.error(err);
                     });
-                //api.room.addRoomDevices(roomID, r.result.id);
+                //api.room.addRoomDevices(roomID, devID);
                 this.$refs.deviceform.reset();
                 // console.log(roomID);
                 // console.log(tempID);
