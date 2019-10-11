@@ -90,7 +90,12 @@
       <workItem from="1570738163859" duration="5130000" />
       <workItem from="1570760490605" duration="5756000" />
       <workItem from="1570800798067" duration="4046000" />
+
       <workItem from="1570805964440" duration="9227000" />
+
+      <workItem from="1570805964440" duration="5435000" />
+      <workItem from="1570814020667" duration="2779000" />
+
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
@@ -127,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570811183163</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Dialog devices with FIRST DEVICE DIALOG WORKING!!!!">
+      <created>1570817314381</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1570817314381</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

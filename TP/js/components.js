@@ -342,7 +342,7 @@
                     
                     
                     
-
+            <!--DIALOG PARA AGREGAR UN DEVICE-->
                     <v-dialog v-model="deviceadd_s" width="300px">
                          <v-card>
                             <v-form @submit="deviceadd" ref="deviceform">
@@ -389,7 +389,8 @@
                             </v-form>
                          </v-card>
                     </v-dialog>
-                    
+            <!--DIALOG PARA AGREGAR UN DEVICE-->   
+               
                </v-list-item>
 
 
@@ -442,6 +443,125 @@
                           <!---DIALOG DE BLINDS-->
                           
                           <!---DIALOG DE OVEN-->
+                          
+
+                          <!---DIALOG DE BLINDS-->
+                          
+                          <!---DIALOG DE OVEN-->
+                           <v-dialog v-model="ovendialog"  width="400px">
+                          
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"><v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                                     <v-list-item>
+                                           <v-card-text>
+      <v-row>
+        <v-col class="pr-4">
+          <v-slider
+          :label="ex3.label"
+            v-model="slider"
+            class="align-center"
+            :max="max"
+            :min="min"
+            hide-details
+          >
+            <template v-slot:append>
+              <v-text-field
+                v-model="slider"
+                class="mt-0 pt-0"
+                hide-details
+                single-line
+                type="number"
+                style="width: 60px"
+              ></v-text-field>
+            </template>
+          </v-slider>
+        </v-col>
+      </v-row>
+    </v-card-text> <!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <v-list-item>
+                                        <template >
+                                            <v-card flat ml-10>
+                                                <v-card-subtitle>Heat</v-card-subtitle>
+                                                <v-radio-group v-model="row" row >
+                                                    <v-radio label="Up" value="radio-2"></v-radio>
+                                                    <v-radio label="Conventional" value="radio-1"></v-radio>
+                                                    <v-radio label="Down" value="radio-3"></v-radio>
+                                                </v-radio-group>
+                                            </v-card>
+                                        </template>
+                                    </v-list-item>
+                                   
+                                    
+                                    <v-list-item>
+                                     <template >
+                                            <v-card flat ml-10>
+                                                <v-card-subtitle>Grill</v-card-subtitle>
+                                                <v-radio-group v-model="row" row >
+                                                      <v-radio label="off" value="radio-1"></v-radio>
+                                                      <v-radio label="economic" value="radio-2"></v-radio>
+                                                      <v-radio label="full" value="radio-3"></v-radio>
+                                                </v-radio-group>
+                                            </v-card>
+                                    </template>
+                                    </v-list-item>   
+
+                                    <v-list-item>
+                                     <template >
+                                            <v-card flat ml-10>
+                                                <v-card-subtitle>Convection</v-card-subtitle>
+                                                <v-radio-group v-model="row" row >
+                                                      <v-radio label="off" value="radio-1"></v-radio>
+                                                      <v-radio label="economic" value="radio-2"></v-radio>
+                                                      <v-radio label="convection" value="radio-3"></v-radio>
+                                                </v-radio-group>
+                                            </v-card>
+                                    </template>
+                                    </v-list-item>                                      
+                                    
+                                    
+                                   
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                          
+                                                                                 
+                                             <v-divider></v-divider>
+                                    <v-row justify="space-around">
+                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
+                                            <v-icon small dark> delete </v-icon> 
+                                        </v-btn>                                   
+                                    </v-row>
+                                    
+                                    
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                             </v-dialog>
+                          <!---DIALOG DE OVEN-->
+                          
+                          <!---DIALOG DE Refrigerator-->
                           <v-dialog v-model="ovendialog"  width="400px">
                           
                                 <v-card>
@@ -519,10 +639,6 @@
                                     </v-card-actions>
                                 </v-card>
                              </v-dialog>
-                          <!---DIALOG DE OVEN-->
-                          
-                          <!---DIALOG DE Refrigerator-->
-                          
                           <!---DIALOG DE Refrigerator-->
                           
                           <!---DIALOG DE AC-->
@@ -547,6 +663,13 @@
     </div>`,
         data(){
             return {
+                //OVENSHITT
+                ex3: { label: 'Temperature', val: 100, color: 'red' },
+                min: 90,
+                max: 230,
+                slider: 100,
+                range: [90, 230],
+                //
                 //DIALOG DEVICES
                 blindsdialog: false,
                 ovendialog: false,
@@ -650,19 +773,17 @@
 
             devDialog(){
                 switch (this.currentDev){
-                case 'blinds':
-                    console.log('hi im the case of BLINDS');
-                    this.blindsdialog=true;
-                    break;
-                case 'speaker':
-                    //Declaraciones ejecutadas cuando el resultado de expresión coincide con el valor2
-                    break;
-                case 'oven':
-                    //Declaraciones ejecutadas cuando el resultado de expresión coincide con valorN
-                    break;
-                default:
-                    //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
-                    break;
+                    case 'blinds':
+                        console.log('hi im the case of BLINDS');
+                        this.blindsdialog=true;
+                        break;
+                    case 'speaker':
+                        this.speakerdialog=true;
+                        break;
+                    case 'oven':
+                        this.ovendialog=true;
+                        break;
+
                 }
 
 
