@@ -125,7 +125,18 @@ Vue.component('lastused', {
                                                           <v-icon dark> add </v-icon> ADD
                                                     </v-btn>
                                               </v-row>
+                                              
+                                              <v-row >
 
+                                                            <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12">
+                                                                <v-col v-if="dev.room == room.name">
+                                                                      <v-btn text> {{ dev.name}}</v-btn>
+                                                                </v-col>
+                                                                
+                                                            </v-col>
+                                              </v-row>
+
+                                              
                                               <!--  -->
                                               <v-dialog v-model="addbutton" width="400px" >  <!-- no me anda el css de este width-->
 
@@ -184,8 +195,8 @@ Vue.component('lastused', {
                 items: [ ],
                 rooms: [ ], //aca me guardo el id, el name, la imagen y fav= false por default
                 /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
-                roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom']
-
+                roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom'],
+                devices: [],
             }
         },
         mounted() {
@@ -201,7 +212,15 @@ Vue.component('lastused', {
                     this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
                 }
                 console.log(this.rooms);
+            });
+
+            api.device.getAll().then( r => {
+                for(let i of r.devices){
+                    this.devices.push({id: i.id, name: i.name, fav: i.meta.fav, room:i.meta.deviceroom});
+                }
+                console.log(this.devices);
             })
+
         },
         methods:{
             roomadd(event) {
@@ -396,16 +415,12 @@ Vue.component('lastused', {
                         }
                     }).then(r => {
                         this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
-                        console.log(roomID);
-                        console.log(r.result.id);
                         api.room.addRoomDevices(roomID, r.result.id);
                     }).catch((err) => {
                         console.error(err);
                     });
-                //api.room.addRoomDevices(roomID, devID);
                 this.$refs.deviceform.reset();
-                // console.log(roomID);
-                // console.log(tempID);
+
             },
             cancelform(){
                 this.$refs.deviceform.reset();
