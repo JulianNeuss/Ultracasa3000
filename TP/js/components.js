@@ -318,8 +318,6 @@
                                              label="Select device"
                                              ref="delnameselector"
                                              required
-                                             :rules="rules"
-                                             counter="60"
                                              ></v-select> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
                                         
