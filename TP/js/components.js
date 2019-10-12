@@ -209,7 +209,7 @@
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "alarm" && i.name !== "vacuum" ) //hay que ver cuales dispositivos usamos
+                    if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
                         this.items.push({id: i.id, name: i.name});
                 }
             });
@@ -687,7 +687,7 @@
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "vacuum" && i.name !== "lamp") //hay que ver cuales dispositivos usamos
+                    if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm")//hay que ver cuales dispositivos usamos
                         this.devicelist.push({id: i.id, name: i.name});
                 }
             });
