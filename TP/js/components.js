@@ -441,97 +441,70 @@
                              </v-dialog>
                           <!---DIALOG DE BLINDS-->
 
-                          <!---DIALOG DE OVEN-->
+                        <!---DIALOG DE OVEN-->
                            <v-dialog v-model="ovendialog"  width="400px">
                             <v-form @submit="ovenaction">
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
                                           <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
-                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                           
+                                                           <!---CONTENIDO DIALOG DE DEVICE-->
                                                                        
                                      <v-list-item>
                                            <v-card-text>
-        <v-row>
-        <v-col class="pr-4">
-          <v-slider
-          :label="ex3.label"
-            v-model="slider"
-            class="align-center"
-            :max="max"
-            :min="min"
-            hide-details
-          >
-            <template v-slot:append>
-              <v-text-field
-                v-model="slider"
-                class="mt-0 pt-0"
-                hide-details
-                single-line
-                type="number"
-                style="width: 60px"
-              ></v-text-field>
-            </template>
-          </v-slider>
-        </v-col>
-      </v-row>
-    </v-card-text> <!--OVEN TEMPERATURE-->
+                                                    <v-row>
+                                                    <v-col class="pr-4">
+                                                      <v-slider
+                                                      :label="ex3.label"
+                                                        v-model="slider"
+                                                        class="align-center"
+                                                        :max="max"
+                                                        :min="min"
+                                                        hide-details
+                                                      >
+                                                        <template v-slot:append>
+                                                          <v-text-field
+                                                            v-model="slider"
+                                                            class="mt-0 pt-0"
+                                                            hide-details
+                                                            single-line
+                                                            type="number"
+                                                            style="width: 60px"
+                                                          ></v-text-field>
+                                                        </template>
+                                                      </v-slider>
+                                                    </v-col>
+                                                  </v-row>
+                                            </v-card-text> <!--OVEN TEMPERATURE-->
                                     </v-list-item>
                                     
                                     
-                                    
-                                    
-                                    
-                                    <v-list-item>
-                                        <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Heat</v-card-subtitle>
-
-                                                <v-radio-group v-model="row" row >
-                                                    <v-radio label="top" value="radio-2"></v-radio>
-                                                    <v-radio label="bottom" value="radio-1"></v-radio>
-                                                    <v-radio label="conventional" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="heatOptions"   label="Heat"  ref="heatOptionsSelector"  ></v-select>
                                             </v-card>
-                                        </template>
-                                    </v-list-item>
-                                   
-                                    
-                                    <v-list-item>
-                                     <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Grill</v-card-subtitle>
-                                                <v-radio-group v-model="row" row >
-                                                      <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="eco" value="radio-2"></v-radio>
-                                                      <v-radio label="large" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="grillOptions"   label="Grill"  ref="grillOptionsSelector"  ></v-select>
                                             </v-card>
-                                    </template>
-                                    </v-list-item>   
-
-                                    <v-list-item>
-                                     <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Convection</v-card-subtitle>
-                                                <v-radio-group v-model="row" row >
-                                                      <v-radio label="off" value="radio-1"></v-radio>
-                                                      <v-radio label="eco" value="radio-2"></v-radio>
-                                                      <v-radio label="normal" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="convectionOptions"   label="Convection" ref="convectionOptionsSelector"   ></v-select>
                                             </v-card>
-                                    </template>
-                                    </v-list-item>                                      
+                                         </v-list-item>                     
                                     
                                     
                                    
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                                  <v-switch v-model="ovenOnOff"  color="success" value="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                   <v-list-item-subtitle>Off / On</v-list-item-subtitle>
@@ -539,13 +512,7 @@
                                         </template>
                                     </v-list-item>                          
                                                                                  
-                                             <v-divider></v-divider>
-                                    <v-row justify="space-around">
-                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
-                                            <v-icon small dark> delete </v-icon> 
-                                        </v-btn>                                   
-                                    </v-row>
-                                    
+                                    <v-divider></v-divider>
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -556,9 +523,6 @@
                                </v-form>   
                              </v-dialog>
                           <!---DIALOG DE OVEN-->
-                          
-                          
-                          
                           
                           
                           
@@ -644,8 +608,8 @@
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="refrigerator = false" >Cancel</v-btn>
+                                        <v-btn text @click="regrigeratordialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
                                </v-form>   
@@ -654,8 +618,101 @@
                           
                           
                           
-                          <!---DIALOG DE AC-->
-                     
+                          <!---DIALOG DE AC-->      
+                          <v-dialog v-model="acdialog"  width="400px">
+                            <v-form @submit="acaction">
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                          
+                                    
+                                    <v-list-item>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex6.label" v-model="slider" class="align-center" :max="38" :min="13" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text><!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                     <v-divider></v-divider>
+                                     <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="acOptions"   label="Mode"  ref="acOptionsSelector"  ></v-select>
+                                            </v-card>
+                                        </v-list-item>
+                                        
+
+   <v-divider></v-divider>
+                                    
+                                    
+                                        <v-card flat>   
+                                            <v-card-subtitle >  Vertical Asps </v-card-subtitle>   
+                                        </v-card>    
+                                    <v-list-item>         
+                                                <v-slider v-model="aspasV" :tick-labels="aspLabels" :max="4" step="1" ticks="always" tick-size="4"></v-slider>
+                                         
+                                    </v-list-item> 
+                                    
+                                                              <v-divider></v-divider>           
+                                     <v-card flat>   
+                                            <v-card-subtitle >  Horizontal Asps </v-card-subtitle>   
+                                        </v-card>    
+                                    <v-list-item>         
+                                                <v-slider v-model="aspasH" :tick-labels="aspLabelsH" :max="5" step="1" ticks="always" tick-size="4"></v-slider>
+                                         
+                                    </v-list-item> 
+                                     <v-divider></v-divider>
+                                     <v-card flat>   
+                                            <v-card-subtitle >  Fan Speed </v-card-subtitle>   
+                                        </v-card>    
+                                    <v-list-item>         
+                                                <v-slider v-model="fanSpeed" :tick-labels="Fanspeed" :max="5" step="1" ticks="always" tick-size="4"></v-slider>
+                                         
+                                    </v-list-item> 
+                                   
+  <v-divider></v-divider>
+                                   
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                          
+                                    
+                                    
+                                                                                 
+                                             <v-divider></v-divider>
+                                    <v-row justify="space-around">
+                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
+                                            <v-icon small dark> delete </v-icon> 
+                                        </v-btn>                                   
+                                    </v-row>
+                                    
+                                    
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                               </v-form>   
+                             </v-dialog>
+                             
                           <!---DIALOG DE AC-->
                           
                           <!---DIALOG DE Speaker-->
@@ -676,6 +733,39 @@
     </div>`,
         data(){
             return {
+                //AC
+                fanSpeed: 0,
+                aspasV: 0,
+                aspasH: 0,
+                acOptions: [
+                    'ventilation',
+                    'hot',
+                    'cold',
+                ],
+                Fanspeed: [
+                    'Auto',
+                    '25',
+                    '50',
+                    '75',
+                    '100',
+                ],
+                aspLabels: [
+                    'Auto',
+                    '22',
+                    '45',
+                    '67',
+                    '90',
+                ],
+                aspLabelsH: [
+                    'Auto',
+                    '-90',
+                    '-45',
+                    '0',
+                    '45',
+                    '90',
+                ],
+                ex6: { label: 'Temperature', val: 100, color: 'red' },
+                //
                 //REFRI
                 ex5: { label: 'Refrigerator', val: 100, color: 'red' },
                 ex4: { label: 'Freezer', val: 100, color: 'red' },
@@ -690,6 +780,24 @@
                 slider: 100,
                 range: [90, 230],
                 ovenOnOff:false,
+                heatOptions: [
+                    'normal',
+                    'top',
+                    'botton',
+
+                ],
+                grillOptions: [
+                    'normal',
+                    'top',
+                    'botton',
+
+                ],
+                convectionOptions: [
+                    'normal',
+                    'top',
+                    'botton',
+
+                ],
                 //
                 //DIALOG DEVICES
                 registereddevices:false,
@@ -845,6 +953,9 @@
                         break;
                     case 'oven':
                         this.ovendialog=true;
+                        break;
+                    case 'ac':
+                        this.acdialog=true;
                         break;
 
                 }
