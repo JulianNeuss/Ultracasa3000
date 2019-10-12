@@ -281,7 +281,7 @@
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-             <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
+                    <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
                     <v-dialog v-model="registereddevices" width="300px">
                          <v-card>
                             <v-form @submit="deletedevice" ref="deldeviceform">
@@ -413,7 +413,7 @@
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.device; currentDevID = device.id ; devDialog();"> 
+                         <v-card class="devices-style" :elevation="21" type="button" @click="name=device.name; currentDev = device.device; currentDevID = device.id ; devDialog();"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
                       
@@ -425,7 +425,7 @@
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
                                           <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
@@ -458,7 +458,7 @@
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
                                           <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
@@ -542,7 +542,7 @@
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
                                           <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
                                     </v-list-item-content>
                                              <v-divider></v-divider>
@@ -678,6 +678,7 @@
                 currentDevID:'',
                 currentDev:'',
                 deviceID: '',
+                name: '',
 
 
                 //refrigerator
@@ -1090,6 +1091,8 @@ Vue.component('routines',{
             currentDevice:null ,
             routines: [ ],
             actions: [],
+            doorActions: ['open', 'close', 'lock', 'unlock'],
+
         }
     },
         methods: {
@@ -1375,6 +1378,24 @@ Vue.component('alarm',{
                           </v-card>
                 </v-dialog>
                 
+                <v-dialog v-model="stateDialog" max-width="300">
+
+                          <v-card>
+                              <v-form @submit="disarmMode" ref="dm">
+
+                                 <v-container >
+                                     <v-card-title class="headline">Alarm State</v-card-title>
+                                     
+                                     {{ getState() }}
+                                     
+                                     <v-card-actions>
+                                         <v-spacer></v-spacer>
+                                         <v-btn class="mx-2" color="deep-purple darken-1" dark @click="stateDialog = false">Done</v-btn>
+                                     </v-card-actions>
+                                 </v-container>
+                              </v-form>
+                          </v-card>
+                </v-dialog>
                 
                 
                 
@@ -1407,7 +1428,7 @@ Vue.component('alarm',{
                  }
 
                  for(let i of r.devices){
-                     this.devices.push({id: i.id, name: i.name}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                     this.devices.push({id: i.id, name: i.name, state: i.state.status}); //por ahora solo le guardo name, hay que ver que mas necesitamos
                  }
              })
 
@@ -1479,6 +1500,14 @@ Vue.component('alarm',{
             this.$refs.changeCodeForm.reset();
 
         },
+
+        getState() {
+            for(let i of this.devices){
+                if(i.name === "alarm"){
+                    return i.state;
+                }
+            }
+        }
 
     },
     data() {
