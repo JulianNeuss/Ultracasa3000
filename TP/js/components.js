@@ -67,7 +67,9 @@
                                                                         ref="nameselector"
                                                                         label="Name"
                                                                         clearable
+                                                                        :rules="rules"
                                                                         maxlength="60"
+                                                                        counter="60"
                                                                         required
                                                                         ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                                             </v-col>
@@ -197,6 +199,11 @@
                 /*{ name: 'PedroRoom', src: "../src/Living.jpg", id:lk12j4lk134}*/
                 roomtypes: ['Room', 'Living', 'Garage', 'Kitchen','Playroom'],
                 devices: [],
+                rules: [
+                    v => !!v || 'Required',
+                    v => !!v && v.length >= 3 || 'Name must be more than 3 characters',
+                    v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
+                ],
             }
         },
         mounted() {
@@ -317,6 +324,8 @@
                                              label="Select device"
                                              ref="delnameselector"
                                              required
+                                             :rules="rules"
+                                             counter="60"
                                              ></v-select> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
                                         
@@ -360,6 +369,8 @@
                                              clearable
                                              maxlength="60"
                                              required
+                                             :rules="rules"
+                                             counter="60"
                                              ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
                                         </v-col>
                                         
@@ -628,6 +639,12 @@
     </div>`,
         data(){
             return {
+                rules: [
+                    v => !!v || 'Required',
+                    v => !!v && v.length >= 3 || 'Name must be more than 3 characters',
+                    v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
+                ],
+
                 //OVENSHITT
                 ex3: { label: 'Temperature', val: 100, color: 'red' },
                 min: 90,
@@ -967,52 +984,50 @@ Vue.component('routines',{
                         <v-list-item-title  class="headline font-weight-bold">Routines</v-list-item-title>
                     </v-list-item-content>
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="dialog = !dialog">
-                        <v-icon dark>add </v-icon>
+                        <v-icon dark> add </v-icon>
                     </v-btn>
 
                     <!-- -->
-
-                    <v-dialog v-model="dialog"  width="800px">  <!-- cambiar width tiene que estar en un CSS -->
-                        <v-card>
-                             
-                             <v-form @submit="addRoutine" ref="addRoutineForm">
-                                                            
-                                     <v-card-title class="grey darken-2" light>
-                                             Add routine
-                                     </v-card-title>
-                                     
-                                     <v-container grid-list-sm>
-                                            <v-flex  xs12  align-center  justify-space-between >
-                                                
-                                                    <v-layout align-center>
-                                                                        
-                                                             <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>
-                                                                                                                      
-                                                    </v-layout>
-                                            </v-flex>
-                                            <v-layout row wrap>
-                                                     <v-col class="d-flex" cols="12" sm="12">
-                                                            <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
-                                                     </v-col>
-                                            </v-layout>
-                                                                
-                                            <v-layout row wrap>
-                                                     <v-col class="d-flex" cols="12" sm="12">
-                                                             <v-select :items="allDev"  label="Device options"  name="category"  ></v-select>
-                                                     </v-col>
-                                            </v-layout>
-                                                                
+                    
+                    <v-dialog v-model="dialog" width="800">
+    
+                              <v-card>
+                                  <v-form  @submit="addRoutine" ref="addRoutineForm">
+    
+                                     <v-container >
+                                         <v-card-title class="headline">Add Routine </v-card-title>
+                                         
+                                         <v-container grid-list-sm>
+                                                <v-flex  xs12  align-center  justify-space-between >
+                                                    
+                                                        <v-layout align-center>
+                                                                            
+                                                                 <v-text-field :rules="deviceRules" required placeholder="Name" ref="nameselector" counter="60"></v-text-field>
+                                                                                                                          
+                                                        </v-layout>
+                                                </v-flex>
+                                                <v-layout row wrap>
+                                                         <v-col class="d-flex" cols="12" sm="12">
+                                                                <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
+                                                         </v-col>
+                                                </v-layout>
+                                                                    
+                                                <v-layout row wrap>
+                                                         <v-col class="d-flex" cols="12" sm="12">
+                                                                 <v-select :items="actions" item-text="actions.name" label="Device options"  name="category"  ></v-select>
+                                                         </v-col>
+                                                </v-layout>
+                                                                    
+                                         </v-container>
+                                         <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn type="submit" left text>Add device</v-btn>
+                                                <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
+                                                <v-btn type="submit" text>Save</v-btn>
+                                         </v-card-actions>
                                      </v-container>
-                                     <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn type="submit" left text>Add device</v-btn>
-                                            <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
-                                            <v-btn type="submit" text>Save</v-btn>
-                                     </v-card-actions>
-                                                            
-                             </v-form>
-                
-                        </v-card>
+                                  </v-form>
+                              </v-card>
                     </v-dialog>
 
 
@@ -1048,23 +1063,33 @@ Vue.component('routines',{
     mounted() {
         api.devicetypes.getAllDeviceTypes().then( ( r ) => {
             for (let i of r.result){
-                if(i.name !== "vacuum"  && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.allDev.push({id: i.id, name: i.name}); // mentira que andan estos comments
+                if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.allDev.push({id: i.id, name: i.name, actions: i.actions}); // mentira que andan estos comments
             }
-
+            console.log(this.allDev);
         })
+
+        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
+            for (let i of r.result){
+                if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    this.actions.push({actions: i.actions.name}); // mentira que andan estos comments
+            }
+            console.log(this.actions);
+        })
+
     },
     data(){
         return{
             deviceRules: [
                 v => !!v || 'Required',
-                v => !!v && v.length >= 3 || 'Name must have 3',
-                v => !!v && v.length <= 60 || 'Name ',
+                v => !!v && v.length >= 3 || 'Name must be more than 3 characters',
+                v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
             ],
             dialog: false,
             allDev: [],
             currentDevice:null ,
-            routines: [ ]
+            routines: [ ],
+            actions: [],
         }
     },
         methods: {
