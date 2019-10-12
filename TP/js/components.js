@@ -113,9 +113,9 @@
                                                             <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                                       </v-list-item-content>
                                                     
-                                                      <v-btn icon @click="room.fav = !room.fav">
+                                                      <!--<v-btn icon @click="room.fav = !room.fav">
                                                             <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
-                                                      </v-btn>
+                                                      </v-btn> -->
                                                </v-list-item>
                                               <v-spacer></v-spacer>
 
@@ -124,17 +124,11 @@
                                                             <v-list-item-title class="medium mb-2"  >Room Devices:</v-list-item-title>
                                                       </v-list-item-content>
 
-<!--                                                    <v-btn class="mx-2"  outlined dark color="deep-purple darken-1" @click="dialog = !dialog">-->
-<!--                                                          <v-icon dark> edit </v-icon> EDIT-->
-<!--                                                    </v-btn>-->
-<!--                                                    <v-btn class="mx-2"  dark color="deep-purple darken-1" @click="addbutton = !addbutton" >-->
-<!--                                                          <v-icon dark> add </v-icon> ADD-->
-<!--                                                    </v-btn>-->
                                               </v-row>
                                               
 
                                               <v-col v-for="dev in devices" :key="dev.name" cols="12" sm="6" md="12"  >
-                                                     <v-row v-if="dev.room == room.name" justify="center" align="center">
+                                                     <v-row v-show="dev.room == room.name" justify="center" align="center">
                                                            <v-btn text> {{ dev.name}}</v-btn>
                                                      </v-row>
                                               </v-col>
@@ -609,8 +603,8 @@
                                     
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="dialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="refriDialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="refriDialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
                              </v-dialog>
@@ -988,7 +982,7 @@ Vue.component('routines',{
                         <v-icon dark> add </v-icon>
                     </v-btn>
 
-                    <!-- -->
+                    <!-- cuadro para agregar rutinas -->
                     
                     <v-dialog v-model="dialog" width="800">
     
@@ -1009,13 +1003,13 @@ Vue.component('routines',{
                                                 </v-flex>
                                                 <v-layout row wrap>
                                                          <v-col class="d-flex" cols="12" sm="12">
-                                                                <v-select :items="allDev" item-text="name"  label="Select Device"  name="category"  ></v-select>
+                                                                <v-select :items="allDev" item-text="name"  label="Select Device" ref="devSelector" name="category"  ></v-select>
                                                          </v-col>
                                                 </v-layout>
                                                                     
                                                 <v-layout row wrap>
                                                          <v-col class="d-flex" cols="12" sm="12">
-                                                                 <v-select :items="actions" item-text="actions.name" label="Device options"  name="category"  ></v-select>
+                                                                 <v-select :items="devOptions" label="Device options"  name="category" type="submit" ></v-select>
                                                          </v-col>
                                                 </v-layout>
                                                                     
@@ -1036,8 +1030,8 @@ Vue.component('routines',{
                     <!-- -->
 
 
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1">
-                        <v-icon>edit</v-icon>
+                   <!--  <v-btn class="mx-2" fab dark color="deep-purple darken-1">
+                        <v-icon>edit</v-icon> -->
                     </v-btn>
                 </v-list-item>
                 <v-divider></v-divider>
@@ -1070,14 +1064,6 @@ Vue.component('routines',{
             console.log(this.allDev);
         })
 
-        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-            for (let i of r.result){
-                if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.actions.push({actions: i.actions.name}); // mentira que andan estos comments
-            }
-            console.log(this.actions);
-        })
-
     },
     data(){
         return{
@@ -1090,14 +1076,27 @@ Vue.component('routines',{
             allDev: [],
             currentDevice:null ,
             routines: [ ],
-            actions: [],
-            doorActions: ['open', 'close', 'lock', 'unlock'],
+            devOptions: [],
 
         }
     },
         methods: {
-
+            //lo que intente hacer aca es guardarme en un vector devoptions las correspondientes al que seleccionan, pero no anduvo del todo bien
+            //si elegis el dispositivo y tocas save recien ahi se guarda
+            //pero si tocas el dispositivo, tocas save, despues cambias el dispositivo y volves a tocar save se guardan las opciones de los 2
+            //no se resetea el vector
             addRoutine(event){
+                console.log(this.$refs.devSelector.internalValue);
+                event.preventDefault();
+
+                    for(let i of this.allDev){
+                        console.log(i.name);
+                        if(this.$refs.devSelector.internalValue === i.name){
+                            for(let j of i.actions)
+                                this.devOptions.push(j.name);
+                            console.log(this.devOptions);
+                        }
+                    }
 
             },
 
