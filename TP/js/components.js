@@ -113,9 +113,9 @@
                                                             <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                                       </v-list-item-content>
                                                     
-                                                      <!--<v-btn icon @click="room.fav = !room.fav">
+                                                      <v-btn icon @click="room.fav = !room.fav">
                                                             <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
-                                                      </v-btn> -->
+                                                      </v-btn> 
                                                </v-list-item>
                                               <v-spacer></v-spacer>
 
@@ -1469,7 +1469,7 @@
             mounted() {
                 api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                     for (let i of r.result){
-                        if(i.name !== "vacuum" && i.name !== "lamp") //hay que ver cuales dispositivos usamos
+                        if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
                             this.devicelist.push({id: i.id, name: i.name});
                     }
                 });
