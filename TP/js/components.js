@@ -172,678 +172,7 @@ Vue.component('rooms',{
         }
 
     }),
-
-    /*Vue.component('devices',{
-        template:
-            `<div>
-               <v-list-item one-line>
-
-
-                    <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="registereddevices = !registereddevices">
-                        <v-icon dark> info </v-icon>
-                    </v-btn>
-
-
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="devicedelete = !devicedelete">
-                        <v-icon dark> delete </v-icon>
-                    </v-btn>
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="deviceadd_s = !deviceadd_s">
-                        <v-icon dark> add </v-icon>
-                    </v-btn>
-
-            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
-                    <v-dialog v-model="registereddevices" width="300px">
-                         <v-card>
-                            <v-form @submit="deletedevice" ref="deldeviceform">
-
-                                <v-card-title light> Device Status </v-card-title>
-
-
-
-
-
-
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn  text  color="primary" @click="canceldelform">Done</v-btn>
-                                </v-card-actions>
-
-
-
-                            </v-form>
-                         </v-card>
-                    </v-dialog>
-            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
-
-
-            <!--DIALOG PARA BORRAR UN DEVICE-->
-                    <v-dialog v-model="devicedelete" width="300px">
-                         <v-card>
-                            <v-form @submit="deletedevice" ref="deldeviceform">
-
-                                <v-card-title light> Delete Device  </v-card-title>
-
-
-
-                                 <v-container grid-list-sm>
-                                     <v-layout row wrap>
-
-                                        <v-col cols="12" sm="6" md="12">
-                                             <v-select
-                                             :items="devices" item-text="name"
-                                             label="Select device"
-                                             ref="delnameselector"
-                                             required
-                                             ></v-select> <!-- chequear que lo que ingresan aca no este repetido-->
-                                        </v-col>
-
-                                     </v-layout>
-                                 </v-container>
-
-
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn  text  color="primary" @click="canceldelform">Cancel</v-btn>
-                                    <v-btn text @click="devicedelete = false" type="submit">Save</v-btn>
-                                </v-card-actions>
-
-
-
-                            </v-form>
-                         </v-card>
-                    </v-dialog>
-            <!--DIALOG PARA BORRAR UN DEVICE-->
-
-
-
-
-
-            <!--DIALOG PARA AGREGAR UN DEVICE-->
-                    <v-dialog v-model="deviceadd_s" width="300px">
-                         <v-card>
-                            <v-form @submit="deviceadd" ref="deviceform">
-
-                                <v-card-title light> Add Device  </v-card-title>
-
-
-
-                                 <v-container grid-list-sm>
-                                     <v-layout row wrap>
-
-                                        <v-col cols="12" sm="6" md="12">
-                                             <v-text-field
-                                             ref="nameselector"
-                                             label="Name"
-                                             clearable
-                                             maxlength="60"
-                                             required
-                                             :rules="rules"
-                                             counter="60"
-                                             ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
-                                        </v-col>
-
-
-                                        <v-col class="d-flex" cols="12" sm="12">
-                                             <v-select :items="devicelist" item-text="name" label="Select Device"  ref="deviceselector" required></v-select>
-                                        </v-col>
-
-
-                                        <v-col class="d-flex" cols="12" sm="12">
-                                            <v-select :items="rooms" item-text="name" label="Select Room"  ref="deviceroomselector" required></v-select>
-                                        </v-col>
-
-                                     </v-layout>
-                                 </v-container>
-
-
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn  text  color="primary" @click="cancelform">Cancel</v-btn>
-                                    <v-btn text @click="deviceadd_s = false" type="submit">Save</v-btn>
-                                </v-card-actions>
-
-
-
-                            </v-form>
-                         </v-card>
-                    </v-dialog>
-            <!--DIALOG PARA AGREGAR UN DEVICE-->
-
-               </v-list-item>
-
-
-
-
-               <v-divider></v-divider>
-
-
-
-
-               <v-row>
-                    <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
-                         <v-card class="devices-style" :elevation="21" type="button" @click="name=device.name; currentDev = device.device; currentDevID = device.id ; devDialog();">
-                            <v-img height="150"   :src="device.src">
-                            <v-card-title class="white--text" v-text="device.name" ></v-card-title>
-
-                 <!---DIALOG DE DEVICES-->
-
-                          <!---DIALOG DE BLINDS-->
-                          <v-dialog v-model="blindsdialog"  width="400px">
-                          <v-form @submit="blindsaction">
-                                <v-card>
-                                                          <!---TITULO DIALOG DE DEVICE-->
-                                    <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                             <v-divider></v-divider>
-                                                          <!---CONTENIDO DIALOG DE DEVICE-->
-
-                                     <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="blindsOnOff" color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Closed / Open</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="blindsdialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="blindsdialog = false" type="submit" >Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                             </v-form>
-                             </v-dialog>
-                          <!---DIALOG DE BLINDS-->
-
-                          <!---DIALOG DE OVEN-->
-                           <v-dialog v-model="ovendialog"  width="400px">
-                            <v-form @submit="ovenaction">
-                                <v-card>
-                                                          <!---TITULO DIALOG DE DEVICE-->
-                                    <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                             <v-divider></v-divider>
-
-                                                           <!---CONTENIDO DIALOG DE DEVICE-->
-
-                                     <v-list-item>
-                                           <v-card-text>
-                                                    <v-row>
-                                                    <v-col class="pr-4">
-                                                      <v-slider
-                                                      :label="ex3.label"
-                                                        v-model="slider"
-                                                        class="align-center"
-                                                        :max="max"
-                                                        :min="min"
-                                                        hide-details
-                                                      >
-                                                        <template v-slot:append>
-                                                          <v-text-field
-                                                            v-model="slider"
-                                                            class="mt-0 pt-0"
-                                                            hide-details
-                                                            single-line
-                                                            type="number"
-                                                            style="width: 60px"
-                                                          ></v-text-field>
-                                                        </template>
-                                                      </v-slider>
-                                                    </v-col>
-                                                  </v-row>
-                                            </v-card-text> <!--OVEN TEMPERATURE-->
-                                    </v-list-item>
-
-
-                                        <v-list-item>
-                                            <v-card flat ml-12>
-                                                <v-select :items="heatOptions"   label="Heat"  ref="heatOptionsSelector"  ></v-select>
-                                            </v-card>
-                                        </v-list-item>
-                                        <v-list-item>
-                                            <v-card flat ml-12>
-                                                <v-select :items="grillOptions"   label="Grill"  ref="grillOptionsSelector"  ></v-select>
-                                            </v-card>
-                                        </v-list-item>
-                                        <v-list-item>
-                                            <v-card flat ml-12>
-                                                <v-select :items="convectionOptions"   label="Convection" ref="convectionOptionsSelector"   ></v-select>
-                                            </v-card>
-                                         </v-list-item>
-
-
-
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                  <v-switch v-model="ovenOnOff"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-
-                                    <v-divider></v-divider>
-
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                               </v-form>
-                             </v-dialog>
-                          <!---DIALOG DE OVEN-->
-
-                          <!---DIALOG DE Refrigerator-->
-                          <v-dialog v-model="refrigeratordialog"  width="400px">
-                            <v-form @submit="refrigeratoraction">
-                                <v-card>
-                                                          <!---TITULO DIALOG DE DEVICE-->
-                                    <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                             <v-divider></v-divider>
-                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
-
-                                     <v-list-item>
-                                           <v-card-text>
-                                             <v-row>
-                                               <v-col class="pr-4">
-                                                      <v-slider :label="ex4.label" v-model="slider" class="align-center" :max="8" :min="2" hide-details>
-                                                        <template v-slot:append>
-                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
-                                                         </template>
-                                                    </v-slider>
-                                               </v-col>
-                                             </v-row>
-                                    </v-card-text><!--OVEN TEMPERATURE-->
-                                    </v-list-item>
-
-                                                                         <v-list-item>
-                                           <v-card-text>
-                                             <v-row>
-                                               <v-col class="pr-4">
-                                                      <v-slider :label="ex5.label" v-model="slider" class="align-center" :max="1" :min="-15" hide-details>
-                                                        <template v-slot:append>
-                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
-                                                         </template>
-                                                    </v-slider>
-                                               </v-col>
-                                             </v-row>
-                                    </v-card-text><!--OVEN TEMPERATURE-->
-                                    </v-list-item>
-
-
-
-
-
-                                    <v-list-item>
-                                        <template >
-                                            <v-card flat ml-10>
-                                                <v-card-subtitle>Mode</v-card-subtitle>
-
-                                                <v-radio-group v-model="row" row >
-                                                    <v-radio label="Normal" value="radio-2"></v-radio>
-                                                    <v-radio label="Party" value="radio-1"></v-radio>
-                                                    <v-radio label="Vacations" value="radio-3"></v-radio>
-                                                </v-radio-group>
-                                            </v-card>
-                                        </template>
-                                    </v-list-item>
-
-
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="refrigerator = false" >Cancel</v-btn>
-                                        <v-btn text @click="regrigeratordialog = false" type="submit" >Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                               </v-form>
-                             </v-dialog>
-                          <!---DIALOG DE Refrigerator-->
-
-                          <!---DIALOG DE AC-->
-
-                          <!---DIALOG DE AC-->
-
-                          <!---DIALOG DE Speaker-->
-
-                          <!---DIALOG DE Speaker-->
-
-                          <!---DIALOG DE Door-->
-                          <v-dialog v-model="doordialog"  width="400px">
-
-                                <v-card>
-                                                          <!---TITULO DIALOG DE DEVICE-->
-                                    <v-list-item-content class="text-center">
-                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
-                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
-                                    </v-list-item-content>
-                                             <v-divider></v-divider>
-                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
-
-                                     <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="doorClosedOpen"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Close / Open</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="doorLockedUnlocked"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Unlock / Lock</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>
-
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="refriDialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="refriDialog = false" type="submit" >Save</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                             </v-dialog>
-                          <!---DIALOG DE Door-->
-
-                 <!---DIALOG DE DEVICES-->
-
-
-                            </v-img>
-                         </v-card>
-                    </v-col>
-               </v-row>
-    </div>`,
-        data(){
-            return {
-                rules: [
-                    v => !!v || 'Required',
-                    v => !!v && v.length >= 3 || 'Name must be more than 3 characters',
-                    v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
-                ],
-
-                //OVEN
-                ex3: { label: 'Temperature', val: 100, color: 'red' },
-                min: 90,
-                max: 230,
-                ovendialog: false,
-                slider: 100,
-                range: [90, 230],
-                ovenOnOff:false,
-                heatOptions: ["top","bottom","conventional"],
-                grillOptions: ["off","eco","large"],
-                convectionOptions: ["off","eco","normal"],
-                //
-
-                //DOOR
-                doordialog: false,
-                doorClosedOpen:false,
-                doorLockedUnlocked:false,
-                //
-
-                //DIALOG DEVICES
-                registereddevices:false,
-
-                blindsdialog: false,
-
-                refrigeratordialog: false,
-                acdialog: false,
-                speakerdialog: false,
-                //////////////////////
-
-                //Blinds Variables
-                blindsOnOff: false,
-                //////////////////////
-                devicedelete: false,
-                deviceadd_s: false,
-                rooms: [],
-                devices: [], //id,name,src,device --> el device tiene el lo que es, Ej: 'blinds'
-                devicelist: [],
-                currentDevID:'',
-                currentDev:'',
-                deviceID: '',
-                name: '',
-
-
-                //refrigerator
-                refridialog:false,
-            }
-        },
-        mounted() {
-            api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-                for (let i of r.result){
-                    if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm")//hay que ver cuales dispositivos usamos
-                        this.devicelist.push({id: i.id, name: i.name});
-                }
-            });
-
-            api.room.getAll().then( r => {
-                for(let i of r.result){
-                    this.rooms.push({id: i.id, name: i.name, src: "../src/" + i.meta.img + ".jpg", fav: i.meta.fav});
-                }
-            });
-
-            api.device.getAll().then( r => {
-                for(let i of r.devices){
-                    if(i.name !== "alarm")
-                        this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
-                }
-            });
-            //Cargar variables de estado de los devices. Cada vez que haces REFRESH SE ROMPE EL ESTADO ACTUAL
-
-        },
-        methods:{
-            deviceadd(event) {
-                // event.preventDefault();
-                    var tempID;
-                    var roomID;
-                    var roomSelector;
-                    for(let i of this.devicelist){
-                        if (i.name === this.$refs.deviceselector.internalValue){
-                            tempID = i.id;
-                        }
-                    }
-                    for(let i of this.rooms){
-                        if (i.name === this.$refs.deviceroomselector.internalValue){
-                            roomID = i.id;
-                        }
-                    }
-                    roomSelector = this.$refs.deviceroomselector.internalValue;
-                api.device.add({
-                        type: {id:tempID},
-                        name: this.$refs.nameselector.internalValue,
-                        meta:{
-                            fav: false,
-                            roomID: roomID,
-                            deviceroom: this.$refs.deviceroomselector.internalValue,
-                            img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
-                            device: this.$refs.deviceselector.internalValue
-                        }
-                    }).catch((err) => {
-                        console.error(err);
-                    });
-                this.$refs.deviceform.reset();
-
-            },
-            cancelform(){
-                this.$refs.deviceform.reset();
-                this.deviceadd_s = false
-            },
-
-            deviceadd(event) {
-                event.preventDefault();
-                var tempID;
-                var roomID;
-                var roomSelector;
-                for(let i of this.devicelist){
-                    if (i.name === this.$refs.deviceselector.internalValue){
-                        tempID = i.id;
-                    }
-                }
-                for(let i of this.rooms){
-                    if (i.name === this.$refs.deviceroomselector.internalValue){
-                        roomID = i.id;
-                    }
-                }
-                roomSelector = this.$refs.deviceroomselector.internalValue;
-                api.device.add({
-                    type: {id:tempID},
-                    name: this.$refs.nameselector.internalValue,
-                    meta:{
-                        fav: false,
-                        roomID: roomID,
-                        deviceroom: this.$refs.deviceroomselector.internalValue,
-                        img: "../src/" + this.$refs.deviceselector.internalValue + ".jpg",
-                        device: this.$refs.deviceselector.internalValue
-                    }
-                }).then(r => {
-                    this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
-                    // console.log(roomID);
-                    // console.log(r.result.id);
-                    api.room.addRoomDevices(roomID, r.result.id);
-                }).catch((err) => {
-                    console.error(err);
-                });
-                this.$refs.deviceform.reset();
-            },
-            cancelform(){
-                this.$refs.deviceform.reset();
-                this.deviceadd_s = false
-            },
-
-            // namer(id,name,room,device){
-            //
-            //     // console.log('hi im namer');
-            //     // console.log(id);
-            //     // console.log(name);
-            //     // console.log(room);
-            //     // console.log(device);
-            //    //this.currentDev = device;
-            // },
-
-            devDialog(){
-                switch (this.currentDev){
-                    case 'blinds':
-                        console.log('hi im the case of BLINDS');
-                        this.blindsdialog=true;
-                        break;
-                    case 'speaker':
-                        this.speakerdialog=true;
-                        break;
-                    case 'oven':
-                        this.ovendialog=true;
-                        break;
-                    case 'door':
-                        this.doordialog=true;
-                        break;
-
-                }
-
-
-            },
-            canceldelform(){
-                this.$refs.deldeviceform.reset();
-                this.devicedelete = false
-            },
-            deletedevice(event){
-                // event.preventDefault();
-                console.log('hola1')
-                for(let i of this.devices){
-                    console.log(i.name);
-                    if (i.name === this.$refs.delnameselector.internalValue){
-                        api.device.delete(i.id);
-                        break;
-                    }
-                }
-            },
-
-            //////// METHODS PARA DEVICES ////////////////
-            blindsaction(e){
-                e.preventDefault();
-                //is ON
-                if(this.blindsOnOff){
-                    api.device.sendAction(this.currentDevID,"open","");
-                }
-                //is OFF
-                else{
-                    api.device.sendAction(this.currentDevID,"close","");
-                }
-            },
-            ovenaction(e){
-                e.preventDefault();
-
-                //is ON
-                if(this.ovenOnOff){
-                    api.device.sendAction(this.currentDevID,"turnOn","");
-                }
-                //is OFF
-                else{
-                    api.device.sendAction(this.currentDevID,"turnOff","");
-                }
-                api.device.sendAction(this.currentDevID,"setTemperature",[this.slider]);
-                api.device.sendAction(this.currentDevID,"setHeat",[this.$refs.heatOptionsSelector[0].internalValue]);
-                api.device.sendAction(this.currentDevID,"setGrill",[this.$refs.grillOptionsSelector[0].internalValue]);
-                api.device.sendAction(this.currentDevID,"setConvection",[this.$refs.convectionOptionsSelector[0].internalValue]);
-
-            },
-
-            dooraction(e){
-                e.preventDefault();
-                //is OPEN
-                if(this.doorClosedOpen){
-                    api.device.sendAction(this.currentDevID,"open","");
-                }
-                //is CLOSED
-                else{
-                    api.device.sendAction(this.currentDevID,"close","");
-                }
-                //is LOCKED
-                if(this.doorLockedUnlocked){
-                    api.device.sendAction(this.currentDevID,"lock","");
-                }
-                //is UNLOCKED
-                else{
-                    api.device.sendAction(this.currentDevID,"unlocked","");
-                }
-
-            }
-            ////////////////////////////////////////////////
-        }
-
-    }), */
-
-        Vue.component('devices',{
+Vue.component('devices',{
             template:
                 `<div>
                <v-list-item one-line>
@@ -853,9 +182,7 @@ Vue.component('rooms',{
                         <v-list-item-title  class="headline font-weight-bold">Devices</v-list-item-title>
                     </v-list-item-content>
                     
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="registereddevices = !registereddevices">
-                        <v-icon dark> info </v-icon>
-                    </v-btn>
+                  
                     
            
                     <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="devicedelete = !devicedelete">
@@ -865,29 +192,7 @@ Vue.component('rooms',{
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-             <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
-                    <v-dialog v-model="registereddevices" width="300px">
-                         <v-card>
-                            <v-form @submit="deletedevice" ref="deldeviceform">
-                                
-                                <v-card-title light> Device Status </v-card-title>
-
-
-
-                              
-
-
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn  text  color="primary" @click="canceldelform">Done</v-btn>
-                                </v-card-actions>
-                                
-                                
-                                
-                            </v-form>
-                         </v-card>
-                    </v-dialog>
-            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->       
+               
                     
                     
             <!--DIALOG PARA BORRAR UN DEVICE-->
@@ -993,13 +298,41 @@ Vue.component('rooms',{
 
                <v-row>
                     <v-col v-for="device in devices" :key="device.name" cols="12" md="4" >
+                            <v-btn class="mx-2" fab dark color="deep-purple darken-1" small @click="registereddevices = !registereddevices; updateState();">
+                                  <v-icon dark> info </v-icon>
+                            </v-btn>
+                            
                          <v-card class="devices-style" :elevation="21" type="button" @click="currentDev = device.device; currentDevID = device.id ; devDialog();"> 
                             <v-img height="150"   :src="device.src">
                             <v-card-title class="white--text" v-text="device.name" ></v-card-title>
+                            
+                            
+                            
+                            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
+                                <v-dialog v-model="registereddevices" width="300px">
+                                     <v-card>
+                                        <v-card-title light> Device Status </v-card-title>
+            
+                                             <v-col v-for="state in states"  cols="12" md="6">
+                                                <v-container>
+                                                    <v-list-item one-line>
+                                                            <v-list-item-title>state</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-container>
+                                              </v-col>
+                                                
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn  text  color="primary" @click="registereddevices = false">Done</v-btn>
+                                            </v-card-actions>
+                                            
+                                     </v-card>
+                                </v-dialog>
+                            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->     
                       
                  <!---DIALOG DE DEVICES-->
                  
-                          <!---DIALOG DE BLINDS-->
+                          <!---DIALOG DE BLINDS API WORKING-->
                           <v-dialog v-model="blindsdialog"  width="400px">
                           <v-form @submit="blindsaction">
                                 <v-card>
@@ -1032,7 +365,7 @@ Vue.component('rooms',{
                              </v-dialog>
                           <!---DIALOG DE BLINDS-->
 
-                          <!---DIALOG DE OVEN-->
+                          <!---DIALOG DE OVEN API WORKING-->
                           <v-dialog v-model="ovendialog"  width="400px">
                             <v-form @submit="ovenaction">
                                 <v-card>
@@ -1115,9 +448,7 @@ Vue.component('rooms',{
                              </v-dialog>
                           <!---DIALOG DE OVEN-->
                           
-                          
-                          
-                          <!---DIALOG DE Refrigerator-->
+                          <!---DIALOG DE Refrigerator API WORKING-->
                           <v-dialog v-model="refrigeratordialog"  width="400px">
                             <v-form @submit="refrigeratoraction">
                                 <v-card>
@@ -1133,9 +464,9 @@ Vue.component('rooms',{
                                            <v-card-text>
                                              <v-row>
                                                <v-col class="pr-4">
-                                                      <v-slider :label="ex4.label" v-model="slider" class="align-center" :max="8" :min="2" hide-details>
+                                                      <v-slider :label="ex4.label" v-model="sliderFreezer" class="align-center" :max="-8" :min="-20" hide-details>
                                                         <template v-slot:append>
-                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                             <v-text-field   v-model="sliderFreezer" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
                                                          </template>
                                                     </v-slider>
                                                </v-col>
@@ -1147,9 +478,9 @@ Vue.component('rooms',{
                                            <v-card-text>
                                              <v-row>
                                                <v-col class="pr-4">
-                                                      <v-slider :label="ex5.label" v-model="slider" class="align-center" :max="1" :min="-15" hide-details>
+                                                      <v-slider :label="ex5.label" v-model="sliderRefri" class="align-center" :max="8" :min="2" hide-details>
                                                         <template v-slot:append>
-                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                             <v-text-field   v-model="sliderRefri" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
                                                          </template>
                                                     </v-slider>
                                                </v-col>
@@ -1164,52 +495,29 @@ Vue.component('rooms',{
                                     <v-list-item>
                                         <template >
                                             <v-card flat ml-10>
-                                                <v-card-subtitle>Mode</v-card-subtitle>
-
-                                                <v-radio-group v-model="row" row >
-                                                    <v-radio label="Normal" value="radio-2"></v-radio>
-                                                    <v-radio label="Party" value="radio-1"></v-radio>
-                                                    <v-radio label="Vacations" value="radio-3"></v-radio>
-                                                </v-radio-group>
+                                              
+                                                    <v-select :items="RefriModes"   label="Mode"  ref="RefriSelectorModes"></v-select>
+                                                   
                                             </v-card>
                                         </template>
                                     </v-list-item>
                                     
                                    
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                          
-                                    
-                                    
-                                                                                 
-                                             <v-divider></v-divider>
-                                    <v-row justify="space-around">
-                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
-                                            <v-icon small dark> delete </v-icon> 
-                                        </v-btn>                                   
-                                    </v-row>
-                                    
-                                    
+                                                
+                                                                           
+                                    <v-divider></v-divider>
+                                   
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="refrigerator = false" >Cancel</v-btn>
-                                        <v-btn text @click="regrigeratordialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="refrigeratordialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="refrigeratordialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
                                </v-form>   
                              </v-dialog>
                           <!---DIALOG DE Refrigerator-->
                           
-                          
-                          
-                          <!---DIALOG DE AC-->      
+                          <!---DIALOG DE AC API WORKING-->      
                           <v-dialog v-model="acdialog"  width="400px">
                             <v-form @submit="acaction">
                                 <v-card>
@@ -1227,9 +535,9 @@ Vue.component('rooms',{
                                            <v-card-text>
                                              <v-row>
                                                <v-col class="pr-4">
-                                                      <v-slider :label="ex6.label" v-model="slider" class="align-center" :max="38" :min="13" hide-details>
+                                                      <v-slider :label="ex6.label" v-model="sliderTemp" class="align-center" :max="38" :min="13" hide-details>
                                                         <template v-slot:append>
-                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                             <v-text-field   v-model="sliderTemp" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
                                                          </template>
                                                     </v-slider>
                                                </v-col>
@@ -1245,31 +553,29 @@ Vue.component('rooms',{
                                         
 
    <v-divider></v-divider>
-                                    
-                                    
-                                        <v-card flat>   
-                                            <v-card-subtitle >  Vertical Asps </v-card-subtitle>   
-                                        </v-card>    
-                                    <v-list-item>         
-                                                <v-slider v-model="aspasV" :tick-labels="aspLabels" :max="4" step="1" ticks="always" tick-size="4"></v-slider>
                                          
+                                    <v-list-item>         
+                                                
+                                         <v-card flat ml-12>
+                                                <v-select :items="aspLabels"   label="Vertical Asps"  ref="aspasVSelector"  ></v-select>
+                                            </v-card>
                                     </v-list-item> 
                                     
                                                               <v-divider></v-divider>           
-                                     <v-card flat>   
-                                            <v-card-subtitle >  Horizontal Asps </v-card-subtitle>   
-                                        </v-card>    
-                                    <v-list-item>         
-                                                <v-slider v-model="aspasH" :tick-labels="aspLabelsH" :max="5" step="1" ticks="always" tick-size="4"></v-slider>
-                                         
+                                     
+                                    <v-list-item>  
+                                         <v-card flat ml-12>
+                                                <v-select :items="aspLabelsH"   label="Horizontal Asps"  ref="aspasHSelector"  ></v-select>
+                                            </v-card>
                                     </v-list-item> 
+                                    
                                      <v-divider></v-divider>
-                                     <v-card flat>   
-                                            <v-card-subtitle >  Fan Speed </v-card-subtitle>   
-                                        </v-card>    
-                                    <v-list-item>         
-                                                <v-slider v-model="fanSpeed" :tick-labels="Fanspeed" :max="5" step="1" ticks="always" tick-size="4"></v-slider>
-                                         
+                                     
+                                       
+                                    <v-list-item>      
+                                         <v-card flat ml-12>
+                                                <v-select :items="Fanspeed"   label="Fan Speed"  ref="fanSpeedSelector"  ></v-select>
+                                            </v-card>
                                     </v-list-item> 
                                    
   <v-divider></v-divider>
@@ -1277,42 +583,116 @@ Vue.component('rooms',{
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                                  <v-switch v-model="acOffOn"  color="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                   <v-list-item-subtitle>Off / On</v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
                                     </v-list-item>                          
-                                    
-                                    
-                                                                                 
-                                             <v-divider></v-divider>
-                                    <v-row justify="space-around">
-                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
-                                            <v-icon small dark> delete </v-icon> 
-                                        </v-btn>                                   
-                                    </v-row>
-                                    
-                                    
+                                   
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
-                                        <v-btn  text  color="primary" @click="ovendialog = false" >Cancel</v-btn>
-                                        <v-btn text @click="ovendialog = false" type="submit" >Save</v-btn>
+                                        <v-btn  text  color="primary" @click="acdialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="acdialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
                                </v-form>   
                              </v-dialog>
                           <!---DIALOG DE AC-->
                           
+                          <!---DIALOG DE Speaker API WORKING-->
+                          <v-dialog v-model="speakerdialog"  width="400px">
+                            <v-form @submit="speakeraction">
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                          
+                                    
+                                    <v-list-item>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex7" v-model="sliderSpeaker" class="align-center" max="10" min="0" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="sliderSpeaker" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text>
+                                    </v-list-item>
+                                    
+                                     <v-divider></v-divider>
+                                  
+                                     <v-list-item>
+                                            <v-card flat ml-12>
+                                                <v-select :items="speakeroptions"   label="Mode"  ref="SpeakerOptionsSelector"  ></v-select>
+                                            </v-card>
+                                      </v-list-item>
+                                        
+                                        <template>
+                                          <div class="text-center">
+                                            <v-btn  @click="prevSong"  class="mx-2" fab dark small color="primary">
+                                              <v-icon dark>mdi-skip-previous</v-icon>
+                                            </v-btn>
+                                        
+                                            <v-btn @click="stopSong" class="mx-2" fab dark small color="pink">
+                                              <v-icon dark>mdi-stop</v-icon>
+                                            </v-btn>
+                                        
+                                            <v-btn  @click="playSong" class="mx-2" fab dark small color="indigo">
+                                              <v-icon dark>mdi-play</v-icon>
+                                            </v-btn>
+                                        
+                                            <v-btn @click="pauseSong" class="mx-2" fab dark small color="teal">
+                                              <v-icon dark>mdi-pause</v-icon>
+                                            </v-btn>
+                                        
+                                            <v-btn @click="nextSong" class="mx-2" fab dark small color="cyan">
+                                              <v-icon dark>mdi-skip-next</v-icon>
+                                            </v-btn>
+                                            
+                                            <v-btn @click="resumeSong" class="mx-2" fab dark small color="cyan">
+                                              <v-icon dark>mdi-tilde</v-icon>
+                                            </v-btn>
+                                        
+                                          </div>
+                                        </template>
+
+<!--                                        <v-list-item>-->
+<!--                                        <template v-slot:default="{ active, toggle }">-->
+<!--                                            <v-list-item-action>-->
+<!--                                                  <v-switch v-model="SpeakerOffOn"  color="success"  hide-details></v-switch>-->
+<!--                                            </v-list-item-action>-->
+<!--                                            <v-list-item-content>-->
+<!--                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>-->
+<!--                                            </v-list-item-content>-->
+<!--                                        </template>-->
+<!--                                    </v-list-item>                          -->
+                                                                   
+                                        <v-divider></v-divider>
+                                   
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="speakerdialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="speakerdialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                               </v-form>   
+                             </v-dialog>
                           <!---DIALOG DE Speaker-->
                           
-                          <!---DIALOG DE Speaker-->
-                          
-                          <!---DIALOG DE Door-->
-                          <v-form @submit="dooraction">
+                          <!---DIALOG DE Door API WORKING--> 
                           <v-dialog v-model="doordialog"  width="400px">
-                          
+                          <v-form @submit="dooraction">
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
                                     <v-list-item-content class="text-center">
@@ -1325,18 +705,20 @@ Vue.component('rooms',{
                                      <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                     <v-switch v-model="doorClosedOpen"  color="success" value="success" hide-details></v-switch>
+                                                     <v-switch v-model="doorClosedOpen"  color="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                   <v-list-item-subtitle>Close / Open</v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
                                     </v-list-item>
+                                    
+                                    <template v-if="!doorClosedOpen">
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
                                             <template if >  
-                                                     <v-switch v-model="doorLockedUnlocked"  color="success" value="success" hide-details></v-switch>
+                                                     <v-switch v-model="doorLockedUnlocked"  color="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                   <v-list-item-subtitle>Unlock / Lock</v-list-item-subtitle>
@@ -1344,6 +726,7 @@ Vue.component('rooms',{
                                             </template>
                                         </template>
                                     </v-list-item>
+                                   </template>
                                    
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
@@ -1351,8 +734,8 @@ Vue.component('rooms',{
                                         <v-btn text @click="doordialog = false" type="submit" >Save</v-btn>
                                     </v-card-actions>
                                 </v-card>
+                                 </v-form>
                              </v-dialog>
-                             </v-form>
                           <!---DIALOG DE Door-->
                           
                  <!---DIALOG DE DEVICES-->
@@ -1365,13 +748,27 @@ Vue.component('rooms',{
     </div>`,
             data(){
                 return {
+                    //DEVICE STATES
+                    states: {},
+                    //SPEAKER
+                    ex7: 'Volume',
+                    speakeroptions: ["clasica","country","dance","latina","pop","rock"],
+                    prev:false,
+                    next:false,
+                    play: false,
+                    stop:false,
+                    sliderSpeaker: 0,
+                    SpeakerOffOn: false,
+                    //
                     //DOOR
                     doordialog: false,
                     doorClosedOpen:false,
                     doorLockedUnlocked:false,
                     //
                     //AC
+                    acOffOn: false,
                     fanSpeed: 0,
+                    sliderTemp: 20,
                     aspasV: 0,
                     aspasH: 0,
                     acOptions: [
@@ -1404,13 +801,15 @@ Vue.component('rooms',{
                     ex6: { label: 'Temperature', val: 100, color: 'red' },
                     //
                     //REFRI
-                    ex5: { label: 'Refrigerator', val: 100, color: 'red' },
-                    ex4: { label: 'Freezer', val: 100, color: 'red' },
-                    slider: 100,
+                    ex5: { label: 'Refrigerator'},
+                    ex4: { label: 'Freezer' },
+                    sliderFreezer: -8,
+                    sliderRefri: 2,
                     range: [2, 8],
                     ovenOnOff:false,
+                    RefriModes: ["default","vacation","party"],
                     //
-                    //OVENSHITT
+
                     //OVEN
                     ex3: { label: 'Temperature', val: 100, color: 'red' },
                     min: 90,
@@ -1428,11 +827,10 @@ Vue.component('rooms',{
                     registereddevices:false,
 
                     blindsdialog: false,
-                    ovendialog: false,
                     refrigeratordialog: false,
                     acdialog: false,
                     speakerdialog: false,
-                    doordialog: false,
+
                     //////////////////////
 
                     //Blinds Variables
@@ -1513,7 +911,7 @@ Vue.component('rooms',{
                 },
 
                 deviceadd(event) {
-                    event.preventDefault();
+                    //event.preventDefault();
                     var tempID;
                     var roomID;
                     var roomSelector;
@@ -1553,24 +951,12 @@ Vue.component('rooms',{
                     this.deviceadd_s = false
                 },
 
-                // namer(id,name,room,device){
-                //
-                //     // console.log('hi im namer');
-                //     // console.log(id);
-                //     // console.log(name);
-                //     // console.log(room);
-                //     // console.log(device);
-                //    //this.currentDev = device;
-                // },
-
                 devDialog(){
                     switch (this.currentDev){
                         case 'blinds':
-                            console.log('hi im the case of BLINDS');
                             this.blindsdialog=true;
                             break;
                         case 'refrigerator':
-                            console.log('hi im the case of BLINDS');
                             this.refrigeratordialog=true;
                             break;
                         case 'speaker':
@@ -1595,10 +981,7 @@ Vue.component('rooms',{
                     this.devicedelete = false
                 },
                 deletedevice(event){
-                    // event.preventDefault();
-                    console.log('hola1')
                     for(let i of this.devices){
-                        console.log(i.name);
                         if (i.name === this.$refs.delnameselector.internalValue){
                             api.device.delete(i.id);
                             break;
@@ -1612,19 +995,21 @@ Vue.component('rooms',{
                     //is OPEN
                     if(this.doorClosedOpen){
                         api.device.sendAction(this.currentDevID,"open","");
+                        this.doorLockedUnlocked=false;
                     }
                     //is CLOSED
                     else{
                         api.device.sendAction(this.currentDevID,"close","");
+                        //is LOCKED
+                        if(this.doorLockedUnlocked){
+                            api.device.sendAction(this.currentDevID,"lock","");
+                        }
+                        //is UNLOCKED
+                        else{
+                            api.device.sendAction(this.currentDevID,"unlocked","");
+                        }
                     }
-                    //is LOCKED
-                    if(this.doorLockedUnlocked){
-                        api.device.sendAction(this.currentDevID,"lock","");
-                    }
-                    //is UNLOCKED
-                    else{
-                        api.device.sendAction(this.currentDevID,"unlocked","");
-                    }
+
 
                 },
                 ////////////////////////////////////////////////
@@ -1658,12 +1043,64 @@ Vue.component('rooms',{
                         api.device.sendAction(this.currentDevID,"close","");
                     }
                 },
+                speakeraction(){
+                    e.preventDefault();
+                    //SETEAR VOLUMEN, MODO, ONOFF
+                    api.device.sendAction(this.currentDevID,"setVolume",[this.sliderSpeaker]);
+                    api.device.sendAction(this.currentDevID,"setGenre",[this.$refs.SpeakerOptionsSelector.internalValue]);
 
-                ////////////////////////////////////////////////
+                },
+                prevSong(){
+                    api.device.sendAction(this.currentDevID,"previousSong","");
+                },
+                nextSong(){
+                    api.device.sendAction(this.currentDevID,"nextSong","");
+                },
+                playSong(){
+                    api.device.sendAction(this.currentDevID,"play","");
+                },
+                pauseSong(){
+                    api.device.sendAction(this.currentDevID,"pause","");
+                },
+                stopSong(){
+                    api.device.sendAction(this.currentDevID,"stop","");
+                },
+                resumeSong(){
+                    api.device.sendAction(this.currentDevID,"resume","");
+                },
+                refrigeratoraction(e){
+                    e.preventDefault();
+                    api.device.sendAction(this.currentDevID,"setFreezerTemperature",[this.sliderFreezer]);
+                    api.device.sendAction(this.currentDevID,"setTemperature",[this.sliderRefri]);
+                    api.device.sendAction(this.currentDevID,"setMode",[this.$refs.RefriSelectorModes[5].internalValue]);
+
+
+                },
+                acaction(e){
+                    //is ON
+                    e.preventDefault();
+                    if(this.acOffOn){
+                        api.device.sendAction(this.currentDevID,"turnOn","");
+                        api.device.sendAction(this.currentDevID,"setTemperature",[this.sliderTemp]);
+                        api.device.sendAction(this.currentDevID,"setMode",[this.$refs.acOptionsSelector[5].internalValue]);
+                        api.device.sendAction(this.currentDevID,"setVerticalSwing",[this.$refs.aspasVSelector[5].internalValue]);
+                        api.device.sendAction(this.currentDevID,"setHorizontalSwing",[this.$refs.aspasHSelector[5].internalValue]);
+                        api.device.sendAction(this.currentDevID,"setFanSpeed",[this.$refs.fanSpeedSelector[5].internalValue]);
+                    }
+                    //if OFF
+                    else{
+                        api.device.sendAction(this.currentDevID,"turnOff","");
+                    }
+
+                },
+                updateState(){
+                    this.states = api.device.getState(this.currentDevID).result;
+                }
+
+
             }
 
         }),
-
 Vue.component('favourites',{
     template:
         `<v-row>
@@ -1966,16 +1403,7 @@ Vue.component('routines',{
 
  */
 
-
-
-
-
-
-
-
-
-
-        Vue.component('routines',{
+Vue.component('routines',{
 
             template: ` 
     <v-item-group>
@@ -2149,50 +1577,6 @@ Vue.component('routines',{
             }
 
         }),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Vue.component('alarm',{
     template:`
@@ -2518,8 +1902,6 @@ Vue.component('alarm',{
 
 }),
 
-
-
 Vue.component('toolbar', {
     template:
         `<div>
@@ -2575,8 +1957,6 @@ Vue.component('toolbar', {
         }
     }
 });
-
-
 
 new Vue({
     el: '#app',
