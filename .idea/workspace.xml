@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="" />
+    <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +96,7 @@
       <workItem from="1570818772708" duration="1194000" />
       <workItem from="1570818893461" duration="1259000" />
       <workItem from="1570820525248" duration="74000" />
-      <workItem from="1570820625923" duration="4380000" />
+      <workItem from="1570820625923" duration="8052000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>

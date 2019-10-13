@@ -1,47 +1,4 @@
-
-
-
-
-
-// Vue.component('lastused', {
-//     template:
-//         `<div>
-//                <v-list-item one-line>
-//                      <v-list-item-content class="align-self-start">
-//                         <v-list-item-title  class="headline font-weight-bold">Last Used</v-list-item-title>
-//                     </v-list-item-content>
-//                </v-list-item>
-//                <v-divider></v-divider>
-//
-//                <v-row>
-//                     <v-col v-for="last in lastusedvec" :key="last.title"  cols="12" md="4" >
-//                             <v-card class="last-used-style" :elevation="21" type="button">
-//                                <v-list-item three-line>
-//                                       <v-list-item-content class="align-self-start">
-//                                             <v-list-item-title  class="medium mb-2"  v-text="last.title"></v-list-item-title>
-//                                             <v-list-item-subtitle v-text="last.room"></v-list-item-subtitle>
-//                                       </v-list-item-content>
-//                                     <v-icon> {{ last.icon }}</v-icon>
-//                                </v-list-item>
-//
-//                             </v-card>
-//                     </v-col>
-//                </v-row>
-//         </div>`,
-//     data(){
-//         return {
-//             lastusedvec: [
-//                 { title: 'Living', icon: 'tv' },
-//                 { title: 'Smart Tv', room: 'Living' , icon: 'tv'},
-//                 { title: 'Apple Homepods', room:'Dorm Jorge' , icon: 'speaker'},
-//             ]
-//         }
-//     }
-// }),
-//
-
-
-    Vue.component('rooms',{
+Vue.component('rooms',{
         template:
             `<div>
 
@@ -112,10 +69,6 @@
                                                       <v-list-item-content class="text-center">
                                                             <v-list-item-title  class="title"  v-text="room.name"></v-list-item-title>
                                                       </v-list-item-content>
-                                                    
-                                                      <!--<v-btn icon @click="room.fav = !room.fav">
-                                                            <v-icon large> {{ room.fav ? 'favorite' : 'favorite_border' }} </v-icon>
-                                                      </v-btn> -->
                                                </v-list-item>
                                               <v-spacer></v-spacer>
 
@@ -132,44 +85,6 @@
                                                            <v-btn text> {{ dev.name}}</v-btn>
                                                      </v-row>
                                               </v-col>
-
-                                              <!--  -->
-<!--                                              <v-dialog v-model="addbutton" width="400px" >  &lt;!&ndash; no me anda el css de este width&ndash;&gt;-->
-
-<!--                                                    <v-card>-->
-<!--                                                        <v-form>-->
-
-<!--                                                                <v-card-title class="grey darken-2" light>-->
-<!--                                                                    Add Device-->
-<!--                                                                </v-card-title>-->
-<!--                                                                <v-container grid-list-sm>-->
-
-<!--                                                                    <v-layout row wrap>-->
-<!--                                                                        <v-col class="d-flex" cols="12" sm="12">-->
-<!--                                                                          <v-select-->
-<!--                                                                            :items="items" item-text="name"-->
-<!--                                                                            label="Select Device"-->
-<!--                                                                            required-->
-<!--                                                                          ></v-select>-->
-<!--                                                                        </v-col>-->
-<!--                                                                    </v-layout>-->
-
-<!--                                                                </v-container>-->
-<!--                                                                <v-card-actions>-->
-<!--                                                                    <v-spacer></v-spacer>-->
-<!--                                                                    <v-btn  text  color="primary" @click="addbutton = false" >Cancel</v-btn>-->
-<!--                                                                    <v-btn text @click="addbutton = false">Save</v-btn>-->
-<!--                                                                </v-card-actions>-->
-
-<!--                                                        </v-form>-->
-
-<!--                                                     </v-card>-->
-
-
-<!--                                              </v-dialog>-->
-
-                                               <!-- -->
-
                                               <v-card-actions>
                                                     <v-spacer></v-spacer>
                                                     <v-btn  text  color="primary" @click="dialog = false" >Cancel</v-btn>
@@ -275,7 +190,7 @@
                         <v-icon dark> add </v-icon>
                     </v-btn>
                     
-                    <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
+            <!--DIALOG PARA VER ESTADO DE LOS DEVICES-->
                     <v-dialog v-model="registereddevices" width="300px">
                          <v-card>
                             <v-form @submit="deletedevice" ref="deldeviceform">
@@ -528,8 +443,95 @@
                           <!---DIALOG DE OVEN-->
                           
                           <!---DIALOG DE Refrigerator-->
+                          <v-dialog v-model="refrigeratordialog"  width="400px">
+                            <v-form @submit="refrigeratoraction">
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="device.name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                                     <v-list-item>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex4.label" v-model="slider" class="align-center" :max="8" :min="2" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text><!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                    
+                                                                         <v-list-item>
+                                           <v-card-text>
+                                             <v-row>
+                                               <v-col class="pr-4">
+                                                      <v-slider :label="ex5.label" v-model="slider" class="align-center" :max="1" :min="-15" hide-details>
+                                                        <template v-slot:append>
+                                                             <v-text-field   v-model="slider" class="mt-0 pt-0" hide-details single-line type="number" style="width: 60px" ></v-text-field>
+                                                         </template>
+                                                    </v-slider>
+                                               </v-col>
+                                             </v-row>
+                                    </v-card-text><!--OVEN TEMPERATURE-->
+                                    </v-list-item>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <v-list-item>
+                                        <template >
+                                            <v-card flat ml-10>
+                                                <v-card-subtitle>Mode</v-card-subtitle>
 
-                          <v-dialog v-model="refridialog"  width="400px">
+                                                <v-radio-group v-model="row" row >
+                                                    <v-radio label="Normal" value="radio-2"></v-radio>
+                                                    <v-radio label="Party" value="radio-1"></v-radio>
+                                                    <v-radio label="Vacations" value="radio-3"></v-radio>
+                                                </v-radio-group>
+                                            </v-card>
+                                        </template>
+                                    </v-list-item>
+                                    
+                                   
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>                          
+                                    
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="refrigerator = false" >Cancel</v-btn>
+                                        <v-btn text @click="regrigeratordialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                               </v-form>   
+                             </v-dialog>
+                          <!---DIALOG DE Refrigerator-->
+                          
+                          <!---DIALOG DE AC-->
+                          
+                          <!---DIALOG DE AC-->
+                          
+                          <!---DIALOG DE Speaker-->
+                          
+                          <!---DIALOG DE Speaker-->
+                          
+                          <!---DIALOG DE Door-->
+                          <v-dialog v-model="doordialog"  width="400px">
                           
                                 <v-card>
                                                           <!---TITULO DIALOG DE DEVICE-->
@@ -543,62 +545,24 @@
                                      <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                                     <v-switch v-model="doorClosedOpen"  color="success" value="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
+                                                  <v-list-item-subtitle>Close / Open</v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
                                     </v-list-item>
                                     <v-list-item>
                                         <template v-slot:default="{ active, toggle }">
                                             <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
+                                                     <v-switch v-model="doorLockedUnlocked"  color="success" value="success" hide-details></v-switch>
                                             </v-list-item-action>
                                             <v-list-item-content>
-                                                  <v-list-item-subtitle>Stop / Play</v-list-item-subtitle>
+                                                  <v-list-item-subtitle>Unlock / Lock</v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
                                     </v-list-item>
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Aspirar / Trapear</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                                    
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                     <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Back to charger</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                
-                                    <v-list-item>
-                                        <template v-slot:default="{ active, toggle }">
-                                            <v-list-item-action>
-                                                  <v-switch v-model="ex11"  color="success" value="success" hide-details></v-switch>
-                                            </v-list-item-action>
-                                            <v-list-item-content>
-                                                  <v-list-item-subtitle>Off / On</v-list-item-subtitle>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-item>                          
-                                                                                 
-                                             <v-divider></v-divider>
-                                    <v-row justify="space-around">
-                                      <v-btn class="mx-2" right small dark color="deep-purple darken-1" @click="deletedevice" ref="deletedevicebutton">
-                                            <v-icon small dark> delete </v-icon> 
-                                        </v-btn>                                   
-                                    </v-row>
-                                    
-                                    
+                                   
                                     <v-card-actions>
                                         <v-spacer></v-spacer>
                                         <v-btn  text  color="primary" @click="refriDialog = false" >Cancel</v-btn>
@@ -606,19 +570,6 @@
                                     </v-card-actions>
                                 </v-card>
                              </v-dialog>
-
-                          <!---DIALOG DE Refrigerator-->
-                          
-                          <!---DIALOG DE AC-->
-                          
-                          <!---DIALOG DE AC-->
-                          
-                          <!---DIALOG DE Speaker-->
-                          
-                          <!---DIALOG DE Speaker-->
-                          
-                          <!---DIALOG DE Door-->
-                          
                           <!---DIALOG DE Door-->
                           
                  <!---DIALOG DE DEVICES-->
@@ -637,10 +588,11 @@
                     v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
                 ],
 
-                //OVENSHITT
+                //OVEN
                 ex3: { label: 'Temperature', val: 100, color: 'red' },
                 min: 90,
                 max: 230,
+                ovendialog: false,
                 slider: 100,
                 range: [90, 230],
                 ovenOnOff:false,
@@ -648,15 +600,21 @@
                 grillOptions: ["off","eco","large"],
                 convectionOptions: ["off","eco","normal"],
                 //
+
+                //DOOR
+                doordialog: false,
+                doorClosedOpen:false,
+                doorLockedUnlocked:false,
+                //
+
                 //DIALOG DEVICES
                 registereddevices:false,
 
                 blindsdialog: false,
-                ovendialog: false,
+
                 refrigeratordialog: false,
                 acdialog: false,
                 speakerdialog: false,
-                doordialog: false,
                 //////////////////////
 
                 //Blinds Variables
@@ -766,8 +724,8 @@
                     }
                 }).then(r => {
                     this.devices.push({name: r.result.name, room: roomSelector, id: r.result.id});
-                    console.log(roomID);
-                    console.log(r.result.id);
+                    // console.log(roomID);
+                    // console.log(r.result.id);
                     api.room.addRoomDevices(roomID, r.result.id);
                 }).catch((err) => {
                     console.error(err);
@@ -800,6 +758,9 @@
                         break;
                     case 'oven':
                         this.ovendialog=true;
+                        break;
+                    case 'door':
+                        this.doordialog=true;
                         break;
 
                 }
@@ -849,6 +810,27 @@
                 api.device.sendAction(this.currentDevID,"setHeat",[this.$refs.heatOptionsSelector[0].internalValue]);
                 api.device.sendAction(this.currentDevID,"setGrill",[this.$refs.grillOptionsSelector[0].internalValue]);
                 api.device.sendAction(this.currentDevID,"setConvection",[this.$refs.convectionOptionsSelector[0].internalValue]);
+
+            },
+
+            dooraction(e){
+                e.preventDefault();
+                //is OPEN
+                if(this.doorClosedOpen){
+                    api.device.sendAction(this.currentDevID,"open","");
+                }
+                //is CLOSED
+                else{
+                    api.device.sendAction(this.currentDevID,"close","");
+                }
+                //is LOCKED
+                if(this.doorLockedUnlocked){
+                    api.device.sendAction(this.currentDevID,"lock","");
+                }
+                //is UNLOCKED
+                else{
+                    api.device.sendAction(this.currentDevID,"unlocked","");
+                }
 
             }
             ////////////////////////////////////////////////
