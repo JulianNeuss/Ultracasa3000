@@ -96,7 +96,7 @@
       <workItem from="1570818893461" duration="1259000" />
       <workItem from="1570820525248" duration="74000" />
       <workItem from="1570820625923" duration="8052000" />
-      <workItem from="1570926926364" duration="6865000" />
+      <workItem from="1570926926364" duration="7160000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
@@ -154,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570933761565</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="DEVICES WORKING WITH API 100% + UI DE RUTINES">
+      <created>1570934015972</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1570934015972</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,6 +188,7 @@
     <MESSAGE value="Dialog devices with FIRST DEVICE DIALOG WORKING!!!!" />
     <MESSAGE value="OVEN 100% working." />
     <MESSAGE value="DEVICES WORKING WITH API 100%" />
-    <option name="LAST_COMMIT_MESSAGE" value="DEVICES WORKING WITH API 100%" />
+    <MESSAGE value="DEVICES WORKING WITH API 100% + UI DE RUTINES" />
+    <option name="LAST_COMMIT_MESSAGE" value="DEVICES WORKING WITH API 100% + UI DE RUTINES" />
   </component>
 </project>

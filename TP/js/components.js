@@ -28,7 +28,7 @@ Vue.component('rooms',{
                                                                         maxlength="60"
                                                                         counter="60"
                                                                         required
-                                                                        ></v-text-field> <!-- chequear que lo que ingresan aca no este repetido-->
+                                                                        ></v-text-field> 
                                                             </v-col>
 
                                                             <v-col class="d-flex" cols="12" sm="12">
@@ -59,9 +59,9 @@ Vue.component('rooms',{
             <v-row>
                   <v-col v-for="room in rooms" :key="room.name" cols="12" md="6" >
                          <v-card class="rooms-style" :elevation="21" type="button" @click="dialog = !dialog">
-                               <v-img height="150"   :src="room.src"> <!-- no me anda el css de este height-->
+                               <v-img height="150"   :src="room.src"> 
                                      <v-card-title class="white--text" v-text="room.name" ></v-card-title>
-                                     <v-dialog v-model="dialog"  width="400px"> <!-- no me anda el css de este width-->
+                                     <v-dialog v-model="dialog"  width="400px"> 
                                           <v-card>
 
 
@@ -123,7 +123,7 @@ Vue.component('rooms',{
         mounted() {
             api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                 for (let i of r.result){
-                    if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                    if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm")
                         this.items.push({id: i.id, name: i.name});
                 }
             });
@@ -853,7 +853,7 @@ Vue.component('devices',{
             mounted() {
                 api.devicetypes.getAllDeviceTypes().then( ( r ) => {
                     for (let i of r.result){
-                        if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
+                        if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm")
                             this.devicelist.push({id: i.id, name: i.name});
                     }
                 });
@@ -1197,7 +1197,7 @@ Vue.component('favourites',{
         api.device.getAll().then( r  => {
             for(let i of r.devices){
                 if(i.meta.fav === true){
-                    this.devices.push({name: i.name}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                    this.devices.push({name: i.name});
                 }
             }
         })
@@ -1221,7 +1221,7 @@ Vue.component('routines',{
 
                     <!-- -->
 
-                    <v-dialog v-model="dialog"  width="800px">  <!-- cambiar width tiene que estar en un CSS -->
+                    <v-dialog v-model="dialog"  width="800px">  
                         <v-card>
                              <v-form @submit="addRoutine" ref="addRoutineForm">                           
                                      <v-card-title class="grey darken-2" light>
@@ -1396,17 +1396,10 @@ Vue.component('routines',{
             }
         },
 
-        addRoutine(event){
-            //
-        },
-
-        cancelAdd(event){
-            //////////?????//////////
-        },
 
         routineadd(event) {
             event.preventDefault();
-            //if(this.$refs.roomform.validate()){
+
             api.routine.add({
 
                     name: this.$refs.nameselector.internalValue ,
@@ -1437,9 +1430,7 @@ Vue.component('routines',{
             }).catch((err) => {
                 console.error(err);
             });
-            //  }else{
-            //    console.error("Error en el formulario");
-            //}
+
             this.$refs.roomform.reset();
         },
         cancelform(){
@@ -1669,7 +1660,7 @@ Vue.component('alarm',{
                  }
 
                  for(let i of r.devices){
-                     this.devices.push({id: i.id, name: i.name, state: i.state.status}); //por ahora solo le guardo name, hay que ver que mas necesitamos
+                     this.devices.push({id: i.id, name: i.name, state: i.state.status});
                  }
              })
 
@@ -1712,11 +1703,7 @@ Vue.component('alarm',{
                     idCode = i.id;
                 }
             }
-            /*if(this.$refs.password.internalValue !== old){
-                alert(JSON.stringify({error : 'invalid password'}));
-                this.$refs.hm.reset();
-                return;
-            } */
+
             api.device.sendAction(idCode, 'armAway', [this.$refs.password.internalValue]);
             this.awayModeDialog = false;
             this.$refs.am.reset();
@@ -1730,11 +1717,7 @@ Vue.component('alarm',{
                     idCode = i.id;
                 }
             }
-            /*if(this.$refs.oldCode.internalValue !== old){
-                alert(JSON.stringify({error : 'invalid password'}));
-                this.$refs.changeCodeForm.reset();
-                return;
-            }*/
+
             let params = JSON.parse(JSON.stringify([this.$refs.oldCode.internalValue, this.$refs.newCode.internalValue]));
             api.device.sendAction(idCode, 'changeSecurityCode', params);
             this.changeSecurityCodeDialog = false;
@@ -1753,9 +1736,7 @@ Vue.component('alarm',{
     },
     data() {
         return{
-            devices: [], /* me guardo los id's de los devices ya creados,
-                            asi cuando entro a alarmas me fijo,
-                            si ya hay creada una alarma muestro una cosa, sino muestro otra*/
+            devices: [],
             changeSecurityCodeDialog : false,
             homeModeDialog: false,
             awayModeDialog: false,
@@ -1802,26 +1783,7 @@ Vue.component('toolbar', {
                        
             </v-toolbar>
             
-            <!--<v-navigation-drawer v-model="drawer" app right clipped  class="white">
-                <v-list-item>
-                     <v-list-item-content>
-                          <v-btn class="mx-2" depressed @click="drawer = !drawer">
-                                <v-icon>settings</v-icon> Settings
-                          </v-btn>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list dense >
-                    <v-list-item v-for="item in items" :key="item.title" link>
-                         <v-list-item-icon>
-                             <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list>
-            </v-navigation-drawer> -->
+            
         </div>`,
     data(){
         return {
@@ -1850,14 +1812,4 @@ new Vue({
             { index: 3, name: 'SAFETY', href: 'safety.html'},
         ]
     }),
-    /*component:{
-      toolbar,
-
-    },
-
-    methods: {
-        addAlarm: function () {
-
-        }
-    }*/
 });
