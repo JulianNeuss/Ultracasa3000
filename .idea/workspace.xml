@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26fba0ff-d87f-492f-9bb8-77bfb434befb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP/js/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/TP/js/components.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -97,7 +96,7 @@
       <workItem from="1570818893461" duration="1259000" />
       <workItem from="1570820525248" duration="74000" />
       <workItem from="1570820625923" duration="8052000" />
-      <workItem from="1570926926364" duration="6639000" />
+      <workItem from="1570926926364" duration="6865000" />
     </task>
     <task id="LOCAL-00001" summary="el tab marca a la ventana donde estoy y los devicesTypes los traigo desde la API">
       <created>1570627021586</created>
@@ -148,7 +147,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570836086931</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="DEVICES WORKING WITH API 100%">
+      <created>1570933761565</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1570933761565</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,6 +180,7 @@
     <MESSAGE value="Dialog devices" />
     <MESSAGE value="Dialog devices with FIRST DEVICE DIALOG WORKING!!!!" />
     <MESSAGE value="OVEN 100% working." />
-    <option name="LAST_COMMIT_MESSAGE" value="OVEN 100% working." />
+    <MESSAGE value="DEVICES WORKING WITH API 100%" />
+    <option name="LAST_COMMIT_MESSAGE" value="DEVICES WORKING WITH API 100%" />
   </component>
 </project>

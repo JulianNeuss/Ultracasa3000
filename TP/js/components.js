@@ -1205,207 +1205,9 @@ Vue.component('favourites',{
 
 
 }),
-
-
-
-
-
-/*
 Vue.component('routines',{
 
-    template: `
-    <v-item-group>
-
-            <v-container>
-                <v-list-item one-line>
-                    <v-list-item-content class="align-self-start">
-                        <v-list-item-title  class="headline font-weight-bold">Routines</v-list-item-title>
-                    </v-list-item-content>
-                    <v-btn class="mx-2" fab dark color="deep-purple darken-1" @click="dialog = !dialog">
-                        <v-icon dark> add </v-icon>
-                    </v-btn>
-
-                    <!-- cuadro para agregar rutinas -->
-
-                    <v-dialog v-model="dialog" width="800">
-
-                              <v-card>
-                                  <v-form  @submit="addRoutine" ref="addRoutineForm">
-
-                                     <v-container >
-                                         <v-card-title class="headline">Add Routine </v-card-title>
-
-                                         <v-container grid-list-sm>
-                                                <v-flex  xs12  align-center  justify-space-between >
-
-                                                        <v-layout align-center>
-
-                                                                 <v-text-field :rules="deviceRules" required placeholder="Name" ref="nameselector" counter="60"></v-text-field>
-
-                                                        </v-layout>
-                                                </v-flex>
-                                                <v-layout row wrap>
-                                                         <v-col class="d-flex" cols="12" sm="12">
-                                                                <v-select :items="allDev" item-text="name"  label="Select Device" ref="devSelector" name="category"  ></v-select>
-                                                         </v-col>
-                                                </v-layout>
-
-                                                <v-layout row wrap>
-                                                         <v-col class="d-flex" cols="12" sm="12">
-                                                                 <v-select :items="devOptions" label="Device options"  name="category" type="submit" ></v-select>
-                                                         </v-col>
-                                                </v-layout>
-
-                                         </v-container>
-                                         <v-card-actions>
-                                                <v-spacer></v-spacer>
-                                                <v-btn type="submit" left text>Add device</v-btn>
-                                                <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
-                                                <v-btn type="submit" text>Save</v-btn>
-                                         </v-card-actions>
-                                     </v-container>
-                                  </v-form>
-                              </v-card>
-                    </v-dialog>
-
-
-
-                    <!-- -->
-
-
-                   <!--  <v-btn class="mx-2" fab dark color="deep-purple darken-1">
-                        <v-icon>edit</v-icon> -->
-                    </v-btn>
-                </v-list-item>
-                <v-divider></v-divider>
-
-                <v-row>
-                    <v-col v-for="routine in routines" :key="routine.title"  cols="12" md="4" >
-                        <v-card class="routine-card-style" :elevation="21" type="button">
-                            <v-list-item three-line>
-                                <v-list-item-content class="align-self-start">
-                                    <v-list-item-title  class="medium mb-2"  v-text="routine.title"></v-list-item-title>
-                                </v-list-item-content>
-                                <v-icon centered> {{ routine.icon }}</v-icon>
-                            </v-list-item>
-                        </v-card>
-                    </v-col>
-                </v-row>
-
-
-
-
-            </v-container>
-        </v-item-group>`,
-
-    mounted() {
-        api.devicetypes.getAllDeviceTypes().then( ( r ) => {
-            for (let i of r.result){
-                if(i.name !== "vacuum" && i.name !== "lamp" && i.name !== "alarm") //hay que ver cuales dispositivos usamos
-                    this.allDev.push({id: i.id, name: i.name, actions: i.actions}); // mentira que andan estos comments
-            }
-            console.log(this.allDev);
-        })
-
-    },
-    data(){
-        return{
-            deviceRules: [
-                v => !!v || 'Required',
-                v => !!v && v.length >= 3 || 'Name must be more than 3 characters',
-                v => !!v && v.length <= 60 || 'Name must be less than 60 characters',
-            ],
-            dialog: false,
-            allDev: [],
-            currentDevice:null ,
-            routines: [ ],
-            devOptions: [],
-
-        }
-    },
-        methods: {
-            //lo que intente hacer aca es guardarme en un vector devoptions las correspondientes al que seleccionan, pero no anduvo del todo bien
-            //si elegis el dispositivo y tocas save recien ahi se guarda
-            //pero si tocas el dispositivo, tocas save, despues cambias el dispositivo y volves a tocar save se guardan las opciones de los 2
-            //no se resetea el vector
-            addRoutine(event){
-                console.log(this.$refs.devSelector.internalValue);
-                event.preventDefault();
-
-                    for(let i of this.allDev){
-                        console.log(i.name);
-                        if(this.$refs.devSelector.internalValue === i.name){
-                            for(let j of i.actions)
-                                this.devOptions.push(j.name);
-                            console.log(this.devOptions);
-                        }
-                    }
-
-            },
-
-            cancelAdd(event){
-
-            },
-
-            routineadd(event) {
-                event.preventDefault();
-              //if(this.$refs.roomform.validate()){
-                    api.routine.add({
-
-                            name: this.$refs.nameselector.internalValue ,
-                            "actions": [
-                              {
-                                "device": {
-                                  "id": "c39181d52abe5555"
-                                },
-                                "actionName": "turnOff",
-                                "params": [],
-                                "meta": {}
-                              },
-                              {
-                                "device": {
-                                  "id": "f597c13717008fb1"
-                                },
-                                "actionName": "armStay",
-                                "params": [
-                                  "1234"
-                                ],
-                                "meta": {}
-                              }
-                            ],
-                            "meta": {}
-                        }
-                    ).then(r => {
-                        this.routines.push({title: r.result.name, id: r.result.id});
-                    }).catch((err) => {
-                        console.error(err);
-                    });
-              //  }else{
-                //    console.error("Error en el formulario");
-                //}
-                this.$refs.roomform.reset();
-            },
-            cancelform(){
-                this.$refs.roomform.reset();
-                this.roomname = '';
-                this.addroom = false
-            },
-            review(){
-                console.log(api.room.getAll());
-            },
-            currentDev(e){
-                this.currentDevice.pop();
-                this.currentDevice.push(e);
-            }
-    }
-
-}),
-
- */
-
-Vue.component('routines',{
-
-            template: ` 
+        template: ` 
     <v-item-group>
 
             <v-container>
@@ -1421,47 +1223,83 @@ Vue.component('routines',{
 
                     <v-dialog v-model="dialog"  width="800px">  <!-- cambiar width tiene que estar en un CSS -->
                         <v-card>
-                             
-                             <v-form @submit="addRoutine" ref="addRoutineForm">
-                                                            
+                             <v-form @submit="addRoutine" ref="addRoutineForm">                           
                                      <v-card-title class="grey darken-2" light>
                                              Add routine
                                      </v-card-title>
                                      
                                      <v-container grid-list-sm>
                                             <v-flex  xs12  align-center  justify-space-between >
-                                                
-                                                    <v-layout align-center>
-                                                                        
-                                                             <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>
-                                                                                                                      
+                                                   <v-card flat >
+                                                    <v-layout align-center>             
+                                                             <v-text-field :rules="deviceRules" required placeholder="Name"   ref="nameselector" counter="60"></v-text-field>                                                                                                                   
                                                     </v-layout>
+                                                    </v-card>
                                             </v-flex>
                                             <v-layout row wrap>
                                                      <v-col class="d-flex" cols="12" sm="12">
-                                                            <v-select :items="devices" item-text="name"  label="Select Device"  name="category"  ></v-select>
+                                                            <v-select :items="devices" item-text="name"  label="Select Device"  name="category" ref="dev" ></v-select>
                                                      </v-col>
+                                                     <v-btn @click="devDialog()">set</v-btn>
                                             </v-layout>
-                                                                
-                                            <v-layout row wrap>
-                                                     <v-col class="d-flex" cols="12" sm="12">
-                                                             <v-select :items="allDev"  label="Device options"  name="category"  ></v-select>
-                                                     </v-col>
-                                            </v-layout>
-                                                                
                                      </v-container>
                                      <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-btn type="submit" left text>Add device</v-btn>
+                                            <v-btn @click="" left text>Add device</v-btn>
                                             <v-btn  text  color="primary" @click="cancelAdd" >Cancel</v-btn>
                                             <v-btn type="submit" text>Save</v-btn>
-                                     </v-card-actions>
-                                                            
+                                     </v-card-actions>                      
                              </v-form>
-                
                         </v-card>
                     </v-dialog>
-
+                    
+                       
+                    <!---DIALOG DE Door-->
+                         <v-form @submit="dooraction">
+                          <v-dialog v-model="doordialog"  width="400px">
+                          
+                                <v-card>
+                                                          <!---TITULO DIALOG DE DEVICE-->
+                                    <v-list-item-content class="text-center">
+                                          <v-list-item-title  class="title"  v-text="name"></v-list-item-title>
+                                          <v-list-item-subtitle class="subtitle"  v-text="currentDev"></v-list-item-subtitle>
+                                    </v-list-item-content>
+                                             <v-divider></v-divider>
+                                                                       <!---CONTENIDO DIALOG DE DEVICE-->
+                                                                       
+                                     <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                                     <v-switch v-model="doorClosedOpen"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Close / Open</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                    <v-list-item>
+                                        <template v-slot:default="{ active, toggle }">
+                                            <v-list-item-action>
+                                            <template if >  
+                                                     <v-switch v-model="doorLockedUnlocked"  color="success" value="success" hide-details></v-switch>
+                                            </v-list-item-action>
+                                            <v-list-item-content>
+                                                  <v-list-item-subtitle>Unlock / Lock</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                            </template>
+                                        </template>
+                                    </v-list-item>
+                                   
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn  text  color="primary" @click="doordialog = false" >Cancel</v-btn>
+                                        <v-btn text @click="doordialog = false" type="submit" >Save</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                             </v-dialog>
+                             </v-form>
+                          <!---DIALOG DE Door-->
+                          
 
 
                     <!-- -->
@@ -1492,92 +1330,133 @@ Vue.component('routines',{
             </v-container>
         </v-item-group>`,
 
-            mounted() {
-                api.device.getAll().then( r => {
-                    for(let i of r.devices){
-                        if(i.name !== "alarm")
-                            this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
-                    }
-                    console.log(this.devices);
-                })
-            },
-            data(){
-                return{
-                    deviceRules: [
-                        v => !!v || 'Required',
-                        v => !!v && v.length >= 3 || 'Name must have 3',
-                        v => !!v && v.length <= 60 || 'Name ',
-                    ],
-                    dialog: false,
-                    devices: [],
-                    currentDevice:null ,
-                    routines: [ ]
+        mounted() {
+            api.device.getAll().then( r => {
+                for(let i of r.devices){
+                    if(i.name !== "alarm")
+                        this.devices.push({id: i.id, name: i.name, src: i.meta.img, device: i.meta.device});
                 }
-            },
-            methods: {
+                console.log(this.devices);
+            })
+        },
+        data(){
+            return{
+                //DOOR
+                doordialog: false,
+                doorClosedOpen:false,
+                doorLockedUnlocked:false,
+                //
+                doordialog:false,
+                deviceRules: [
+                    v => !!v || 'Required',
+                    v => !!v && v.length >= 3 || 'Name must have 3',
+                    v => !!v && v.length <= 60 || 'Name ',
+                ],
+                dialog: false,
+                devices: [],
+                currentDevice:null ,
+                routines: [ ]
+            }
+        },
+        methods: {
 
-                addRoutine(event){
+            devDialog(){
+                console.log("tetas");
+                var t;
+                for(let i of devices) {
+                    if (i.name == this.$ref.dev.internalValue) { i.device = t;
+                    }
+                }
+                {
 
-                },
+                    switch (t) {
+                        case 'blinds':
+                            this.blindsdialog = true;
+                            break;
+                        case 'refrigerator':
+                            console.log('hi im the case of BLINDS');
+                            this.refrigeratordialog = true;
+                            break;
+                        case 'speaker':
+                            this.speakerdialog = true;
+                            break;
+                        case 'oven':
+                            this.ovendialog = true;
+                            break;
+                        case 'ac':
+                            this.acdialog = true;
+                            break;
+                        case 'door':
+                            this.doordialog = true;
+                            break;
 
-                cancelAdd(event){
+                    }
+                }
 
-                },
+            }
+        },
 
-                routineadd(event) {
-                    event.preventDefault();
-                    //if(this.$refs.roomform.validate()){
-                    api.routine.add({
+        addRoutine(event){
+            //
+        },
 
-                            name: this.$refs.nameselector.internalValue ,
-                            "actions": [
-                                {
-                                    "device": {
-                                        "id": "c39181d52abe5555"
-                                    },
-                                    "actionName": "turnOff",
-                                    "params": [],
-                                    "meta": {}
-                                },
-                                {
-                                    "device": {
-                                        "id": "f597c13717008fb1"
-                                    },
-                                    "actionName": "armStay",
-                                    "params": [
-                                        "1234"
-                                    ],
-                                    "meta": {}
-                                }
+        cancelAdd(event){
+            //////////?????//////////
+        },
+
+        routineadd(event) {
+            event.preventDefault();
+            //if(this.$refs.roomform.validate()){
+            api.routine.add({
+
+                    name: this.$refs.nameselector.internalValue ,
+                    "actions": [
+                        {
+                            "device": {
+                                "id": "c39181d52abe5555"
+                            },
+                            "actionName": "turnOff",
+                            "params": [],
+                            "meta": {}
+                        },
+                        {
+                            "device": {
+                                "id": "f597c13717008fb1"
+                            },
+                            "actionName": "armStay",
+                            "params": [
+                                "1234"
                             ],
                             "meta": {}
                         }
-                    ).then(r => {
-                        this.routines.push({title: r.result.name, id: r.result.id});
-                    }).catch((err) => {
-                        console.error(err);
-                    });
-                    //  }else{
-                    //    console.error("Error en el formulario");
-                    //}
-                    this.$refs.roomform.reset();
-                },
-                cancelform(){
-                    this.$refs.roomform.reset();
-                    this.roomname = '';
-                    this.addroom = false
-                },
-                review(){
-                    console.log(api.room.getAll());
-                },
-                currentDev(e){
-                    this.currentDevice.pop();
-                    this.currentDevice.push(e);
+                    ],
+                    "meta": {}
                 }
-            }
+            ).then(r => {
+                this.routines.push({title: r.result.name, id: r.result.id});
+            }).catch((err) => {
+                console.error(err);
+            });
+            //  }else{
+            //    console.error("Error en el formulario");
+            //}
+            this.$refs.roomform.reset();
+        },
+        cancelform(){
+            this.$refs.roomform.reset();
+            this.roomname = '';
+            this.addroom = false
+        },
+        review(){
+            console.log(api.room.getAll());
+        },
+        currentDev(e){
+            this.currentDevice.pop();
+            this.currentDevice.push(e);
+        }
 
-        }),
 
+    }),
 Vue.component('alarm',{
     template:`
         <v-container>
@@ -1901,7 +1780,6 @@ Vue.component('alarm',{
     }
 
 }),
-
 Vue.component('toolbar', {
     template:
         `<div>
@@ -1957,7 +1835,6 @@ Vue.component('toolbar', {
         }
     }
 });
-
 new Vue({
     el: '#app',
     vuetify: new Vuetify(),
